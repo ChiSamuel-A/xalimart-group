@@ -13,11 +13,10 @@ const TEMPLATES: {
   name: string
   tagline: string
 }[] = [
-  { id: 'classic', name: 'Classic',       tagline: 'Bold purple banner' },
-  { id: 'light',   name: 'Light',         tagline: 'White + purple accents' },
-  { id: 'bold',    name: 'Bold',          tagline: 'Split dark / light cols' },
-  { id: 'mono',    name: 'Mono',          tagline: 'Minimal, thin strip' },
-  { id: 'jg',      name: 'JG Signature',  tagline: 'White body · gold socials · indigo banner' },
+  { id: 'dark',         name: 'Dark',          tagline: 'Black body · circular photo'    },
+  { id: 'light',        name: 'Light',         tagline: 'White body · circular photo'    },
+  { id: 'minimal-light', name: 'Minimal Light', tagline: 'White body · large name'       },
+  { id: 'minimal-dark',  name: 'Minimal Dark',  tagline: 'Black body · large name'       },
 ]
 
 export default function TemplatePicker({ data, onChange }: Props) {
@@ -26,9 +25,8 @@ export default function TemplatePicker({ data, onChange }: Props) {
       <p className="text-[11px] font-medium text-gray-400 uppercase tracking-widest mb-3">
         Choose Template
       </p>
-      {/* Mobile: horizontal scroll strip — no wrapping, no orphaned half-rows.
-          sm+: switch to a proper grid */}
-      <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-3 overflow-x-auto pb-1 sm:overflow-x-visible sm:pb-0 snap-x snap-mandatory">
+      {/* Mobile: horizontal scroll strip — sm+: grid */}
+      <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 overflow-x-auto pb-1 sm:overflow-x-visible sm:pb-0 snap-x snap-mandatory">
         {TEMPLATES.map(({ id, name, tagline }) => {
           const active = data.templateId === id
           return (
@@ -41,16 +39,11 @@ export default function TemplatePicker({ data, onChange }: Props) {
                 'transition-all hover:shadow-sm cursor-pointer snap-start',
                 'flex-shrink-0 w-36 sm:w-auto',
                 active
-                  ? 'border-[#7f51ff] shadow-sm shadow-purple-100'
-                  : 'border-gray-100 hover:border-gray-200'
+                  ? 'border-black shadow-sm shadow-zinc-200'
+                  : 'border-gray-100 hover:border-gray-300'
               )}
             >
-              <span
-                className={cn(
-                  'text-sm font-semibold leading-tight',
-                  active ? 'text-[#7f51ff]' : 'text-gray-800'
-                )}
-              >
+              <span className={cn('text-sm font-semibold leading-tight', active ? 'text-black' : 'text-gray-800')}>
                 {name}
               </span>
               <span className="text-[11px] text-gray-400 mt-0.5 leading-tight">

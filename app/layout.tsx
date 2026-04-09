@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Signature Generator — Target Point",
-  description: "Generate professional Outlook-ready email signatures for Target Point.",
+  title: "Signature Generator — Xalimart Group",
+  description: "Generate professional Outlook-ready email signatures for Xalimart Group.",
 };
 
 export default function RootLayout({

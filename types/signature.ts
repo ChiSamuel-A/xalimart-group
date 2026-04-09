@@ -5,12 +5,7 @@ export interface SignatureData {
   email: string
   website: string
   photoBase64: string | null
-  templateId: 'classic' | 'light' | 'bold' | 'mono' | 'jg'
-  products: {
-    weExport: boolean
-    tripnbusiness: boolean
-    weXperience: boolean
-  }
+  templateId: 'dark' | 'light' | 'minimal-light' | 'minimal-dark'
   socials: {
     facebook: string
     instagram: string
@@ -19,25 +14,20 @@ export interface SignatureData {
 }
 
 export interface SignatureImages {
-  targetpoint: string
-  weExport: string
-  tripnbusiness: string
-  weXperience: string
-  facebook: string
-  instagram: string
-  linkedin: string
-  jgLogo: string
-  targetpointFav: string
-  tripnbusinessFav: string
-  weExportFav: string
-  weImportFav: string
-  iconInstagram: string
-  iconFacebook: string
-  iconLinkedin: string
+  xalimartBlack: string
+  xalimartWhite: string
   emailIcon: string
-  globeIcon: string
-  appelIcon: string
   emailIconWh: string
+  globeIcon: string
   globeIconWh: string
+  appelIcon: string
   telephoneIconWh: string
+  locationBlack: string
+  locationWhite: string
+  instagramWh: string
+  facebookWh: string
+  linkedinWh: string
+  instagramBl: string
+  facebookBl: string
+  linkedinBl: string
 }

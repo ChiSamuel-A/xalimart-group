@@ -21,14 +21,9 @@ export default function CopyButton({ data, isValid = true }: Props) {
   const handleCopy = async () => {
     setState('loading')
     try {
-      // Fetch all logos and embed them as base64 so the signature
-      // is fully self-contained when pasted into Outlook.
       const images = await getInlineImages()
       const html = buildSignatureHTML(data, images)
 
-      // ClipboardItem with text/html writes rich text to the clipboard.
-      // When pasted into Outlook's signature editor the full table
-      // structure, colours, and images are preserved.
       const htmlBlob = new Blob([html], { type: 'text/html' })
       const textBlob = new Blob(
         [`${data.fullName} | ${data.role} | ${data.phone} | ${data.email}`],
@@ -57,10 +52,10 @@ export default function CopyButton({ data, isValid = true }: Props) {
           'w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all',
           !canCopy && 'bg-gray-200 text-gray-400 cursor-not-allowed',
           canCopy && state === 'idle' &&
-            'bg-purple-700 hover:bg-purple-800 text-white shadow-md hover:shadow-lg active:scale-[0.98]',
-          canCopy && state === 'loading' && 'bg-purple-400 text-white cursor-wait',
+            'bg-black hover:bg-zinc-800 text-white shadow-md hover:shadow-lg active:scale-[0.98]',
+          canCopy && state === 'loading' && 'bg-zinc-500 text-white cursor-wait',
           canCopy && state === 'success' && 'bg-emerald-600 text-white',
-          canCopy && state === 'error' && 'bg-red-500 text-white'
+          canCopy && state === 'error'   && 'bg-red-500 text-white'
         )}
       >
         {state === 'idle' && (

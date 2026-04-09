@@ -9,7 +9,7 @@ import SignaturePreview from '@/components/SignaturePreview'
 import ConfirmModal from '@/components/ConfirmModal'
 import type { SignatureData } from '@/types/signature'
 
-const STORAGE_KEY = 'tp_signature_data'
+const STORAGE_KEY = 'xalimart_signature_data'
 
 const defaultData: SignatureData = {
   fullName: '',
@@ -18,12 +18,7 @@ const defaultData: SignatureData = {
   email: '',
   website: '',
   photoBase64: null,
-  templateId: 'classic',
-  products: {
-    weExport: true,
-    tripnbusiness: true,
-    weXperience: true,
-  },
+  templateId: 'dark',
   socials: {
     facebook: '',
     instagram: '',
@@ -52,8 +47,8 @@ function saveToStorage(data: SignatureData) {
 }
 
 export default function Home() {
-  const [data, setData]                   = useState<SignatureData>(loadFromStorage)
-  const [isValid, setIsValid]             = useState(true)
+  const [data, setData]                         = useState<SignatureData>(loadFromStorage)
+  const [isValid, setIsValid]                   = useState(true)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   const handleChange = (newData: SignatureData) => {
@@ -69,27 +64,27 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      <header className="bg-gradient-to-r from-purple-950 to-purple-800 shadow-xl">
+      <header className="bg-black shadow-xl">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center gap-4">
           <Image
-            src="/targetpoint.png"
-            alt="Target Point"
-            width={160}
-            height={44}
+            src="/xalimart-white.png"
+            alt="Xalimart Group"
+            width={48}
+            height={48}
             className="object-contain"
             priority
           />
-          <div className="h-8 w-px bg-purple-700" />
+          <div className="h-8 w-px bg-zinc-700" />
           <div>
             <h1 className="text-white font-bold text-xl tracking-tight leading-tight">
               Signature Generator
             </h1>
-            <p className="text-purple-300 text-xs">Build your professional email signature</p>
+            <p className="text-zinc-400 text-xs">Build your professional email signature</p>
           </div>
         </div>
       </header>
 
-      {/* Template picker sits between header and the two-column layout */}
+      {/* Template picker */}
       <TemplatePicker data={data} onChange={handleChange} />
 
       <main className="max-w-6xl mx-auto px-6 py-6">
