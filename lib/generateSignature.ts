@@ -25,7 +25,7 @@ export async function fetchImageAsBase64(url: string): Promise<string> {
 // Logos are served from the deployed URL so Outlook can fetch them as
 // normal hosted images — base64 logos are unreliable in Outlook Desktop.
 // The profile photo (photoBase64) remains base64 since it is user-uploaded.
-const HOSTED_BASE = 'https://xalimart-sign.vercel.app'
+const HOSTED_BASE = 'https://xalimart-group.vercel.app'
 
 export async function getInlineImages(): Promise<SignatureImages> {
   return {
