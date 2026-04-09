@@ -20,37 +20,36 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
   const { fullName, role, phone, email, website, photoBase64, socials } = data
 
   // ── Photo (left) ───────────────────────────────────────────────────────────
-  // Wider cell to accommodate larger photo and provide better spacing
-  const photoCell = `<td width="130" valign="middle"
-    style="width:130px;padding:20px;vertical-align:middle;
+  const photoCell = `<td width="145" valign="middle"
+    style="width:145px;padding:20px 0 20px 20px;vertical-align:middle;
            mso-table-lspace:0pt;mso-table-rspace:0pt;">
     ${photoBase64
-      ? `<img src="${photoBase64}" width="100" height="100"
+      ? `<img src="${photoBase64}" width="120" height="120"
            alt="${clampText(fullName, 40)}"
-           style="display:block;border-radius:50%;width:100px;height:100px;object-fit:cover;">`
-      : `<table cellpadding="0" cellspacing="0" border="0" width="100" height="100"
-           style="width:100px;height:100px;border-radius:50%;background-color:#cccccc;
+           style="display:block;border-radius:50%;width:120px;height:120px;object-fit:cover;border:0;">`
+      : `<table cellpadding="0" cellspacing="0" border="0" width="120" height="120"
+           style="width:120px;height:120px;border-radius:50%;background-color:#cccccc;
                   border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-           <tr><td width="100" height="100" style="width:100px;height:100px;font-size:0;line-height:0;">&nbsp;</td></tr>
+           <tr><td width="120" height="120" style="width:120px;height:120px;font-size:0;line-height:0;">&nbsp;</td></tr>
          </table>`
     }
   </td>`
 
   // ── Center — name, role, contact rows ──────────────────────────────────────
   const centerCell = `<td valign="middle"
-    style="padding:20px 10px;vertical-align:middle;
+    style="padding:20px 10px 20px 5px;vertical-align:middle;
            mso-table-lspace:0pt;mso-table-rspace:0pt;">
     <table cellpadding="0" cellspacing="0" border="0"
       style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
-        <td style="font-family:Arial,sans-serif;font-size:22px;font-weight:bold;
+        <td style="font-family:Arial,sans-serif;font-size:22px;font-weight:600;
                    color:${TEXT_NAME};line-height:26px;mso-line-height-rule:exactly;
                    padding-bottom:4px;">
           ${clampText(fullName || 'Full Name', 40)}
         </td>
       </tr>
       <tr>
-        <td style="font-family:Arial,sans-serif;font-size:13px;
+        <td style="font-family:Arial,sans-serif;font-size:13px;font-weight:normal;
                    color:${TEXT_ROLE};line-height:17px;mso-line-height-rule:exactly;
                    padding-bottom:15px;">
           ${clampText(role || 'Job Title', 60)}
@@ -87,16 +86,18 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
     ${socialIconsRowWhiteFilled(socials, images)}
   </td>`
 
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="620"
-    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
-           background-color:${BG};width:620px;max-width:100%;color-scheme:light;
-           font-family:Arial,sans-serif;">
-    <tr>
-      ${photoCell}
-      ${centerCell}
-      ${vDivider}
-      ${rightCell}
-    </tr>
-  </table>`
+  return `<div style="max-width:620px;overflow:hidden;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="620"
+      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
+             background-color:${BG};width:620px;max-width:100%;color-scheme:light;
+             font-family:Arial,sans-serif;">
+      <tr>
+        ${photoCell}
+        ${centerCell}
+        ${vDivider}
+        ${rightCell}
+      </tr>
+    </table>
+  </div>`
 }
 
