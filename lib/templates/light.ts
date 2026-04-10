@@ -41,12 +41,12 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
            mso-table-lspace:0pt;mso-table-rspace:0pt;">
     <!--[if mso]>
     <v:rect xmlns:v="urn:schemas-microsoft-com:vml"
-      style="position:absolute;left:59px;top:-70px;width:28px;height:380px;rotation:-39;"
+      style="position:absolute;left:59px;top:-70px;width:28px;height:600px;rotation:-39;"
       filled="t" stroked="f" fillcolor="#000000">
     </v:rect>
     <![endif]-->
     <!--[if !mso]><!-->
-    <div style="position:absolute;top:50%;left:59px;width:28px;height:380px;
+    <div style="position:absolute;top:90%;left:49px;width:108px;height:600px;
                 background-color:#000000;
                 -webkit-transform:translateY(-50%) rotate(-39deg);
                 transform:translateY(-50%) rotate(-39deg);
