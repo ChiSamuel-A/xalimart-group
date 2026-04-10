@@ -13,7 +13,6 @@ const BG        = 'transparent'
 const TEXT_NAME = '#222222'
 const TEXT_ROLE = '#555555'
 const TEXT_INFO = '#222222'
-const BADGE_BG  = 'transparent'
 const DIVIDER   = '#cccccc'
 
 export function buildLight(data: SignatureData, images: SignatureImages): string {
@@ -64,10 +63,10 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
             <tr>
               <td>
                 <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-                  ${email   ? badgeContactRow(images.emailIcon,      `mailto:${email}`,     clampText(email, 38),   { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${phone   ? badgeContactRow(images.appelIconBl,      whatsappHref(phone),   phone,                  { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${website ? badgeContactRow(images.globeIcon,      normalizeUrl(website), clampText(website, 38), { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${badgeContactRow(images.locationBlack, '#', STATIC_ADDRESS, { badgeBg: BADGE_BG, textColor: TEXT_INFO, isStatic: true, multiline: true })}
+                  ${email   ? badgeContactRow(images.emailIcon,      `mailto:${email}`,     clampText(email, 38),   { textColor: TEXT_INFO }) : ''}
+                  ${phone   ? badgeContactRow(images.appelIconBl,      whatsappHref(phone),   phone,                  { textColor: TEXT_INFO }) : ''}
+                  ${website ? badgeContactRow(images.globeIcon,      normalizeUrl(website), clampText(website, 38), { textColor: TEXT_INFO }) : ''}
+                  ${badgeContactRow(images.locationBlack, '#', STATIC_ADDRESS, { textColor: TEXT_INFO, isStatic: true, multiline: true })}
                 </table>
               </td>
             </tr>
