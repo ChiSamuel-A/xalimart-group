@@ -6,15 +6,15 @@ import {
   normalizeUrl,
   STATIC_ADDRESS,
   badgeContactRow,
-  socialIconsRowWhiteFilled,
+  socialIconsRowBlack,
 } from './shared'
 
-const BG        = '#010101'
-const TEXT_NAME = '#ffffff'
-const TEXT_ROLE = '#bbbbbb'
-const TEXT_INFO = '#ffffff'
-const BADGE_BG  = '#ffffff'   // all icons now use white circles
-const DIVIDER   = '#444444'   // a bit softer for dark theme
+const BG        = 'transparent'
+const TEXT_NAME = '#222222'
+const TEXT_ROLE = '#555555'
+const TEXT_INFO = '#222222'
+const BADGE_BG  = 'transparent'
+const DIVIDER   = '#cccccc'
 
 export function buildDark(data: SignatureData, images: SignatureImages): string {
   const { fullName, role, phone, email, website, photoBase64, socials } = data
@@ -69,10 +69,10 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
   const brandContent = `
     <div style="padding:20px;text-align:center;">
       <a href="https://xalimartgroup.sn" target="_blank" style="display:block;text-decoration:none;">
-        <img src="${images.xalimartWhite}" width="150" alt="Xalimart Group"
+        <img src="${images.xalimartBlack}" width="150" alt="Xalimart Group"
           style="display:block;margin:0 auto;width:150px;height:auto;max-width:150px;">
       </a>
-      ${socialIconsRowWhiteFilled(socials, images)}
+      ${socialIconsRowBlack(socials, images)}
     </div>
   `
 
@@ -84,7 +84,7 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
         .mobile-center { text-align: center !important; }
       }
     </style>
-    <div style="max-width:620px;overflow:hidden;color-scheme:dark;">
+    <div style="max-width:620px;overflow:hidden;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="620"
         style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
                background-color:${BG};width:620px;max-width:100%;

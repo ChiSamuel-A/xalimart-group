@@ -37,11 +37,8 @@ export function badgeContactRow(
   iconSrc: string,
   href: string,
   label: string,
-  { badgeBg = '#feffff', textColor = '#ffffff', isStatic = false, multiline = false }: BadgeRowOpts = {}
+  { badgeBg = 'transparent', textColor = '#222222', isStatic = false, multiline = false }: BadgeRowOpts = {}
 ): string {
-  // If the bg is pure white, use off-white
-  const finalBadgeBg = (badgeBg === '#ffffff' || badgeBg === '#FFFFFF') ? '#feffff' : badgeBg;
-
   const labelHtml = isStatic
     ? `<span style="color:${textColor};font-family:Arial,sans-serif;font-size:12px;
                    line-height:16px;mso-line-height-rule:exactly;font-weight:normal;">${label}</span>`
@@ -54,26 +51,13 @@ export function badgeContactRow(
       <table cellpadding="0" cellspacing="0" border="0"
         style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
         <tr>
-          <!-- Circle badge — nested table is more reliable for border-radius -->
-          <td width="${BADGE}" style="width:${BADGE}px;padding:0;vertical-align:middle;" valign="middle">
-            <table cellpadding="0" cellspacing="0" border="0" width="${BADGE}" height="${BADGE}"
-              style="width:${BADGE}px;height:${BADGE}px;background-color:${finalBadgeBg};
-                     border-radius:50%;border-collapse:collapse;
-                     mso-table-lspace:0pt;mso-table-rspace:0pt;">
-              <tr>
-                <td width="${BADGE}" height="${BADGE}" align="center" valign="middle"
-                  style="width:${BADGE}px;height:${BADGE}px;padding:0;
-                         font-size:0;line-height:0;color-scheme:light;
-                         text-align:center;vertical-align:middle;">
-                  <img src="${iconSrc}" width="${ICON}" height="${ICON}" border="0"
-                    style="display:inline-block;vertical-align:middle;
-                           width:${ICON}px;height:${ICON}px;border:0;outline:none;
-                           filter: brightness(1) !important;" alt="">
-                </td>
-              </tr>
-            </table>
+          <td width="${BADGE}" align="center" valign="middle"
+            style="width:${BADGE}px;padding:0;font-size:0;line-height:0;text-align:center;vertical-align:middle;">
+            <!-- White glow filter helps black icons stay visible on dark backgrounds -->
+            <img src="${iconSrc}" width="${ICON}" height="${ICON}" border="0"
+              style="display:inline-block;vertical-align:middle;width:${ICON}px;height:${ICON}px;border:0;outline:none;
+                     filter: drop-shadow(1px 1px 0px #ffffff) drop-shadow(-1px -1px 0px #ffffff) drop-shadow(1px -1px 0px #ffffff) drop-shadow(-1px 1px 0px #ffffff);" alt="">
           </td>
-          <!-- Label -->
           <td style="padding-left:10px;font-family:Arial,sans-serif;font-size:12px;
                      color:${textColor};line-height:16px;mso-line-height-rule:exactly;
                      ${multiline ? 'max-width:240px;' : 'white-space:nowrap;'}
@@ -100,35 +84,20 @@ function buildSocialCells(
   bgColor: string,
   border: string
 ): string {
-  // If the bg is pure white, use off-white
-  const finalBgColor = (bgColor === '#ffffff' || bgColor === '#FFFFFF') ? '#feffff' : bgColor;
-
   return active.map((s, i) =>
-    `<td${i < active.length - 1 ? ` style="padding-right:8px;mso-table-lspace:0pt;mso-table-rspace:0pt;"` : ' style="mso-table-lspace:0pt;mso-table-rspace:0pt;"'} align="center" valign="middle">
-      <table cellpadding="0" cellspacing="0" border="0" width="${SOC}" height="${SOC}"
-        style="width:${SOC}px;height:${SOC}px;background-color:${finalBgColor};
-               border-radius:50%;${border ? `border:${border};` : ''}
-               border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-        <tr>
-          <td width="${SOC}" height="${SOC}" align="center" valign="middle"
-            style="width:${SOC}px;height:${SOC}px;padding:0;
-                   font-size:0;line-height:0;color-scheme:light;
-                   text-align:center;vertical-align:middle;">
-            <a href="${s.url}" target="_blank"
-              style="display:inline-block;vertical-align:middle;text-decoration:none;line-height:0;font-size:0;">
-              <img src="${s.src}" width="${SICO}" height="${SICO}" border="0"
-                style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;
-                       filter: brightness(1) !important;" alt="${s.alt}">
-            </a>
-          </td>
-        </tr>
-      </table>
+    `<td${i < active.length - 1 ? ` style="padding-right:12px;mso-table-lspace:0pt;mso-table-rspace:0pt;"` : ' style="mso-table-lspace:0pt;mso-table-rspace:0pt;"'} align="center" valign="middle">
+      <a href="${s.url}" target="_blank"
+        style="display:inline-block;vertical-align:middle;text-decoration:none;line-height:0;font-size:0;">
+        <img src="${s.src}" width="${SICO}" height="${SICO}" border="0"
+          style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;
+                 filter: drop-shadow(1px 1px 0px #ffffff) drop-shadow(-1px -1px 0px #ffffff) drop-shadow(1px -1px 0px #ffffff) drop-shadow(-1px 1px 0px #ffffff);" alt="${s.alt}">
+      </a>
     </td>`
   ).join('')
 }
 
-// White filled circles + black (bl) icons — used by the Dark template
-export function socialIconsRowWhiteFilled(
+// Transparent "Safe" icons — used by both templates now
+export function socialIconsRowBlack(
   socials: { facebook: string; instagram: string; linkedin: string },
   images: SignatureImages
 ): string {
@@ -143,26 +112,6 @@ export function socialIconsRowWhiteFilled(
   return `<table cellpadding="0" cellspacing="0" border="0" align="center"
     style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
            margin-top:14px;">
-    <tr>${buildSocialCells(active, '#ffffff', '')}</tr>
-  </table>`
-}
-
-// Black filled circles + white icons — used by Light template
-export function socialIconsRowBlackCircle(
-  socials: { facebook: string; instagram: string; linkedin: string },
-  images: SignatureImages
-): string {
-  const active = [
-    socials.instagram ? { url: socials.instagram, src: images.instagramWh, alt: 'Instagram' } : null,
-    socials.facebook  ? { url: socials.facebook,  src: images.facebookWh,  alt: 'Facebook'  } : null,
-    socials.linkedin  ? { url: socials.linkedin,  src: images.linkedinWh,  alt: 'LinkedIn'  } : null,
-  ].filter((s): s is NonNullable<typeof s> => s !== null)
-
-  if (!active.length) return ''
-
-  return `<table cellpadding="0" cellspacing="0" border="0" align="center"
-    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
-           margin-top:14px;">
-    <tr>${buildSocialCells(active, '#000000', '')}</tr>
+    <tr>${buildSocialCells(active, 'transparent', '')}</tr>
   </table>`
 }

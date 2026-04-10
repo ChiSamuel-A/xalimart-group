@@ -6,15 +6,15 @@ import {
   normalizeUrl,
   STATIC_ADDRESS,
   badgeContactRow,
-  socialIconsRowBlackCircle,
+  socialIconsRowBlack,
 } from './shared'
 
-const BG        = '#feffff'
-const TEXT_NAME = '#000000'
-const TEXT_ROLE = '#777777'
-const TEXT_INFO = '#000000'
-const BADGE_BG  = '#000000'
-const DIVIDER   = '#eeeeee'
+const BG        = 'transparent'
+const TEXT_NAME = '#222222'
+const TEXT_ROLE = '#555555'
+const TEXT_INFO = '#222222'
+const BADGE_BG  = 'transparent'
+const DIVIDER   = '#cccccc'
 
 export function buildLight(data: SignatureData, images: SignatureImages): string {
   const { fullName, role, phone, email, website, photoBase64, socials } = data
@@ -64,10 +64,10 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
             <tr>
               <td>
                 <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-                  ${email   ? badgeContactRow(images.emailIconWh,    `mailto:${email}`,     clampText(email, 38),   { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${phone   ? badgeContactRow(images.appelIcon,      whatsappHref(phone),   phone,                  { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${website ? badgeContactRow(images.globeIconWh,    normalizeUrl(website), clampText(website, 38), { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
-                  ${badgeContactRow(images.locationWhite, '#', STATIC_ADDRESS, { badgeBg: BADGE_BG, textColor: TEXT_INFO, isStatic: true, multiline: true })}
+                  ${email   ? badgeContactRow(images.emailIcon,      `mailto:${email}`,     clampText(email, 38),   { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
+                  ${phone   ? badgeContactRow(images.appelIconBl,      whatsappHref(phone),   phone,                  { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
+                  ${website ? badgeContactRow(images.globeIcon,      normalizeUrl(website), clampText(website, 38), { badgeBg: BADGE_BG, textColor: TEXT_INFO }) : ''}
+                  ${badgeContactRow(images.locationBlack, '#', STATIC_ADDRESS, { badgeBg: BADGE_BG, textColor: TEXT_INFO, isStatic: true, multiline: true })}
                 </table>
               </td>
             </tr>
@@ -84,7 +84,7 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
         <img src="${images.xalimartBlack}" width="150" alt="Xalimart Group"
           style="display:block;margin:0 auto;width:150px;height:auto;max-width:150px;">
       </a>
-      ${socialIconsRowBlackCircle(socials, images)}
+      ${socialIconsRowBlack(socials, images)}
     </div>
   `
 
@@ -97,7 +97,7 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
         .mobile-padding-0 { padding: 0 !important; }
       }
     </style>
-    <div style="max-width:620px;overflow:hidden;color-scheme:light;">
+    <div style="max-width:620px;overflow:hidden;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="620"
         style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
                background-color:${BG};width:620px;max-width:100%;
