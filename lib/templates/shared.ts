@@ -24,7 +24,6 @@ export function whatsappHref(phone: string): string {
 // Centering: line-height = badge size on the inner TD + vertical-align:middle
 // on an inline-block img — works in Outlook, Gmail, Apple Mail.
 interface BadgeRowOpts {
-  badgeBg?: string
   textColor?: string
   isStatic?: boolean   // true → plain span instead of <a>
   multiline?: boolean  // true → wrapping text (address)
@@ -37,7 +36,7 @@ export function badgeContactRow(
   iconSrc: string,
   href: string,
   label: string,
-  { badgeBg = 'transparent', textColor = '#222222', isStatic = false, multiline = false }: BadgeRowOpts = {}
+  { textColor = '#222222', isStatic = false, multiline = false }: BadgeRowOpts = {}
 ): string {
   const labelHtml = isStatic
     ? `<span style="color:${textColor};font-family:Arial,sans-serif;font-size:12px;
@@ -73,16 +72,10 @@ export function badgeContactRow(
 }
 
 // ── Social icons row ───────────────────────────────────────────────────────────
-// bgColor  : fill colour of the circle
-// border   : optional CSS border string, e.g. '2px solid #ffffff'
-// icons    : array of { url, src, alt }
-const SOC  = 34   // social circle diameter in px
 const SICO = 18   // social icon size in px
 
 function buildSocialCells(
-  active: { url: string; src: string; alt: string }[],
-  bgColor: string,
-  border: string
+  active: { url: string; src: string; alt: string }[]
 ): string {
   return active.map((s, i) =>
     `<td${i < active.length - 1 ? ` style="padding-right:12px;mso-table-lspace:0pt;mso-table-rspace:0pt;"` : ' style="mso-table-lspace:0pt;mso-table-rspace:0pt;"'} align="center" valign="middle">
@@ -112,6 +105,6 @@ export function socialIconsRowBlack(
   return `<table cellpadding="0" cellspacing="0" border="0" align="center"
     style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
            margin-top:14px;">
-    <tr>${buildSocialCells(active, 'transparent', '')}</tr>
+    <tr>${buildSocialCells(active)}</tr>
   </table>`
 }

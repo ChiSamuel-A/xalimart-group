@@ -40,7 +40,7 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
 
     process()
     return () => { active = false }
-  }, [data.photoBase64, data.templateId])
+  }, [data.photoBase64, data.templateId, data])
 
   // NOTE: We also need to keep other text fields in sync immediately.
   // The useEffect above only depends on photo/template. If they type their name,
