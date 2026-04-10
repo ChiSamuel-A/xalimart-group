@@ -63,6 +63,7 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
       </tr>
     </table>
   `
+  
 
   // ── Right Side Content (Logo + Socials) ───────────────────────────────────
   const brandContent = `
