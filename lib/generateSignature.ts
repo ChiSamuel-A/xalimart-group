@@ -1,14 +1,18 @@
 import type { SignatureData, SignatureImages } from '@/types/signature'
 import { buildDark } from './templates/dark'
 import { buildLight } from './templates/light'
+import { buildMinimalLight } from './templates/minimal-light'
+import { buildMinimalDark } from './templates/minimal-dark'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
   switch (data.templateId) {
-    case 'dark':         return buildDark(data, images)
-    case 'light':        return buildLight(data, images)
+    case 'dark':          return buildDark(data, images)
+    case 'light':         return buildLight(data, images)
+    case 'minimal-light': return buildMinimalLight(data, images)
+    case 'minimal-dark':  return buildMinimalDark(data, images)
     // remaining templates will be added here
-    default:             return buildDark(data, images)
+    default:              return buildDark(data, images)
   }
 }
 

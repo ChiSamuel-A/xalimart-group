@@ -1,4 +1,4 @@
-// Template: Dark — full black body, 620×220px, circular photo left
+// Template: Minimal Dark — transparent body, optimized for dark themes, no photo
 import type { SignatureData, SignatureImages } from '@/types/signature'
 import {
   clampText,
@@ -10,50 +10,41 @@ import {
 } from './shared'
 
 const BG        = '#000000'
-const TEXT_NAME = '#ffffff'
-const TEXT_ROLE = '#bbbbbb'
-const TEXT_INFO = '#ffffff'
-const DIVIDER   = '#444444'
+const TEXT_NAME = '#ffffff' // Pure white for name on black background
+const TEXT_ROLE = '#bbbbbb' // Softer grey for the role
+const TEXT_INFO = '#ffffff' // Pure white for contact info
+const DIVIDER   = '#444444' // Subtle dark divider
 
-export function buildDark(data: SignatureData, images: SignatureImages): string {
-  const { fullName, role, phone, email, website, photoBase64, socials } = data
+export function buildMinimalDark(data: SignatureData, images: SignatureImages): string {
+  const { fullName, role, phone, email, website, socials } = data
 
-  // ── Photo (left) ───────────────────────────────────────────────────────────
-  const photoEl = photoBase64
-    ? `<img src="${photoBase64}" width="120" height="120"
-         alt="${clampText(fullName, 40)}"
-         style="display:block;border-radius:50%;width:120px;height:120px;object-fit:cover;border:0;">`
-    : `<table cellpadding="0" cellspacing="0" border="0" width="120" height="120"
-         style="width:120px;height:120px;border-radius:50%;background-color:#444444;
-                border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-         <tr><td width="120" height="120" style="width:120px;height:120px;font-size:0;line-height:0;">&nbsp;</td></tr>
-       </table>`
-
-  // ── Left Side Content (Photo + Info) ──────────────────────────────────────
+  // ── Left Side Content (Identity + Contact, no photo) ─────────────────────
   const identityContent = `
-    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+    <table cellpadding="0" cellspacing="0" border="0"
+      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
-        <td width="145" valign="middle" style="width:145px;padding:20px 0 20px 20px;vertical-align:middle;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-          ${photoEl}
-        </td>
-        <td valign="middle" style="padding:20px 10px 20px 10px;vertical-align:middle;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-          <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+        <td style="padding:20px 10px 20px 20px;vertical-align:middle;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+          <table cellpadding="0" cellspacing="0" border="0"
+            style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
             <tr>
-              <td style="font-family:Arial,sans-serif;font-size:22px;font-weight:600;color:${TEXT_NAME};line-height:26px;padding-bottom:4px;">
+              <td style="font-family:Arial,sans-serif;font-size:22px;font-weight:700;
+                         color:${TEXT_NAME};line-height:26px;padding-bottom:4px;">
                 ${clampText(fullName || 'Full Name', 40)}
               </td>
             </tr>
             <tr>
-              <td style="font-family:Arial,sans-serif;font-size:13px;font-weight:normal;color:${TEXT_ROLE};line-height:17px;padding-bottom:15px;">
+              <td style="font-family:Arial,sans-serif;font-size:13px;font-weight:normal;
+                         color:${TEXT_ROLE};line-height:17px;padding-bottom:18px;">
                 ${clampText(role || 'Job Title', 60)}
               </td>
             </tr>
             <tr>
               <td>
-                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                <table cellpadding="0" cellspacing="0" border="0"
+                  style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
                   ${email   ? badgeContactRow(images.emailIconWh,   `mailto:${email}`,     clampText(email, 38),   { textColor: TEXT_INFO }) : ''}
-                  ${phone   ? badgeContactRow(images.appelIcon,     whatsappHref(phone),   phone,                  { textColor: TEXT_INFO }) : ''}
                   ${website ? badgeContactRow(images.globeIconWh,   normalizeUrl(website), clampText(website, 38), { textColor: TEXT_INFO }) : ''}
+                  ${phone   ? badgeContactRow(images.appelIcon,     whatsappHref(phone),   phone,                  { textColor: TEXT_INFO }) : ''}
                   ${badgeContactRow(images.locationWhite, '#', STATIC_ADDRESS, { textColor: TEXT_INFO, isStatic: true, multiline: true })}
                 </table>
               </td>
@@ -63,7 +54,6 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
       </tr>
     </table>
   `
-  
 
   // ── Right Side Content (Logo + Socials) ───────────────────────────────────
   const brandContent = `
@@ -100,19 +90,19 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
               <tr>
                 <td width="419" valign="middle">
             <![endif]-->
-            <div class="mobile-stack" style="display:inline-block; width:419px; vertical-align:middle; max-width:100%; font-size:14px; line-height:normal;">
+            <div class="mobile-stack" style="display:inline-block;width:419px;vertical-align:middle;max-width:100%;font-size:14px;line-height:normal;">
               ${identityContent}
             </div>
             <!--[if mso]>
                 </td>
                 <td width="1" valign="middle" style="background-color:${DIVIDER};">
             <![endif]-->
-            <div class="mobile-hide" style="display:inline-block; width:1px; height:180px; vertical-align:middle; background-color:${DIVIDER};"></div>
+            <div class="mobile-hide" style="display:inline-block;width:1px;height:180px;vertical-align:middle;background-color:${DIVIDER};"></div>
             <!--[if mso]>
                 </td>
                 <td width="200" valign="middle">
             <![endif]-->
-            <div class="mobile-stack" style="display:inline-block; width:200px; vertical-align:middle; max-width:100%; font-size:14px; line-height:normal;">
+            <div class="mobile-stack" style="display:inline-block;width:200px;vertical-align:middle;max-width:100%;font-size:14px;line-height:normal;">
               ${brandContent}
             </div>
             <!--[if mso]>
@@ -126,4 +116,3 @@ export function buildDark(data: SignatureData, images: SignatureImages): string 
     </div>
   `
 }
-

@@ -87,7 +87,27 @@ function buildSocialCells(
   ).join('')
 }
 
-// Transparent "Safe" icons — used by both templates now
+// Transparent "Safe" icons (using White sources) — for minimal-light
+export function socialIconsRowWhite(
+  socials: { facebook: string; instagram: string; linkedin: string },
+  images: SignatureImages
+): string {
+  const active = [
+    socials.instagram ? { url: socials.instagram, src: images.instagramWh, alt: 'Instagram' } : null,
+    socials.facebook  ? { url: socials.facebook,  src: images.facebookWh,  alt: 'Facebook'  } : null,
+    socials.linkedin  ? { url: socials.linkedin,  src: images.linkedinWh,  alt: 'LinkedIn'  } : null,
+  ].filter((s): s is NonNullable<typeof s> => s !== null)
+
+  if (!active.length) return ''
+
+  return `<table cellpadding="0" cellspacing="0" border="0" align="center"
+    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
+           margin-top:14px;">
+    <tr>${buildSocialCells(active)}</tr>
+  </table>`
+}
+
+// Transparent "Safe" icons (using Black sources) — used by dark templates
 export function socialIconsRowBlack(
   socials: { facebook: string; instagram: string; linkedin: string },
   images: SignatureImages
