@@ -9,7 +9,7 @@ import {
   socialIconsRowBlackCircle,
 } from './shared'
 
-const BG        = '#ffffff'
+const BG        = '#feffff'
 const TEXT_NAME = '#000000'
 const TEXT_ROLE = '#777777'
 const TEXT_INFO = '#000000'
@@ -97,10 +97,10 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
         .mobile-padding-0 { padding: 0 !important; }
       }
     </style>
-    <div style="max-width:620px;overflow:hidden;">
+    <div style="max-width:620px;overflow:hidden;color-scheme:light;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="620"
         style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
-               background-color:${BG};width:620px;max-width:100%;color-scheme:light;
+               background-color:${BG};width:620px;max-width:100%;
                font-family:Arial,sans-serif;">
         <tr>
           <td style="padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">

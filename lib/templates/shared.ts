@@ -37,8 +37,11 @@ export function badgeContactRow(
   iconSrc: string,
   href: string,
   label: string,
-  { badgeBg = '#ffffff', textColor = '#ffffff', isStatic = false, multiline = false }: BadgeRowOpts = {}
+  { badgeBg = '#feffff', textColor = '#ffffff', isStatic = false, multiline = false }: BadgeRowOpts = {}
 ): string {
+  // If the bg is pure white, use off-white
+  const finalBadgeBg = (badgeBg === '#ffffff' || badgeBg === '#FFFFFF') ? '#feffff' : badgeBg;
+
   const labelHtml = isStatic
     ? `<span style="color:${textColor};font-family:Arial,sans-serif;font-size:12px;
                    line-height:16px;mso-line-height-rule:exactly;font-weight:normal;">${label}</span>`
@@ -54,17 +57,18 @@ export function badgeContactRow(
           <!-- Circle badge — nested table is more reliable for border-radius -->
           <td width="${BADGE}" style="width:${BADGE}px;padding:0;vertical-align:middle;" valign="middle">
             <table cellpadding="0" cellspacing="0" border="0" width="${BADGE}" height="${BADGE}"
-              style="width:${BADGE}px;height:${BADGE}px;background-color:${badgeBg};
+              style="width:${BADGE}px;height:${BADGE}px;background-color:${finalBadgeBg};
                      border-radius:50%;border-collapse:collapse;
                      mso-table-lspace:0pt;mso-table-rspace:0pt;">
               <tr>
                 <td width="${BADGE}" height="${BADGE}" align="center" valign="middle"
                   style="width:${BADGE}px;height:${BADGE}px;padding:0;
-                         font-size:0;line-height:0;
+                         font-size:0;line-height:0;color-scheme:light;
                          text-align:center;vertical-align:middle;">
                   <img src="${iconSrc}" width="${ICON}" height="${ICON}" border="0"
                     style="display:inline-block;vertical-align:middle;
-                           width:${ICON}px;height:${ICON}px;border:0;outline:none;" alt="">
+                           width:${ICON}px;height:${ICON}px;border:0;outline:none;
+                           filter: brightness(1) !important;" alt="">
                 </td>
               </tr>
             </table>
@@ -96,21 +100,25 @@ function buildSocialCells(
   bgColor: string,
   border: string
 ): string {
+  // If the bg is pure white, use off-white
+  const finalBgColor = (bgColor === '#ffffff' || bgColor === '#FFFFFF') ? '#feffff' : bgColor;
+
   return active.map((s, i) =>
     `<td${i < active.length - 1 ? ` style="padding-right:8px;mso-table-lspace:0pt;mso-table-rspace:0pt;"` : ' style="mso-table-lspace:0pt;mso-table-rspace:0pt;"'} align="center" valign="middle">
       <table cellpadding="0" cellspacing="0" border="0" width="${SOC}" height="${SOC}"
-        style="width:${SOC}px;height:${SOC}px;background-color:${bgColor};
+        style="width:${SOC}px;height:${SOC}px;background-color:${finalBgColor};
                border-radius:50%;${border ? `border:${border};` : ''}
                border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
         <tr>
           <td width="${SOC}" height="${SOC}" align="center" valign="middle"
             style="width:${SOC}px;height:${SOC}px;padding:0;
-                   font-size:0;line-height:0;
+                   font-size:0;line-height:0;color-scheme:light;
                    text-align:center;vertical-align:middle;">
             <a href="${s.url}" target="_blank"
               style="display:inline-block;vertical-align:middle;text-decoration:none;line-height:0;font-size:0;">
               <img src="${s.src}" width="${SICO}" height="${SICO}" border="0"
-                style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;" alt="${s.alt}">
+                style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;
+                       filter: brightness(1) !important;" alt="${s.alt}">
             </a>
           </td>
         </tr>
