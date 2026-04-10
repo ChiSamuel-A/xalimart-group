@@ -1,10 +1,11 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { buildSignatureHTML, getPreviewImages } from '@/lib/generateSignature'
 import CopyButton from '@/components/CopyButton'
 import CopyButtonErrorBoundary from '@/components/CopyButtonErrorBoundary'
 import type { SignatureData } from '@/types/signature'
+import { createLightComposite } from '@/lib/composite'
 
 interface Props {
   data: SignatureData
@@ -12,9 +13,48 @@ interface Props {
 }
 
 export default function SignaturePreview({ data, isValid = true }: Props) {
+  const [processedData, setProcessedData] = useState<SignatureData>(data)
+
+  // ── Compositing logic ───────────────────────────────────────────────────────
+  // We only run this when the photo or template changes.
+  useEffect(() => {
+    let active = true
+
+    async function process() {
+      // If template is light, we MUST have the composite for it to look right.
+      if (data.templateId === 'light') {
+        try {
+          const composite = await createLightComposite(data.photoBase64)
+          if (active) {
+            setProcessedData({ ...data, compositePhotoBase64: composite })
+          }
+        } catch (err) {
+          console.error('Compositing failed:', err)
+          if (active) setProcessedData(data)
+        }
+      } else {
+        // For other templates, we don't need the composite.
+        if (active) setProcessedData(data)
+      }
+    }
+
+    process()
+    return () => { active = false }
+  }, [data.photoBase64, data.templateId])
+
+  // NOTE: We also need to keep other text fields in sync immediately.
+  // The useEffect above only depends on photo/template. If they type their name,
+  // we want the preview to update instantly without waiting for an async process.
+  const displayData = useMemo(() => {
+    return {
+      ...data,
+      compositePhotoBase64: processedData.compositePhotoBase64
+    }
+  }, [data, processedData.compositePhotoBase64])
+
   const html = useMemo(
-    () => buildSignatureHTML(data, getPreviewImages()),
-    [data]
+    () => buildSignatureHTML(displayData, getPreviewImages()),
+    [displayData]
   )
 
   return (
@@ -62,7 +102,7 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
       </div>
 
       <CopyButtonErrorBoundary>
-        <CopyButton data={data} isValid={isValid} />
+        <CopyButton data={displayData} isValid={isValid} />
       </CopyButtonErrorBoundary>
 
       <p className="text-xs text-center text-gray-400">

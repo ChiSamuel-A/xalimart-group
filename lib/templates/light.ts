@@ -31,12 +31,17 @@ export function buildLight(data: SignatureData, images: SignatureImages): string
        </table>`
 
   // ── Left cell — single diagonal bar behind the photo ──────────────────────
-  // One 28 px-wide bar at -39° slices the full height of the cell (bar is
-  // 380 px tall so it extends well past both the top and bottom edges).
-  // Modern clients: CSS transform.  Outlook: VML <v:rect> with rotation:-39.
-  // Bar bounding-box is centred horizontally (left=59 = 145/2 − 14) and
-  // vertically (top=−70 keeps the centre at ≈110 px for a ~220 px row).
-  const photoCell = `<td width="145" valign="middle"
+  // If we have a composite photo (baked with line.png), use it.
+  // Otherwise, fallback to the complex CSS/VML logic (legacy).
+  const photoCell = data.compositePhotoBase64
+    ? `<td width="145" valign="middle" 
+           style="width:145px;padding:0;vertical-align:middle;text-align:center;
+                  mso-table-lspace:0pt;mso-table-rspace:0pt;">
+          <img src="${data.compositePhotoBase64}" width="145" height="250" 
+               alt="${clampText(fullName, 40)}"
+               style="display:block;width:145px;height:250px;border:0;object-fit:cover;">
+       </td>`
+    : `<td width="145" valign="middle"
     style="width:145px;padding:0;vertical-align:middle;overflow:hidden;position:relative;
            mso-table-lspace:0pt;mso-table-rspace:0pt;">
     <!--[if mso]>

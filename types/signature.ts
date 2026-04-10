@@ -5,6 +5,7 @@ export interface SignatureData {
   email: string
   website: string
   photoBase64: string | null
+  compositePhotoBase64?: string | null
   templateId: 'dark' | 'light' | 'minimal-light' | 'minimal-dark'
   socials: {
     facebook: string
