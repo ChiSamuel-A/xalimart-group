@@ -54,8 +54,7 @@ export function badgeContactRow(
             style="width:${BADGE}px;padding:0;font-size:0;line-height:0;text-align:center;vertical-align:middle;">
             <!-- White glow filter helps black icons stay visible on dark backgrounds -->
             <img src="${iconSrc}" width="${ICON}" height="${ICON}" border="0"
-              style="display:inline-block;vertical-align:middle;width:${ICON}px;height:${ICON}px;border:0;outline:none;
-                     filter: drop-shadow(1px 1px 0px #ffffff) drop-shadow(-1px -1px 0px #ffffff) drop-shadow(1px -1px 0px #ffffff) drop-shadow(-1px 1px 0px #ffffff);" alt="">
+              style="display:inline-block;vertical-align:middle;width:${ICON}px;height:${ICON}px;border:0;outline:none;" alt="">
           </td>
           <td style="padding-left:10px;font-family:Arial,sans-serif;font-size:12px;
                      color:${textColor};line-height:16px;mso-line-height-rule:exactly;
@@ -82,8 +81,7 @@ function buildSocialCells(
       <a href="${s.url}" target="_blank"
         style="display:inline-block;vertical-align:middle;text-decoration:none;line-height:0;font-size:0;">
         <img src="${s.src}" width="${SICO}" height="${SICO}" border="0"
-          style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;
-                 filter: drop-shadow(1px 1px 0px #ffffff) drop-shadow(-1px -1px 0px #ffffff) drop-shadow(1px -1px 0px #ffffff) drop-shadow(-1px 1px 0px #ffffff);" alt="${s.alt}">
+          style="display:inline-block;vertical-align:middle;width:${SICO}px;height:${SICO}px;border:0;outline:none;" alt="${s.alt}">
       </a>
     </td>`
   ).join('')

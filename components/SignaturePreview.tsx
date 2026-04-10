@@ -4,8 +4,9 @@ import { useMemo, useState, useEffect } from 'react'
 import { buildSignatureHTML, getPreviewImages } from '@/lib/generateSignature'
 import CopyButton from '@/components/CopyButton'
 import CopyButtonErrorBoundary from '@/components/CopyButtonErrorBoundary'
-import type { SignatureData } from '@/types/signature'
+import type { SignatureData, SignatureImages } from '@/types/signature'
 import { createLightComposite } from '@/lib/composite'
+import { processAllImages } from '@/lib/safeIcons'
 
 interface Props {
   data: SignatureData
@@ -14,6 +15,20 @@ interface Props {
 
 export default function SignaturePreview({ data, isValid = true }: Props) {
   const [processedData, setProcessedData] = useState<SignatureData>(data)
+  const [safeImages, setSafeImages] = useState<SignatureImages | null>(null)
+
+  // ── Icon Processing logic ──────────────────────────────────────────────────
+  // We process icons once or when preview images would change.
+  useEffect(() => {
+    let active = true
+    async function prepare() {
+      const rawImages = getPreviewImages()
+      const processed = await processAllImages(rawImages)
+      if (active) setSafeImages(processed)
+    }
+    prepare()
+    return () => { active = false }
+  }, [])
 
   // ── Compositing logic ───────────────────────────────────────────────────────
   // We only run this when the photo or template changes.
@@ -53,8 +68,8 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
   }, [data, processedData.compositePhotoBase64])
 
   const html = useMemo(
-    () => buildSignatureHTML(displayData, getPreviewImages()),
-    [displayData]
+    () => buildSignatureHTML(displayData, safeImages || getPreviewImages()),
+    [displayData, safeImages]
   )
 
   return (

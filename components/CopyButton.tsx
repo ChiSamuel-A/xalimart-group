@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Copy, Check, AlertCircle, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buildSignatureHTML, getInlineImages } from '@/lib/generateSignature'
+import { processAllImages } from '@/lib/safeIcons'
 import type { SignatureData } from '@/types/signature'
 
 interface Props {
@@ -21,7 +22,8 @@ export default function CopyButton({ data, isValid = true }: Props) {
   const handleCopy = async () => {
     setState('loading')
     try {
-      const images = await getInlineImages()
+      const rawImages = await getInlineImages()
+      const images = await processAllImages(rawImages)
       const html = buildSignatureHTML(data, images)
 
       const htmlBlob = new Blob([html], { type: 'text/html' })
