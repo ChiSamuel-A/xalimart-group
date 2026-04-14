@@ -26,7 +26,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = isAddress ? '10px' : '13px'
+  const fontSize = isAddress ? '8px' : '13px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</a>`
@@ -78,16 +78,16 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
   // ── Profile photo ──────────────────────────────────────────────────────────
   const photo = photoBase64
     ? `<img src="${photoBase64}" alt="${clampText(fullName, 40)}"
-         width="140" height="175"
-         style="display:block;width:140px;height:175px;object-fit:cover;
+         width="155" height="220"
+         style="display:block;width:155px;height:220px;object-fit:cover;
                 border-radius:12px;border:1px solid ${DIVIDER};margin:0 auto;">`
-    : `<table cellpadding="0" cellspacing="0" border="0" width="140"
-         style="width:140px;border-radius:12px;background-color:#222222;
+    : `<table cellpadding="0" cellspacing="0" border="0" width="155"
+         style="width:155px;border-radius:12px;background-color:#222222;
                 border:1px solid ${DIVIDER};border-collapse:collapse;
                 mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td width="140" height="175" align="center" valign="middle"
-             style="width:140px;height:175px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
+           <td width="155" height="220" align="center" valign="middle"
+             style="width:155px;height:220px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
          </tr>
        </table>`
 
@@ -152,7 +152,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
 
               <!-- Col 4: Profile photo -->
               <td valign="middle"
-                style="padding:20px 12px 20px 8px;width:150px;text-align:center;background-color:${BG};">
+                style="padding:0 12px 0 8px;width:150px;text-align:center;background-color:${BG};">
                 ${photo}
               </td>
 
