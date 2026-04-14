@@ -120,8 +120,8 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
                   <img src="${images.xalimartBlack}" alt="Xalimart Group" width="110"
                     style="display:block;margin:0 auto;max-width:110px;outline:none;text-decoration:none;border:none;">
                 </a>
-                <p style="margin:10px 0 0 0;font-size:9px;color:#555555;font-family:${FONT};
-                           line-height:1.4;font-style:italic;text-align:center;">
+                <p style="margin:10px 0 0 0;font-size:10px;color:#000000;font-family:${FONT};
+                           line-height:1.4;text-align:center;">
                   ${TAGLINE}
                 </p>
                 ${socialsRow(socials, images)}
