@@ -23,6 +23,7 @@ export async function fetchImageAsBase64(url: string): Promise<string> {
 // The profile photo (photoBase64) remains base64 since it is user-uploaded.
 const HOSTED_BASE = 'https://xalimart-group.vercel.app'
 
+
 export async function getInlineImages(): Promise<SignatureImages> {
   return {
     xalimartBlack:    `${HOSTED_BASE}/xalimart-black.png`,
