@@ -2,26 +2,26 @@
 
 import { useState } from 'react'
 import { useSignIn, useSignUp } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { LogIn, UserPlus, Loader2, MailCheck, ArrowLeft } from 'lucide-react'
 
 type Mode = 'signin' | 'signup' | 'verify'
 
-export default function AuthSection() {
+interface AuthSectionProps {
+  initialMode?: 'signin' | 'signup'
+}
+
+export default function AuthSection({ initialMode = 'signin' }: AuthSectionProps) {
   const { signIn, setActive: setSignInActive, isLoaded: signInLoaded } = useSignIn()
   const { signUp, setActive: setSignUpActive, isLoaded: signUpLoaded } = useSignUp()
+  const router = useRouter()
 
-  const [mode, setMode]         = useState<Mode>('signin')
+  const [mode, setMode]         = useState<Mode>(initialMode)
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [otp, setOtp]           = useState('')
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
-
-  const switchMode = (next: 'signin' | 'signup') => {
-    setMode(next)
-    setError('')
-    setOtp('')
-  }
 
   // ── Sign In ────────────────────────────────────────────────────────────────
   const handleSignIn = async (e: React.FormEvent) => {
@@ -127,7 +127,7 @@ export default function AuthSection() {
 
           <button
             type="button"
-            onClick={() => switchMode('signup')}
+            onClick={() => router.push('/signup')}
             className="w-full flex items-center justify-center gap-1.5 text-[11px] text-gray-400 hover:text-black font-medium transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
@@ -188,15 +188,23 @@ export default function AuthSection() {
         </button>
 
         <div className="text-center pt-1">
-          <button
-            type="button"
-            onClick={() => switchMode(mode === 'signin' ? 'signup' : 'signin')}
-            className="text-[11px] text-gray-400 hover:text-black font-medium transition-colors"
-          >
-            {mode === 'signin'
-              ? "Don't have an account? Create one"
-              : 'Already have an account? Sign In'}
-          </button>
+          {mode === 'signin' ? (
+            <button
+              type="button"
+              onClick={() => router.push('/signup')}
+              className="text-[11px] text-gray-400 hover:text-black font-medium transition-colors"
+            >
+              Don&apos;t have an account? Create one
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => router.push('/login')}
+              className="text-[11px] text-gray-400 hover:text-black font-medium transition-colors"
+            >
+              Already have an account? Sign In
+            </button>
+          )}
         </div>
       </form>
     </div>
