@@ -25,7 +25,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = isAddress ? '8.5px' : '13px'
+  const fontSize = isAddress ? '8px' : '11px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</a>`
