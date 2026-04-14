@@ -128,8 +128,8 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
   return `
     <style>
       @media only screen and (max-width:480px) {
-        .xw-desktop { display:none    !important; }
-        .xw-mobile  { display:table   !important; }
+        .xw-desktop { display:none !important; mso-hide:all !important; overflow:hidden !important; max-height:0 !important; width:0 !important; }
+        .xw-mobile  { display:table !important; max-height:none !important; overflow:visible !important; line-height:1.4 !important; visibility:visible !important; }
       }
     </style>
 
@@ -195,8 +195,10 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
     <!-- ════════════════════════════════════════════════════════════════════ -->
     <!-- MOBILE (100% width, hidden on desktop, shown on mobile via @media)  -->
     <!-- ════════════════════════════════════════════════════════════════════ -->
+    <!--[if !mso]><!-->
     <table class="xw-mobile" cellpadding="0" cellspacing="0" border="0"
-      style="display:none;margin:0;padding:0;font-family:Arial,sans-serif;
+      style="display:none; max-height:0; overflow:hidden; mso-hide:all;
+             margin:0;padding:0;font-family:Arial,sans-serif;
              font-size:14px;line-height:1.4;color:#000000;width:100%;
              border-bottom:2px solid #000000;background-color:#ffffff;">
 
@@ -249,5 +251,6 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
       </tr>
 
     </table>
+    <!--<![endif]-->
   `
 }
