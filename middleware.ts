@@ -1,6 +1,11 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export default clerkMiddleware()
+// Auth is handled client-side via Clerk's useUser() hook in page.tsx.
+// No server-side route protection needed — this middleware is a clean pass-through.
+export function middleware(_request: NextRequest) {
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
