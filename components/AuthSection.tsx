@@ -35,8 +35,9 @@ export default function AuthSection() {
       if (result.status === 'complete') {
         await setSignInActive({ session: result.createdSessionId })
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.longMessage || err.errors?.[0]?.message || 'Sign in failed.')
+    } catch (err: unknown) {
+      const e = err as { errors?: { longMessage?: string; message?: string }[] }
+      setError(e.errors?.[0]?.longMessage || e.errors?.[0]?.message || 'Sign in failed.')
     } finally {
       setLoading(false)
     }
@@ -53,8 +54,9 @@ export default function AuthSection() {
       await signUp.create({ emailAddress: email, password })
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
       setMode('verify')
-    } catch (err: any) {
-      setError(err.errors?.[0]?.longMessage || err.errors?.[0]?.message || 'Sign up failed.')
+    } catch (err: unknown) {
+      const e = err as { errors?: { longMessage?: string; message?: string }[] }
+      setError(e.errors?.[0]?.longMessage || e.errors?.[0]?.message || 'Sign up failed.')
     } finally {
       setLoading(false)
     }
@@ -72,8 +74,9 @@ export default function AuthSection() {
       if (result.status === 'complete') {
         await setSignUpActive({ session: result.createdSessionId })
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.longMessage || err.errors?.[0]?.message || 'Invalid code.')
+    } catch (err: unknown) {
+      const e = err as { errors?: { longMessage?: string; message?: string }[] }
+      setError(e.errors?.[0]?.longMessage || e.errors?.[0]?.message || 'Invalid code.')
     } finally {
       setLoading(false)
     }
