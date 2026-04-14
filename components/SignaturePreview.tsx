@@ -1,12 +1,11 @@
 'use client'
 
-import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react' // useState kept for safeImages/previewMode/iframeHeight
 import { Monitor, Smartphone } from 'lucide-react'
 import { buildSignatureHTML, getPreviewImages } from '@/lib/generateSignature'
 import CopyButton from '@/components/CopyButton'
 import CopyButtonErrorBoundary from '@/components/CopyButtonErrorBoundary'
 import type { SignatureData, SignatureImages } from '@/types/signature'
-import { createLightComposite } from '@/lib/composite'
 import { processAllImages } from '@/lib/safeIcons'
 
 interface Props {
@@ -17,7 +16,6 @@ interface Props {
 type PreviewMode = 'desktop' | 'mobile'
 
 export default function SignaturePreview({ data, isValid = true }: Props) {
-  const [processedData, setProcessedData]   = useState<SignatureData>(data)
   const [safeImages, setSafeImages]         = useState<SignatureImages | null>(null)
   const [previewMode, setPreviewMode]       = useState<PreviewMode>('desktop')
   const [iframeHeight, setIframeHeight]     = useState(260)
@@ -35,29 +33,7 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
     return () => { active = false }
   }, [])
 
-  // ── Compositing (light template) ───────────────────────────────────────────
-  useEffect(() => {
-    let active = true
-    async function process() {
-      if (data.templateId === 'light') {
-        try {
-          const composite = await createLightComposite(data.photoBase64)
-          if (active) setProcessedData({ ...data, compositePhotoBase64: composite })
-        } catch {
-          if (active) setProcessedData(data)
-        }
-      } else {
-        if (active) setProcessedData(data)
-      }
-    }
-    process()
-    return () => { active = false }
-  }, [data.photoBase64, data.templateId, data])
-
-  const displayData = useMemo(() => ({
-    ...data,
-    compositePhotoBase64: processedData.compositePhotoBase64,
-  }), [data, processedData.compositePhotoBase64])
+  const displayData = useMemo(() => ({ ...data }), [data])
 
   const html = useMemo(
     () => buildSignatureHTML(displayData, safeImages || getPreviewImages()),

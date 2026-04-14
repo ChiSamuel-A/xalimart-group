@@ -7,7 +7,7 @@ export interface SignatureData {
   website: string
   photoBase64: string | null
   compositePhotoBase64?: string | null
-  templateId: 'dark' | 'light' | 'minimal-light' | 'minimal-dark' | 'xalimart-white'
+  templateId: 'xalimart-white' | 'xalimart-black'
   socials: {
     facebook: string
     instagram: string

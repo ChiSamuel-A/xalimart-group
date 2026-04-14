@@ -12,9 +12,10 @@ const TEMPLATES: {
   id: SignatureData['templateId']
   name: string
   tagline: string
+  dark?: boolean
 }[] = [
   { id: 'xalimart-white', name: 'Xalimart White', tagline: 'White body · logo left · photo right' },
-  // next template will be added here
+  { id: 'xalimart-black', name: 'Xalimart Black', tagline: 'Black body · logo left · photo right', dark: true },
 ]
 
 export default function TemplatePicker({ data, onChange }: Props) {
@@ -25,7 +26,7 @@ export default function TemplatePicker({ data, onChange }: Props) {
       </p>
       {/* Mobile: horizontal scroll strip — sm+: grid */}
       <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 overflow-x-auto pb-1 sm:overflow-x-visible sm:pb-0 snap-x snap-mandatory">
-        {TEMPLATES.map(({ id, name, tagline }) => {
+        {TEMPLATES.map(({ id, name, tagline, dark }) => {
           const active = data.templateId === id
           return (
             <button
@@ -33,18 +34,19 @@ export default function TemplatePicker({ data, onChange }: Props) {
               type="button"
               onClick={() => onChange({ ...data, templateId: id })}
               className={cn(
-                'flex flex-col items-start p-4 rounded-xl border-2 bg-white text-left',
+                'flex flex-col items-start p-4 rounded-xl border-2 text-left',
                 'transition-all hover:shadow-sm cursor-pointer snap-start',
                 'flex-shrink-0 w-36 sm:w-auto',
+                dark ? 'bg-zinc-900' : 'bg-white',
                 active
                   ? 'border-black shadow-sm shadow-zinc-200'
                   : 'border-gray-100 hover:border-gray-300'
               )}
             >
-              <span className={cn('text-sm font-semibold leading-tight', active ? 'text-black' : 'text-gray-800')}>
+              <span className={cn('text-sm font-semibold leading-tight', dark ? 'text-white' : active ? 'text-black' : 'text-gray-800')}>
                 {name}
               </span>
-              <span className="text-[11px] text-gray-400 mt-0.5 leading-tight">
+              <span className={cn('text-[11px] mt-0.5 leading-tight', dark ? 'text-zinc-400' : 'text-gray-400')}>
                 {tagline}
               </span>
             </button>

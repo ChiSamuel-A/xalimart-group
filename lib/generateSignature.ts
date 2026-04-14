@@ -1,9 +1,13 @@
 import type { SignatureData, SignatureImages } from '@/types/signature'
 import { buildXalimartWhite } from './templates/xalimart-white'
+import { buildXalimartBlack } from './templates/xalimart-black'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
-  return buildXalimartWhite(data, images)
+  switch (data.templateId) {
+    case 'xalimart-black': return buildXalimartBlack(data, images)
+    default:               return buildXalimartWhite(data, images)
+  }
 }
 
 // ── Image utilities ────────────────────────────────────────────────────────────
