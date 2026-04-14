@@ -10,7 +10,6 @@ const TEXT_ROLE = '#666666'
 const TEXT_INFO = '#000000'
 const TEXT_ADDR = '#444444'
 const DIVIDER   = '#e0e0e0'
-const ICON_BG   = '#000000'
 
 // ── Simple icon wrapper without circle background ──────────────────────────
 function simpleIcon(iconSrc: string, iconSize: number): string {
