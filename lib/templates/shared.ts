@@ -1,7 +1,7 @@
 import type { SignatureImages } from '@/types/signature'
 
 // ── Static content ─────────────────────────────────────────────────────────────
-export const STATIC_ADDRESS = 'Route de Ngor, Flanc des Mamelles,<br>R\u00e9sidence Sadiya Tower, Lot n\u00ba 8'
+export const STATIC_ADDRESS = 'Route de Ngor, Flanc des Mamelles,<br>Residence Sadiya Tower, Lot n\u00b0 8, Dakar, Senegal'
 
 // ── Text clamp ─────────────────────────────────────────────────────────────────
 export function clampText(value: string, maxChars: number): string {

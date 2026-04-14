@@ -18,6 +18,11 @@ body {
   font-size: 14px;
 }
 
+/* Prevent Tailwind preflight from making signature icons oval in preview */
+img[width][height] {
+  height: attr(height px);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

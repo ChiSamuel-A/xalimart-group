@@ -19,15 +19,15 @@ async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<string
     img.src = imageSrc
   })
   const canvas = document.createElement('canvas')
-  canvas.width  = cropPixels.width
-  canvas.height = cropPixels.height
+  canvas.width  = 140
+  canvas.height = 175
   const ctx = canvas.getContext('2d')!
   ctx.drawImage(
     image,
     cropPixels.x, cropPixels.y,
     cropPixels.width, cropPixels.height,
     0, 0,
-    cropPixels.width, cropPixels.height
+    140, 175
   )
   return canvas.toDataURL('image/jpeg', 0.92)
 }

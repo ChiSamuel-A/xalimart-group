@@ -10,12 +10,12 @@ const TEXT_INFO = '#ffffff'
 const TEXT_ADDR = '#bbbbbb'
 const DIVIDER   = '#444444'
 const BG        = '#000000'
-const TAGLINE   = "We don&apos;t follow the stand&apos;Arts, We create them."
+const TAGLINE   = "We don&apos;t follow the stand&apos;Arts,<br>We create them."
 
 // ── Simple icon ────────────────────────────────────────────────────────────
 function simpleIcon(iconSrc: string, iconSize: number): string {
   return `<img src="${iconSrc}" width="${iconSize}" height="${iconSize}" border="0"
-    style="display:block;width:${iconSize}px;height:${iconSize}px;border:none;">`
+    style="display:block;width:${iconSize}px;height:${iconSize}px;min-width:${iconSize}px;min-height:${iconSize}px;max-width:${iconSize}px;max-height:${iconSize}px;border:none;">`
 }
 
 // ── Contact row: icon + text ───────────────────────────────────────────────
@@ -26,7 +26,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = isAddress ? '12px' : '13px'
+  const fontSize = isAddress ? '10px' : '13px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</a>`
@@ -78,16 +78,16 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
   // ── Profile photo ──────────────────────────────────────────────────────────
   const photo = photoBase64
     ? `<img src="${photoBase64}" alt="${clampText(fullName, 40)}"
-         width="120" height="150"
-         style="display:block;width:120px;height:150px;object-fit:cover;
+         width="140" height="175"
+         style="display:block;width:140px;height:175px;object-fit:cover;
                 border-radius:12px;border:1px solid ${DIVIDER};margin:0 auto;">`
-    : `<table cellpadding="0" cellspacing="0" border="0" width="120"
-         style="width:120px;border-radius:12px;background-color:#222222;
+    : `<table cellpadding="0" cellspacing="0" border="0" width="140"
+         style="width:140px;border-radius:12px;background-color:#222222;
                 border:1px solid ${DIVIDER};border-collapse:collapse;
                 mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td width="120" height="150" align="center" valign="middle"
-             style="width:120px;height:150px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
+           <td width="140" height="175" align="center" valign="middle"
+             style="width:140px;height:175px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
          </tr>
        </table>`
 
@@ -121,8 +121,8 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
                   <img src="${images.xalimartWhite}" alt="Xalimart Group" width="110"
                     style="display:block;margin:0 auto;max-width:110px;outline:none;text-decoration:none;border:none;">
                 </a>
-                <p style="margin:10px 0 0 0;font-size:10px;color:#ffffff;font-family:${FONT};
-                           line-height:1.4;text-align:center;">
+                <p style="margin:10px 0 0 0;font-size:8px;color:#ffffff;font-family:${FONT};
+                           line-height:1.5;text-align:center;">
                   ${TAGLINE}
                 </p>
                 ${socialsRow(socials, images)}
@@ -152,7 +152,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
 
               <!-- Col 4: Profile photo -->
               <td valign="middle"
-                style="padding:28px 24px 28px 10px;width:135px;text-align:center;background-color:${BG};">
+                style="padding:20px 12px 20px 8px;width:150px;text-align:center;background-color:${BG};">
                 ${photo}
               </td>
 
