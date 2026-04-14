@@ -42,7 +42,7 @@ export default function Dashboard() {
   // ── Redirect to login if not authenticated ────────────────────────────────
   useEffect(() => {
     if (isLoaded && !user) {
-      router.replace('/')
+      router.replace('/login')
     }
   }, [isLoaded, user, router])
 
@@ -133,7 +133,7 @@ export default function Dashboard() {
   }
 
   const handleSignOut = () => {
-    signOut(() => router.replace('/'))
+    signOut(() => router.replace('/login'))
   }
 
   if (!isLoaded || !user) return null

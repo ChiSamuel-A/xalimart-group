@@ -34,7 +34,6 @@ export default function AuthSection() {
       const result = await signIn.create({ identifier: email, password })
       if (result.status === 'complete') {
         await setSignInActive({ session: result.createdSessionId })
-        window.location.href = '/dashboard'
       }
     } catch (err: unknown) {
       const e = err as { errors?: { longMessage?: string; message?: string }[] }
@@ -74,7 +73,6 @@ export default function AuthSection() {
       const result = await signUp.attemptEmailAddressVerification({ code: otp })
       if (result.status === 'complete') {
         await setSignUpActive({ session: result.createdSessionId })
-        window.location.href = '/dashboard'
       }
     } catch (err: unknown) {
       const e = err as { errors?: { longMessage?: string; message?: string }[] }
