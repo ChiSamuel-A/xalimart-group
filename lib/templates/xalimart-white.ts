@@ -25,7 +25,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = isAddress ? '8px' : '11px'
+  const fontSize = isAddress ? '7.2px' : '11px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.5;">${label}</a>`
@@ -77,16 +77,16 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
   // ── Profile photo ──────────────────────────────────────────────────────────
   const photo = photoBase64
     ? `<img src="${photoBase64}" alt="${clampText(fullName, 40)}"
-         width="155" height="220"
-         style="display:block;width:155px;height:220px;object-fit:cover;
+         width="220" height="220"
+         style="display:block;width:220px;height:220px;
                 border-radius:12px;border:1px solid ${DIVIDER};margin:0 auto;">`
-    : `<table cellpadding="0" cellspacing="0" border="0" width="155"
-         style="width:155px;border-radius:12px;background-color:#d8d8d8;
+    : `<table cellpadding="0" cellspacing="0" border="0" width="220"
+         style="width:220px;border-radius:12px;background-color:#d8d8d8;
                 border:1px solid ${DIVIDER};border-collapse:collapse;
                 mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td width="155" height="220" align="center" valign="middle"
-             style="width:155px;height:220px;font-size:0;line-height:0;background-color:#d8d8d8;">&nbsp;</td>
+           <td width="220" height="220" align="center" valign="middle"
+             style="width:220px;height:220px;font-size:0;line-height:0;background-color:#d8d8d8;">&nbsp;</td>
          </tr>
        </table>`
 
@@ -120,7 +120,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
                   <img src="${images.xalimartBlack}" alt="Xalimart Group" width="110"
                     style="display:block;margin:0 auto;max-width:110px;outline:none;text-decoration:none;border:none;">
                 </a>
-                <p style="margin:10px 0 0 0;font-size:8px;color:#000000;font-family:${FONT};
+                <p style="margin:10px 0 0 0;font-size:7.5px;color:#000000;font-family:${FONT};
                            line-height:1.5;text-align:center;">
                   ${TAGLINE}
                 </p>
@@ -151,7 +151,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
               <!-- Col 4: Profile photo -->
               <td valign="middle"
-                style="padding:0 12px 0 8px;width:150px;text-align:center;">
+                style="padding:0 12px 0 8px;width:244px;text-align:center;">
                 ${photo}
               </td>
 
