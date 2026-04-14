@@ -3,16 +3,17 @@ import { buildDark } from './templates/dark'
 import { buildLight } from './templates/light'
 import { buildMinimalLight } from './templates/minimal-light'
 import { buildMinimalDark } from './templates/minimal-dark'
+import { buildXalimartWhite } from './templates/xalimart-white'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
   switch (data.templateId) {
-    case 'dark':          return buildDark(data, images)
-    case 'light':         return buildLight(data, images)
-    case 'minimal-light': return buildMinimalLight(data, images)
-    case 'minimal-dark':  return buildMinimalDark(data, images)
-    // remaining templates will be added here
-    default:              return buildDark(data, images)
+    case 'dark':            return buildDark(data, images)
+    case 'light':           return buildLight(data, images)
+    case 'minimal-light':   return buildMinimalLight(data, images)
+    case 'minimal-dark':    return buildMinimalDark(data, images)
+    case 'xalimart-white':  return buildXalimartWhite(data, images)
+    default:                return buildDark(data, images)
   }
 }
 
@@ -43,6 +44,7 @@ export async function getInlineImages(): Promise<SignatureImages> {
     globeIconWh:      `${HOSTED_BASE}/globe-wh.png`,
     appelIcon:        `${HOSTED_BASE}/appel.png`,
     appelIconBl:      `${HOSTED_BASE}/appel-bl.png`,
+    phoneIcon:        `${HOSTED_BASE}/phone.png`,
     telephoneIconWh:  `${HOSTED_BASE}/telephone-wh.png`,
     locationBlack:    `${HOSTED_BASE}/location-black.png`,
     locationWhite:    `${HOSTED_BASE}/location-white.png`,
@@ -65,6 +67,7 @@ export function getPreviewImages(): SignatureImages {
     globeIconWh:      '/globe-wh.png',
     appelIcon:        '/appel.png',
     appelIconBl:      '/appel-bl.png',
+    phoneIcon:        '/phone.png',
     telephoneIconWh:  '/telephone-wh.png',
     locationBlack:    '/location-black.png',
     locationWhite:    '/location-white.png',

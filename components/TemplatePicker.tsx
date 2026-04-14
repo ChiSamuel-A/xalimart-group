@@ -13,10 +13,8 @@ const TEMPLATES: {
   name: string
   tagline: string
 }[] = [
-  { id: 'dark',         name: 'Dark',          tagline: 'Black body · circular photo'    },
-  { id: 'light',        name: 'Light',         tagline: 'White body · circular photo'    },
-  { id: 'minimal-light', name: 'Minimal Light', tagline: 'White body · large name'       },
-  { id: 'minimal-dark',  name: 'Minimal Dark',  tagline: 'Black body · large name'       },
+  { id: 'xalimart-white', name: 'Xalimart White', tagline: 'White body · logo left · photo right' },
+  // next template will be added here
 ]
 
 export default function TemplatePicker({ data, onChange }: Props) {

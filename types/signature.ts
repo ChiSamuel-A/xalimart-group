@@ -2,11 +2,12 @@ export interface SignatureData {
   fullName: string
   role: string
   phone: string
+  mobile: string
   email: string
   website: string
   photoBase64: string | null
   compositePhotoBase64?: string | null
-  templateId: 'dark' | 'light' | 'minimal-light' | 'minimal-dark'
+  templateId: 'dark' | 'light' | 'minimal-light' | 'minimal-dark' | 'xalimart-white'
   socials: {
     facebook: string
     instagram: string
@@ -23,6 +24,7 @@ export interface SignatureImages {
   globeIconWh: string
   appelIcon: string
   appelIconBl: string
+  phoneIcon: string
   telephoneIconWh: string
   locationBlack: string
   locationWhite: string

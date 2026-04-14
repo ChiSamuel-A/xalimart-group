@@ -64,10 +64,12 @@ function isValidUrl(val: string): boolean {
 
 export default function SignatureForm({ data, onChange, onValidationChange }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [dialCode, setDialCode]       = useState(() => extractDialCode(data.phone))
-  const [localNumber, setLocalNumber] = useState(() => extractLocalNumber(data.phone))
-  const [errors, setErrors]           = useState<Record<string, string>>({})
-  const [cropSrc, setCropSrc]         = useState<string | null>(null)
+  const [dialCode, setDialCode]             = useState(() => extractDialCode(data.phone))
+  const [localNumber, setLocalNumber]       = useState(() => extractLocalNumber(data.phone))
+  const [mobileDialCode, setMobileDialCode] = useState(() => extractDialCode(data.mobile || ''))
+  const [mobileLocal, setMobileLocal]       = useState(() => extractLocalNumber(data.mobile || ''))
+  const [errors, setErrors]                 = useState<Record<string, string>>({})
+  const [cropSrc, setCropSrc]               = useState<string | null>(null)
 
   const applyError = (key: string, message: string | null) => {
     const next = { ...errors }
@@ -108,10 +110,19 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
       if (raw.length > 5 && isValidPhoneNumber(raw)) {
         formatted = parsePhoneNumberWithError(raw).formatInternational()
       }
-    } catch {
-      // keep raw
-    }
+    } catch { /* keep raw */ }
     onChange({ ...data, phone: formatted })
+  }
+
+  const updateMobile = (code: string, local: string) => {
+    const raw = `${code}${local.trim()}`
+    let formatted = raw
+    try {
+      if (raw.length > 5 && isValidPhoneNumber(raw)) {
+        formatted = parsePhoneNumberWithError(raw).formatInternational()
+      }
+    } catch { /* keep raw */ }
+    onChange({ ...data, mobile: formatted })
   }
 
   const handleDialChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,6 +133,16 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
   const handleLocalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalNumber(e.target.value)
     updatePhone(dialCode, e.target.value)
+  }
+
+  const handleMobileDialChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setMobileDialCode(e.target.value)
+    updateMobile(e.target.value, mobileLocal)
+  }
+
+  const handleMobileLocalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMobileLocal(e.target.value)
+    updateMobile(mobileDialCode, e.target.value)
   }
 
   const inputClass = (key: string, base: string) =>
@@ -234,9 +255,7 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
                          bg-white text-gray-800 cursor-pointer"
             >
               {DIAL_CODES.map(({ code, flag }) => (
-                <option key={code} value={code}>
-                  {flag} {code}
-                </option>
+                <option key={code} value={code}>{flag} {code}</option>
               ))}
             </select>
             <input
@@ -251,6 +270,39 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
           </div>
           {data.phone && (
             <p className="text-[11px] text-zinc-500 mt-1 ml-1">{data.phone}</p>
+          )}
+        </div>
+
+        {/* ── Mobile ───────────────────────────────────────────────────────── */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Mobile Number
+            <span className="text-gray-400 font-normal text-xs ml-1">(optional)</span>
+          </label>
+          <div className="flex gap-2">
+            <select
+              value={mobileDialCode}
+              onChange={handleMobileDialChange}
+              className="flex-shrink-0 w-28 py-2.5 pl-2 pr-1 text-sm border border-gray-200 rounded-lg
+                         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
+                         bg-white text-gray-800 cursor-pointer"
+            >
+              {DIAL_CODES.map(({ code, flag }) => (
+                <option key={code} value={code}>{flag} {code}</option>
+              ))}
+            </select>
+            <input
+              type="tel"
+              value={mobileLocal}
+              onChange={handleMobileLocalChange}
+              placeholder="77 624 07 07"
+              className="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg
+                         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
+                         transition-shadow placeholder:text-gray-300 text-gray-800"
+            />
+          </div>
+          {data.mobile && (
+            <p className="text-[11px] text-zinc-500 mt-1 ml-1">{data.mobile}</p>
           )}
         </div>
 

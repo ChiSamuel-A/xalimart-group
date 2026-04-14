@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
+import { Monitor, Smartphone } from 'lucide-react'
 import { buildSignatureHTML, getPreviewImages } from '@/lib/generateSignature'
 import CopyButton from '@/components/CopyButton'
 import CopyButtonErrorBoundary from '@/components/CopyButtonErrorBoundary'
@@ -13,12 +14,16 @@ interface Props {
   isValid?: boolean
 }
 
-export default function SignaturePreview({ data, isValid = true }: Props) {
-  const [processedData, setProcessedData] = useState<SignatureData>(data)
-  const [safeImages, setSafeImages] = useState<SignatureImages | null>(null)
+type PreviewMode = 'desktop' | 'mobile'
 
-  // ── Icon Processing logic ──────────────────────────────────────────────────
-  // We process icons once or when preview images would change.
+export default function SignaturePreview({ data, isValid = true }: Props) {
+  const [processedData, setProcessedData]   = useState<SignatureData>(data)
+  const [safeImages, setSafeImages]         = useState<SignatureImages | null>(null)
+  const [previewMode, setPreviewMode]       = useState<PreviewMode>('desktop')
+  const [iframeHeight, setIframeHeight]     = useState(260)
+  const iframeRef                           = useRef<HTMLIFrameElement>(null)
+
+  // ── Icon processing ────────────────────────────────────────────────────────
   useEffect(() => {
     let active = true
     async function prepare() {
@@ -30,57 +35,100 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
     return () => { active = false }
   }, [])
 
-  // ── Compositing logic ───────────────────────────────────────────────────────
-  // We only run this when the photo or template changes.
+  // ── Compositing (light template) ───────────────────────────────────────────
   useEffect(() => {
     let active = true
-
     async function process() {
-      // If template is light, we MUST have the composite for it to look right.
       if (data.templateId === 'light') {
         try {
           const composite = await createLightComposite(data.photoBase64)
-          if (active) {
-            setProcessedData({ ...data, compositePhotoBase64: composite })
-          }
-        } catch (err) {
-          console.error('Compositing failed:', err)
+          if (active) setProcessedData({ ...data, compositePhotoBase64: composite })
+        } catch {
           if (active) setProcessedData(data)
         }
       } else {
-        // For other templates, we don't need the composite.
         if (active) setProcessedData(data)
       }
     }
-
     process()
     return () => { active = false }
   }, [data.photoBase64, data.templateId, data])
 
-  // NOTE: We also need to keep other text fields in sync immediately.
-  // The useEffect above only depends on photo/template. If they type their name,
-  // we want the preview to update instantly without waiting for an async process.
-  const displayData = useMemo(() => {
-    return {
-      ...data,
-      compositePhotoBase64: processedData.compositePhotoBase64
-    }
-  }, [data, processedData.compositePhotoBase64])
+  const displayData = useMemo(() => ({
+    ...data,
+    compositePhotoBase64: processedData.compositePhotoBase64,
+  }), [data, processedData.compositePhotoBase64])
 
   const html = useMemo(
     () => buildSignatureHTML(displayData, safeImages || getPreviewImages()),
     [displayData, safeImages]
   )
 
+  // ── Auto-size the mobile iframe to its content ─────────────────────────────
+  const resizeIframe = useCallback(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+    try {
+      const body = iframe.contentDocument?.body
+      if (body) setIframeHeight(body.scrollHeight + 8)
+    } catch { /* cross-origin guard */ }
+  }, [])
+
+  // Mobile iframe srcdoc — injects the signature into a narrow viewport
+  const mobileSrcDoc = useMemo(() => `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          * { box-sizing: border-box; }
+          body { margin: 0; padding: 12px; background: #ffffff; }
+        </style>
+      </head>
+      <body>${html}</body>
+    </html>
+  `, [html])
+
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-black px-6 py-4">
-          <h2 className="text-white font-semibold text-lg">Live Preview</h2>
-          <p className="text-zinc-400 text-sm">How your signature will appear in Outlook</p>
+
+        {/* ── Header ── */}
+        <div className="bg-black px-6 py-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-white font-semibold text-lg">Live Preview</h2>
+            <p className="text-zinc-400 text-sm">How your signature appears in Outlook</p>
+          </div>
+
+          {/* ── Desktop / Mobile toggle ── */}
+          <div className="flex items-center gap-1 bg-zinc-800 rounded-xl p-1">
+            <button
+              onClick={() => setPreviewMode('desktop')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                previewMode === 'desktop'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <Monitor className="w-3.5 h-3.5" />
+              Desktop
+            </button>
+            <button
+              onClick={() => setPreviewMode('mobile')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                previewMode === 'mobile'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              Mobile
+            </button>
+          </div>
         </div>
 
-        {/* Minimal email-client chrome */}
+        {/* ── Email chrome ── */}
         <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 space-y-1.5">
           <div className="flex items-center gap-2">
             <span className="text-[11px] text-gray-400 w-7 flex-shrink-0">From</span>
@@ -102,17 +150,59 @@ export default function SignaturePreview({ data, isValid = true }: Props) {
           </div>
         </div>
 
-        {/* Email body + signature */}
-        <div className="p-6 bg-white overflow-x-auto">
+        {/* ── Signature preview area ── */}
+        <div className="p-6 bg-white">
           <p className="text-sm text-gray-400 pb-4 mb-4 border-b border-gray-100 whitespace-pre-line">
             {`Hi,\n\nThank you for your time today. Looking forward to working together.\n\nBest regards,`}
           </p>
 
-          {/* The signature — rendered at natural width, scrollable on small screens */}
-          <div
-            dangerouslySetInnerHTML={{ __html: html }}
-            style={{ minWidth: 'max-content' }}
-          />
+          {previewMode === 'desktop' ? (
+            /* Desktop: horizontally scrollable so full 600px signature is reachable */
+            <div className="overflow-x-auto">
+              <div
+                dangerouslySetInnerHTML={{ __html: html }}
+                style={{ minWidth: 'max-content' }}
+              />
+            </div>
+          ) : (
+            /* Mobile: 375px iframe — @media queries fire inside it */
+            <div className="flex justify-center">
+              <div
+                className="rounded-3xl overflow-hidden shadow-md"
+                style={{
+                  width: 375,
+                  border: '8px solid #1a1a1a',
+                  borderRadius: 36,
+                }}
+              >
+                {/* Status bar */}
+                <div
+                  className="flex items-center justify-between px-5"
+                  style={{ background: '#1a1a1a', paddingTop: 10, paddingBottom: 10 }}
+                >
+                  <span className="text-white text-[10px] font-semibold">9:41</span>
+                  <div className="w-16 h-4 bg-black rounded-full" />
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-2 bg-white rounded-sm opacity-80" />
+                    <div className="w-2 h-2 bg-white rounded-full opacity-80" />
+                  </div>
+                </div>
+
+                {/* Screen */}
+                <div style={{ background: '#ffffff' }}>
+                  <iframe
+                    ref={iframeRef}
+                    srcDoc={mobileSrcDoc}
+                    width={359}
+                    height={iframeHeight}
+                    onLoad={resizeIframe}
+                    style={{ border: 'none', display: 'block', width: '359px' }}
+                    title="Mobile signature preview"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
