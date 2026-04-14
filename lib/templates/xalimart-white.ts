@@ -12,27 +12,15 @@ const TEXT_ADDR = '#444444'
 const DIVIDER   = '#e0e0e0'
 const ICON_BG   = '#000000'
 
-// ── Black circle wrapper around a white icon ───────────────────────────────
-function circle(iconSrc: string, circleSize: number, iconSize: number): string {
+// ── Simple icon wrapper without circle background ──────────────────────────
+function simpleIcon(iconSrc: string, iconSize: number): string {
   return `
-    <table cellpadding="0" cellspacing="0" border="0"
-      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;
-             display:inline-table;">
-      <tr>
-        <td width="${circleSize}" height="${circleSize}" align="center" valign="middle"
-          style="width:${circleSize}px;height:${circleSize}px;
-                 background-color:${ICON_BG};border-radius:50%;
-                 -webkit-border-radius:50%;mso-border-radius:50%;
-                 mso-table-lspace:0pt;mso-table-rspace:0pt;">
-          <img src="${iconSrc}" width="${iconSize}" height="${iconSize}" border="0"
-            style="display:block;width:${iconSize}px;height:${iconSize}px;
-                   border:none;margin:0 auto;">
-        </td>
-      </tr>
-    </table>`
+    <img src="${iconSrc}" width="${iconSize}" height="${iconSize}" border="0"
+      style="display:block;width:${iconSize}px;height:${iconSize}px;
+             border:none;margin:0 auto;">`
 }
 
-// ── Contact row: circle icon + text ───────────────────────────────────────
+// ── Contact row: icon + text ──────────────────────────────────────────────
 function contactRow(
   iconSrc: string,
   href: string,
@@ -49,8 +37,8 @@ function contactRow(
 
   return `
     <tr>
-      <td valign="${isAddress ? 'top' : 'middle'}" style="padding:3px 10px 3px 0;">
-        ${circle(iconSrc, 26, 13)}
+      <td valign="${isAddress ? 'top' : 'middle'}" style="padding:3px 6px 3px 0;">
+        ${simpleIcon(iconSrc, 16)}
       </td>
       <td valign="${isAddress ? 'top' : 'middle'}"
         style="font-size:${isAddress ? '12px' : '13px'};color:${color};
@@ -60,17 +48,16 @@ function contactRow(
     </tr>`
 }
 
-// ── Social icons row: each icon in a black circle ─────────────────────────
+// ── Social icons row: simple icons ───────────────────────────────────────
 function socialsRow(
   socials: SignatureData['socials'],
   images: SignatureImages,
-  circleSize = 30,
-  iconSize = 15
+  iconSize = 20
 ): string {
   const items = [
-    socials.instagram ? { url: socials.instagram, src: images.instagramWh, alt: 'Instagram' } : null,
-    socials.facebook  ? { url: socials.facebook,  src: images.facebookWh,  alt: 'Facebook'  } : null,
-    socials.linkedin  ? { url: socials.linkedin,  src: images.linkedinWh,  alt: 'LinkedIn'  } : null,
+    socials.instagram ? { url: socials.instagram, src: images.instagramBl, alt: 'Instagram' } : null,
+    socials.facebook  ? { url: socials.facebook,  src: images.facebookBl,  alt: 'Facebook'  } : null,
+    socials.linkedin  ? { url: socials.linkedin,  src: images.linkedinBl,  alt: 'LinkedIn'  } : null,
   ].filter((s): s is NonNullable<typeof s> => s !== null)
 
   if (!items.length) return ''
@@ -82,11 +69,11 @@ function socialsRow(
       <tr>
         ${items.map((s, i) => `
           <td align="center" valign="middle"
-            style="${i < items.length - 1 ? 'padding-right:8px;' : ''}
+            style="${i < items.length - 1 ? 'padding-right:12px;' : ''}
                    mso-table-lspace:0pt;mso-table-rspace:0pt;">
             <a href="${s.url}" target="_blank"
               style="text-decoration:none;display:block;">
-              ${circle(s.src, circleSize, iconSize)}
+              ${simpleIcon(s.src, iconSize)}
             </a>
           </td>`).join('')}
       </tr>
@@ -131,11 +118,11 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
   // ── Contact rows (shared between desktop and mobile) ───────────────────────
   const contactRows = `
-    ${email   ? contactRow(images.emailIconWh, `mailto:${email}`,     clampText(email, 38))   : ''}
-    ${website ? contactRow(images.globeIconWh, normalizeUrl(website), clampText(website, 38)) : ''}
-    ${phone   ? contactRow(images.appelIcon,   whatsappHref(phone),   phone)                  : ''}
-    ${mobile  ? contactRow(images.phoneIcon,   `tel:${mobile}`,       mobile)                 : ''}
-    ${contactRow(images.locationWhite, '#', STATIC_ADDRESS,
+    ${email   ? contactRow(images.emailIcon,    `mailto:${email}`,     clampText(email, 38))   : ''}
+    ${website ? contactRow(images.globeIcon,    normalizeUrl(website), clampText(website, 38)) : ''}
+    ${phone   ? contactRow(images.appelIconBl,  whatsappHref(phone),   phone)                  : ''}
+    ${mobile  ? contactRow(images.phoneIconBl,  `tel:${mobile}`,       mobile)                 : ''}
+    ${contactRow(images.locationBlack, '#', STATIC_ADDRESS,
         { color: TEXT_ADDR, isStatic: true, isAddress: true })}
   `
 
@@ -168,7 +155,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
                     style="display:block;margin:0 auto;max-width:110px;
                            outline:none;text-decoration:none;border:none;">
                 </a>
-                ${socialsRow(socials, images)}
+                ${socialsRow(socials, images, 16)}
               </td>
 
               <!-- Col 2: Divider -->
@@ -179,13 +166,14 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
               <!-- Col 3: Name + Role + contacts -->
               <td valign="top"
                 style="padding:28px 10px 28px 0;width:200px;line-height:1.5;">
-                <div style="font-size:26px;font-weight:bold;margin-bottom:4px;
-                            font-family:Arial,sans-serif;color:${TEXT_NAME};line-height:1.2;">
-                  ${clampText(fullName || 'Full Name', 40)}
+                <div style="font-size:20px;font-weight:bold;margin-bottom:4px;
+                            font-family:Arial,sans-serif;color:${TEXT_NAME};line-height:1.2;
+                            white-space:nowrap;">
+                  ${clampText(fullName || 'Full Name', 35)}
                 </div>
-                <div style="font-size:13px;color:${TEXT_ROLE};margin-bottom:14px;
+                <div style="font-size:12px;color:${TEXT_ROLE};margin-bottom:14px;
                             font-weight:bold;font-family:Arial,sans-serif;">
-                  ${clampText(role || 'Job Title', 60)}
+                  ${clampText(role || 'Job Title', 50)}
                 </div>
                 <table cellpadding="0" cellspacing="0" border="0"
                   style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
@@ -220,13 +208,14 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
           ${mobilePhoto}
         </td>
         <td valign="middle" style="padding:18px 16px 10px 12px;">
-          <div style="font-size:18px;font-weight:bold;color:${TEXT_NAME};
-                      font-family:Arial,sans-serif;line-height:1.2;margin-bottom:4px;">
-            ${clampText(fullName || 'Full Name', 40)}
+          <div style="font-size:15px;font-weight:bold;color:${TEXT_NAME};
+                      font-family:Arial,sans-serif;line-height:1.2;margin-bottom:4px;
+                      white-space:nowrap;">
+            ${clampText(fullName || 'Full Name', 35)}
           </div>
-          <div style="font-size:12px;color:${TEXT_ROLE};font-weight:bold;
+          <div style="font-size:11px;color:${TEXT_ROLE};font-weight:bold;
                       font-family:Arial,sans-serif;">
-            ${clampText(role || 'Job Title', 60)}
+            ${clampText(role || 'Job Title', 50)}
           </div>
         </td>
       </tr>
@@ -256,7 +245,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
             <img src="${images.xalimartBlack}" alt="Xalimart Group" width="90"
               style="display:block;margin:0 auto;max-width:90px;border:none;outline:none;">
           </a>
-          ${socialsRow(socials, images, 28, 14)}
+          ${socialsRow(socials, images, 16)}
         </td>
       </tr>
 

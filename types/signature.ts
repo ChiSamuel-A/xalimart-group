@@ -25,6 +25,7 @@ export interface SignatureImages {
   appelIcon: string
   appelIconBl: string
   phoneIcon: string
+  phoneIconBl: string
   telephoneIconWh: string
   locationBlack: string
   locationWhite: string
