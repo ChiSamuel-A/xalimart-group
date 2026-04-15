@@ -31,11 +31,11 @@ function contactRow(
 
   return `
     <tr>
-      <td valign="${isAddress ? 'top' : 'middle'}" style="padding:4px 8px 4px 0;">
+      <td valign="${isAddress ? 'top' : 'middle'}" style="padding:2px 8px 2px 0;">
         ${simpleIcon(iconSrc, 24)}
       </td>
       <td valign="${isAddress ? 'top' : 'middle'}"
-        style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.4;padding:4px 0;">
+        style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.4;padding:2px 0;">
         ${content}
       </td>
     </tr>`
@@ -57,7 +57,7 @@ function socialsRow(
 
   return `
     <table cellpadding="0" cellspacing="0" border="0" align="center"
-      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;margin-top:14px;">
+      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;margin-top:10px;">
       <tr>
         ${items.map((s, i) => `
           <td align="center" valign="middle"
@@ -78,19 +78,19 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
     ? `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
          style="width:244px;background-color:#ffffff;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td class="xsig-photo-td" width="244" height="244"
-             style="width:244px;height:244px;padding:0;font-size:0;line-height:0;overflow:hidden;">
+           <td class="xsig-photo-td" width="244" height="293"
+             style="width:244px;height:293px;padding:0;font-size:0;line-height:0;overflow:hidden;">
              <img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
-               width="244" height="244"
-               style="display:block;width:244px;height:244px;border:none;vertical-align:top;border-radius:12px;">
+               width="244" height="293"
+               style="display:block;width:244px;height:293px;max-width:244px;max-height:293px;border:none;vertical-align:top;border-radius:12px;object-fit:cover;">
            </td>
          </tr>
        </table>`
     : `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
          style="width:244px;background-color:#d8d8d8;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td class="xsig-photo-td" width="244" height="244" align="center" valign="middle"
-             style="width:244px;height:244px;font-size:0;line-height:0;background-color:#d8d8d8;">&nbsp;</td>
+           <td class="xsig-photo-td" width="244" height="293" align="center" valign="middle"
+             style="width:244px;height:293px;font-size:0;line-height:0;background-color:#d8d8d8;">&nbsp;</td>
          </tr>
        </table>`
 
@@ -119,8 +119,8 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
       td.xsig-c3 table img{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;max-width:14px!important;max-height:14px!important;}
       td.xsig-c4{width:80px!important;height:auto!important;vertical-align:top!important;}
       table.xsig-photo-wrap{width:80px!important;}
-      td.xsig-photo-td{width:80px!important;height:80px!important;}
-      img.xsig-photo{width:80px!important;height:80px!important;min-width:80px!important;min-height:80px!important;max-width:80px!important;max-height:80px!important;}
+      td.xsig-photo-td{width:80px!important;height:91px!important;font-size:0!important;line-height:0!important;overflow:hidden!important;}
+      img.xsig-photo{width:80px!important;height:91px!important;min-width:80px!important;min-height:91px!important;max-width:80px!important;max-height:91px!important;object-fit:cover!important;}
     }
   </style>
   <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
@@ -128,11 +128,11 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
              mso-table-lspace:0pt;mso-table-rspace:0pt;
              font-family:${FONT};font-size:0;line-height:0;
              overflow:hidden;">
-      <tr height="244" style="height:244px;mso-line-height-rule:exactly;">
+      <tr height="293" style="height:293px;mso-line-height-rule:exactly;">
 
         <!-- Col 1: Logo + tagline + socials — 180px -->
         <td class="xsig-c1" valign="middle" width="180"
-          style="padding:10px 10px 10px 16px;width:180px;text-align:center;height:244px;mso-line-height-rule:exactly;">
+          style="padding:10px 10px 10px 16px;width:180px;text-align:center;background-color:#ffffff;height:244px;mso-line-height-rule:exactly;">
           <a href="https://xalimartgroup.sn" target="_blank"
             style="text-decoration:none;display:block;">
             <img class="xsig-logo" src="${images.xalimartBlack}" alt="Xalimart Group" width="120"
@@ -145,7 +145,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
         <!-- Col 2: Divider — 25px -->
         <td class="xsig-c2" valign="middle" width="25"
-          style="padding:0 12px;width:25px;height:244px;mso-line-height-rule:exactly;">
+          style="padding:0 12px;width:25px;background-color:#ffffff;height:244px;mso-line-height-rule:exactly;">
           <table cellpadding="0" cellspacing="0" border="0"
             style="width:1px;height:244px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
             <tr>
@@ -157,7 +157,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
         <!-- Col 3: Name + Role + contacts — 301px -->
         <td class="xsig-c3" valign="middle" width="301"
-          style="padding:10px 8px 10px 0;width:301px;height:244px;mso-line-height-rule:exactly;">
+          style="padding:10px 8px 10px 0;width:301px;background-color:#ffffff;height:244px;mso-line-height-rule:exactly;">
           <div class="xsig-name" style="font-size:21px;font-weight:bold;margin:0 0 4px 0;padding:0;
                       font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
             ${clampText(fullName || 'Full Name', 30)}
@@ -174,7 +174,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
         <!-- Col 4: Profile photo — 244px -->
         <td class="xsig-c4" valign="top" width="244"
-          style="padding:0;width:244px;height:244px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
+          style="padding:0;width:244px;background-color:#ffffff;height:293px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
           ${photo}
         </td>
 

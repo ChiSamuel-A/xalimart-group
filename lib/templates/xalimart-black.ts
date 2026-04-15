@@ -79,19 +79,19 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
     ? `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
          style="width:244px;background-color:${BG};border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td class="xsig-photo-td" width="244" height="244"
-             style="width:244px;height:244px;padding:0;font-size:0;line-height:0;overflow:hidden;">
+           <td class="xsig-photo-td" width="244" height="293"
+             style="width:244px;height:293px;padding:0;font-size:0;line-height:0;overflow:hidden;">
              <img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
-               width="244" height="244"
-               style="display:block;width:244px;height:244px;border:none;vertical-align:top;border-radius:12px;">
+               width="244" height="293"
+               style="display:block;width:244px;height:293px;max-width:244px;max-height:293px;border:none;vertical-align:top;border-radius:12px;object-fit:cover;">
            </td>
          </tr>
        </table>`
     : `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
          style="width:244px;background-color:#222222;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td class="xsig-photo-td" width="244" height="244" align="center" valign="middle"
-             style="width:244px;height:244px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
+           <td class="xsig-photo-td" width="244" height="293" align="center" valign="middle"
+             style="width:244px;height:293px;font-size:0;line-height:0;background-color:#222222;">&nbsp;</td>
          </tr>
        </table>`
 
@@ -120,8 +120,8 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
       td.xsig-c3 table img{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;max-width:14px!important;max-height:14px!important;}
       td.xsig-c4{width:80px!important;height:auto!important;vertical-align:top!important;}
       table.xsig-photo-wrap{width:80px!important;}
-      td.xsig-photo-td{width:80px!important;height:80px!important;}
-      img.xsig-photo{width:80px!important;height:80px!important;min-width:80px!important;min-height:80px!important;max-width:80px!important;max-height:80px!important;}
+      td.xsig-photo-td{width:80px!important;height:91px!important;font-size:0!important;line-height:0!important;overflow:hidden!important;}
+      img.xsig-photo{width:80px!important;height:91px!important;min-width:80px!important;min-height:91px!important;max-width:80px!important;max-height:91px!important;object-fit:cover!important;}
     }
   </style>
   <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
@@ -129,7 +129,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
              mso-table-lspace:0pt;mso-table-rspace:0pt;
              font-family:${FONT};font-size:0;line-height:0;
              overflow:hidden;">
-      <tr height="244" style="height:244px;mso-line-height-rule:exactly;">
+      <tr height="293" style="height:293px;mso-line-height-rule:exactly;">
 
         <!-- Col 1: Logo + tagline + socials — 180px -->
         <td class="xsig-c1" valign="middle" width="180"
@@ -175,7 +175,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
 
         <!-- Col 4: Profile photo — 244px -->
         <td class="xsig-c4" valign="top" width="244"
-          style="padding:0;width:244px;background-color:${BG};height:244px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
+          style="padding:0;width:244px;background-color:${BG};height:293px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
           ${photo}
         </td>
 

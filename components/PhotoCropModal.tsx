@@ -19,15 +19,15 @@ async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<string
     img.src = imageSrc
   })
   const canvas = document.createElement('canvas')
-  canvas.width  = 220
-  canvas.height = 220
+  canvas.width  = 395
+  canvas.height = 475
   const ctx = canvas.getContext('2d')!
   ctx.drawImage(
     image,
     cropPixels.x, cropPixels.y,
     cropPixels.width, cropPixels.height,
     0, 0,
-    220, 220
+    395, 475
   )
   return canvas.toDataURL('image/jpeg', 0.92)
 }
@@ -71,7 +71,7 @@ export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props)
             image={imageSrc}
             crop={crop}
             zoom={zoom}
-            aspect={1}
+            aspect={395 / 475}
             cropShape="rect"
             showGrid={false}
             onCropChange={setCrop}
