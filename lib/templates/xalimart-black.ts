@@ -26,7 +26,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = '11px'
+  const fontSize = '13px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</a>`
@@ -117,7 +117,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
     </style>
     <table cellpadding="0" cellspacing="0" border="0"
       style="margin:0;padding:0;font-family:${FONT};font-size:14px;
-             line-height:1.4;color:#ffffff;table-layout:fixed;width:800px;">
+             line-height:1.4;color:#ffffff;table-layout:fixed;width:900px;">
       <tr>
         <td style="padding:0;margin:0;width:100%;">
           <table cellpadding="0" cellspacing="0" border="0"
@@ -132,7 +132,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
                   <img src="${images.xalimartWhite}" alt="Xalimart Group" width="135"
                     style="display:block;margin:0 auto;max-width:135px;outline:none;text-decoration:none;border:none;">
                 </a>
-                <p style="margin:12px 0 0 0;font-size:11px;color:#ffffff;font-family:${FONT};
+                <p style="margin:12px 0 0 0;font-size:13px;color:#ffffff;font-family:${FONT};
                            line-height:1.4;text-align:center;white-space:nowrap;">
                   ${TAGLINE}
                 </p>
@@ -146,12 +146,12 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
 
               <!-- Col 3: Name + Role + contacts -->
               <td valign="top"
-                style="padding:28px 10px 28px 0;width:315px;line-height:1.4;background-color:${BG};">
-                <div style="font-size:20px;font-weight:bold;margin-bottom:4px;
+                style="padding:28px 10px 28px 0;width:415px;line-height:1.4;background-color:${BG};">
+                <div style="font-size:24px;font-weight:bold;margin-bottom:4px;
                             font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
                   ${clampText(fullName || 'Full Name', 35)}
                 </div>
-                <div style="font-size:11px;color:${TEXT_ROLE};margin-bottom:14px;
+                <div style="font-size:15px;color:${TEXT_ROLE};margin-bottom:14px;
                             font-weight:bold;font-family:${FONT};">
                   ${clampText(role || 'Job Title', 50)}
                 </div>
