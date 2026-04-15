@@ -4,9 +4,14 @@ import { buildXalimartBlack } from './templates/xalimart-black'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
+  const isBlack = data.templateId === 'xalimart-black'
+  const lineIcon = isBlack ? (images.lineIconBl || '/line-bl.png') : (images.lineIconWh || '/line-wh.png')
+  
+  const templateImages = { ...images, lineIcon }
+
   switch (data.templateId) {
-    case 'xalimart-black': return buildXalimartBlack(data, images)
-    default:               return buildXalimartWhite(data, images)
+    case 'xalimart-black': return buildXalimartBlack(data, templateImages)
+    default:               return buildXalimartWhite(data, templateImages)
   }
 }
 
@@ -49,6 +54,8 @@ export async function getInlineImages(): Promise<SignatureImages> {
     instagramBl:      `${HOSTED_BASE}/instagram-bl.png`,
     facebookBl:       `${HOSTED_BASE}/facebook-bl.png`,
     linkedinBl:       `${HOSTED_BASE}/linkedin-bl.png`,
+    lineIconBl:       `${HOSTED_BASE}/gray-vertical-line.png`,
+    lineIconWh:       `${HOSTED_BASE}/gray-vertical-line.png`,
   }
 }
 
@@ -73,5 +80,7 @@ export function getPreviewImages(): SignatureImages {
     instagramBl:      '/instagram-bl.png',
     facebookBl:       '/facebook-bl.png',
     linkedinBl:       '/linkedin-bl.png',
+    lineIconBl:       '/gray-vertical-line.png',
+    lineIconWh:       '/gray-vertical-line.png',
   }
 }

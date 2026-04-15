@@ -63,10 +63,11 @@ export async function makeIconSafe(iconUrl: string): Promise<string> {
 export async function processAllImages(images: SignatureImages): Promise<SignatureImages> {
   const safeImages = { ...images }
   const iconKeys = (Object.keys(images) as Array<keyof SignatureImages>).filter(k => 
-    k.toLowerCase().includes('icon') || 
+    (k.toLowerCase().includes('icon') || 
     k.toLowerCase().includes('wh') || 
     k.toLowerCase().includes('bl') ||
-    ['instagramWh', 'facebookWh', 'linkedinWh', 'instagramBl', 'facebookBl', 'linkedinBl', 'locationBlack', 'locationWhite'].includes(k)
+    ['instagramWh', 'facebookWh', 'linkedinWh', 'instagramBl', 'facebookBl', 'linkedinBl', 'locationBlack', 'locationWhite'].includes(k)) &&
+    !k.toLowerCase().includes('line')
   )
 
   for (const key of iconKeys) {
