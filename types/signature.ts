@@ -37,4 +37,6 @@ export interface SignatureImages {
   linkedinBl: string
   lineIconBl: string
   lineIconWh: string
+  taglineBl: string
+  taglineWh: string
 }

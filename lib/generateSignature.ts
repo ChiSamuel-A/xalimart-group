@@ -56,6 +56,8 @@ export async function getInlineImages(): Promise<SignatureImages> {
     linkedinBl:       `${HOSTED_BASE}/linkedin-bl.png`,
     lineIconBl:       `${HOSTED_BASE}/gray-vertical-line.png`,
     lineIconWh:       `${HOSTED_BASE}/gray-vertical-line.png`,
+    taglineBl:        `${HOSTED_BASE}/tagline-bl.png`,
+    taglineWh:        `${HOSTED_BASE}/tagline-wh.png`,
   }
 }
 
@@ -82,5 +84,7 @@ export function getPreviewImages(): SignatureImages {
     linkedinBl:       '/linkedin-bl.png',
     lineIconBl:       '/gray-vertical-line.png',
     lineIconWh:       '/gray-vertical-line.png',
+    taglineBl:        '/tagline-bl.png',
+    taglineWh:        '/tagline-wh.png',
   }
 }

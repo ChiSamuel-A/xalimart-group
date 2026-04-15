@@ -26,20 +26,28 @@ export default function CopyButton({ data, isValid = true }: Props) {
       const images = await processAllImages(rawImages)
       const html = buildSignatureHTML(data, images)
 
-      const htmlBlob = new Blob([html], { type: 'text/html' })
-      const textBlob = new Blob(
-        [`${data.fullName} | ${data.role} | ${data.phone} | ${data.email}`],
-        { type: 'text/plain' }
-      )
+      // Render into the live DOM first so the browser copies a real
+      // laid-out table — Outlook pastes that directly with no extra padding.
+      const container = document.createElement('div')
+      container.style.cssText = 'position:fixed;left:-9999px;top:0;width:800px;pointer-events:none;'
+      container.innerHTML = html
+      document.body.appendChild(container)
 
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob }),
-      ])
+      const range = document.createRange()
+      range.selectNodeContents(container)
+      const selection = window.getSelection()
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+
+      document.execCommand('copy')
+
+      selection?.removeAllRanges()
+      document.body.removeChild(container)
 
       setState('success')
       setTimeout(() => setState('idle'), 3500)
     } catch (err) {
-      console.error('Clipboard write failed:', err)
+      console.error('Copy failed:', err)
       setState('error')
       setTimeout(() => setState('idle'), 4000)
     }

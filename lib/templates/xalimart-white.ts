@@ -9,7 +9,6 @@ const TEXT_ROLE   = '#000000'
 const TEXT_INFO   = '#000000'
 const TEXT_ADDR   = '#000000'
 const DIVIDER     = '#e0e0e0'
-const TAGLINE     = "We don&apos;t follow the stand&apos;Arts,<br>We create them."
 
 // ── Simple icon ────────────────────────────────────────────────────────────
 function simpleIcon(iconSrc: string, iconSize: number): string {
@@ -76,14 +75,21 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
 
   // ── Profile photo ──────────────────────────────────────────────────────────
   const photo = photoBase64
-    ? `<img src="${photoBase64}" alt="${clampText(fullName, 40)}"
-         width="244" height="244"
-         style="display:block;width:244px;height:244px;border:none;">`
-    : `<table cellpadding="0" cellspacing="0" border="0" width="244"
-         style="width:244px;background-color:#d8d8d8;border-collapse:collapse;
-                mso-table-lspace:0pt;mso-table-rspace:0pt;">
+    ? `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
+         style="width:244px;background-color:#ffffff;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
          <tr>
-           <td width="244" height="244" align="center" valign="middle"
+           <td class="xsig-photo-td" width="244" height="244"
+             style="width:244px;height:244px;padding:0;font-size:0;line-height:0;overflow:hidden;">
+             <img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
+               width="244" height="244"
+               style="display:block;width:244px;height:244px;border:none;vertical-align:top;">
+           </td>
+         </tr>
+       </table>`
+    : `<table class="xsig-photo-wrap" cellpadding="0" cellspacing="0" border="0" width="244"
+         style="width:244px;background-color:#d8d8d8;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+         <tr>
+           <td class="xsig-photo-td" width="244" height="244" align="center" valign="middle"
              style="width:244px;height:244px;font-size:0;line-height:0;background-color:#d8d8d8;">&nbsp;</td>
          </tr>
        </table>`
@@ -97,81 +103,77 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
     ${contactRow(images.locationBlack, '#', STATIC_ADDRESS, { color: TEXT_ADDR, isStatic: true, isAddress: true })}
   `
 
-  return `
-    <style>
-      @font-face {
-        font-family: 'Century Gothic';
-        src: url('https://xalimart-group-sign.vercel.app/fonts/centurygothic.ttf') format('truetype');
-        font-weight: 400;
-        font-style: normal;
-      }
-      @font-face {
-        font-family: 'Century Gothic';
-        src: url('https://xalimart-group-sign.vercel.app/fonts/centurygothic_bold.ttf') format('truetype');
-        font-weight: 700;
-        font-style: normal;
-      }
-    </style>
-    <table cellpadding="0" cellspacing="0" border="0"
-      style="margin:0;padding:0;font-family:${FONT};font-size:14px;
-             line-height:1.4;color:#000000;table-layout:fixed;width:900px;">
-      <tr>
-        <td style="padding:0;margin:0;width:100%;">
+  return `<style>
+    @media screen and (max-width:600px){
+      table.xsig{width:100%!important;}
+      td.xsig-c1{width:110px!important;padding:8px 6px 8px 10px!important;}
+      td.xsig-c1 img.xsig-logo{width:80px!important;max-width:80px!important;}
+      td.xsig-c1 img.xsig-tag{max-width:95px!important;}
+      td.xsig-c2{display:none!important;width:0!important;padding:0!important;overflow:hidden!important;}
+      td.xsig-c3{padding:8px 6px 8px 6px!important;}
+      td.xsig-c3 .xsig-name{font-size:15px!important;}
+      td.xsig-c3 .xsig-role{font-size:11px!important;margin-bottom:6px!important;}
+      td.xsig-c3 table td{font-size:10px!important;white-space:normal!important;}
+      td.xsig-c4{width:90px!important;}
+      table.xsig-photo-wrap{width:90px!important;}
+      td.xsig-photo-td{width:90px!important;height:90px!important;}
+      img.xsig-photo{width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;}
+    }
+  </style>
+  <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
+      style="margin:0;padding:0;width:750px;border-collapse:collapse;
+             mso-table-lspace:0pt;mso-table-rspace:0pt;
+             background-color:#ffffff;font-family:${FONT};font-size:0;line-height:0;">
+      <tr height="244" style="height:244px;mso-line-height-rule:exactly;">
+
+        <!-- Col 1: Logo + tagline + socials — 180px -->
+        <td class="xsig-c1" valign="middle" width="180"
+          style="padding:10px 10px 10px 16px;width:180px;text-align:center;height:244px;mso-line-height-rule:exactly;">
+          <a href="https://xalimartgroup.sn" target="_blank"
+            style="text-decoration:none;display:block;">
+            <img class="xsig-logo" src="${images.xalimartBlack}" alt="Xalimart Group" width="120"
+              style="display:block;margin:0 auto;max-width:120px;outline:none;text-decoration:none;border:none;">
+          </a>
+          <img class="xsig-tag" src="${images.taglineWh}" alt="We don't follow the standArts, We create them."
+            style="display:block;margin:8px auto 0;max-width:140px;border:none;outline:none;">
+          ${socialsRow(socials, images)}
+        </td>
+
+        <!-- Col 2: Divider — 25px -->
+        <td class="xsig-c2" valign="middle" width="25"
+          style="padding:0 12px;width:25px;height:244px;mso-line-height-rule:exactly;">
           <table cellpadding="0" cellspacing="0" border="0"
-            style="width:100%;background-color:#ffffff;">
-            <tr height="244" style="height:244px;">
-
-              <!-- Col 1: Logo + tagline + socials -->
-              <td valign="middle"
-                style="padding:0 10px 0 20px;width:210px;text-align:center;height:244px;">
-                <a href="https://xalimartgroup.sn" target="_blank"
-                  style="text-decoration:none;display:block;">
-                  <img src="${images.xalimartBlack}" alt="Xalimart Group" width="135"
-                    style="display:block;margin:0 auto;max-width:135px;outline:none;text-decoration:none;border:none;">
-                </a>
-                <p style="margin:12px 0 0 0;font-size:12px;color:#000000;font-family:${FONT};
-                           line-height:1.4;text-align:center;white-space:nowrap;">
-                  ${TAGLINE}
-                </p>
-                ${socialsRow(socials, images)}
-              </td>
-
-              <!-- Col 2: Divider -->
-              <td valign="middle" style="padding:0 15px;width:1px;height:244px;">
-                <table cellpadding="0" cellspacing="0" border="0" style="width:1px;height:244px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-                  <tr>
-                    <td width="1" height="244" style="width:1px;height:244px;background-color:${DIVIDER};font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&nbsp;</td>
-                  </tr>
-                </table>
-              </td>
-
-              <!-- Col 3: Name + Role + contacts -->
-              <td valign="middle"
-                style="padding:0 10px 0 0;width:415px;line-height:1.4;height:244px;">
-                <div style="font-size:23px;font-weight:bold;margin-bottom:4px;
-                            font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
-                  ${clampText(fullName || 'Full Name', 35)}
-                </div>
-                <div style="font-size:14px;color:${TEXT_ROLE};margin-bottom:14px;
-                            font-weight:bold;font-family:${FONT};">
-                  ${clampText(role || 'Job Title', 50)}
-                </div>
-                <table cellpadding="0" cellspacing="0" border="0"
-                  style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-                  ${contactRows}
-                </table>
-              </td>
-
-              <!-- Col 4: Profile photo -->
-              <td valign="top"
-                style="padding:0;width:244px;text-align:right;height:244px;line-height:0;font-size:0;">
-                ${photo}
-              </td>
-
+            style="width:1px;height:244px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+            <tr>
+              <td width="1" height="244"
+                style="width:1px;height:244px;background-color:${DIVIDER};font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&nbsp;</td>
             </tr>
           </table>
         </td>
+
+        <!-- Col 3: Name + Role + contacts — 301px -->
+        <td class="xsig-c3" valign="middle" width="301"
+          style="padding:10px 8px 10px 0;width:301px;height:244px;mso-line-height-rule:exactly;">
+          <div class="xsig-name" style="font-size:21px;font-weight:bold;margin:0 0 4px 0;padding:0;
+                      font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
+            ${clampText(fullName || 'Full Name', 30)}
+          </div>
+          <div class="xsig-role" style="font-size:13px;color:${TEXT_ROLE};margin:0 0 12px 0;padding:0;
+                      font-weight:bold;font-family:${FONT};line-height:1.4;">
+            ${clampText(role || 'Job Title', 45)}
+          </div>
+          <table cellpadding="0" cellspacing="0" border="0"
+            style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+            ${contactRows}
+          </table>
+        </td>
+
+        <!-- Col 4: Profile photo — 244px -->
+        <td class="xsig-c4" valign="top" width="244"
+          style="padding:0;width:244px;height:244px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
+          ${photo}
+        </td>
+
       </tr>
-    </table>
-  `
+    </table>`
 }
