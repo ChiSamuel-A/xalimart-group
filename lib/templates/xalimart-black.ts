@@ -34,7 +34,7 @@ function contactRow(
   return `
     <tr>
       <td valign="${isAddress ? 'top' : 'middle'}" style="padding:4px 8px 4px 0;">
-        ${simpleIcon(iconSrc, 20)}
+        ${simpleIcon(iconSrc, 24)}
       </td>
       <td valign="${isAddress ? 'top' : 'middle'}"
         style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.4;padding:4px 0;">
@@ -47,7 +47,7 @@ function contactRow(
 function socialsRow(
   socials: SignatureData['socials'],
   images: SignatureImages,
-  iconSize = 24
+  iconSize = 28
 ): string {
   const items = [
     socials.instagram ? { url: socials.instagram, src: images.instagramWh, alt: 'Instagram' } : null,
