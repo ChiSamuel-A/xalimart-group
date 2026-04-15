@@ -82,7 +82,7 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
              style="width:244px;height:244px;padding:0;font-size:0;line-height:0;overflow:hidden;">
              <img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
                width="244" height="244"
-               style="display:block;width:244px;height:244px;border:none;vertical-align:top;">
+               style="display:block;width:244px;height:244px;border:none;vertical-align:top;border-radius:12px;">
            </td>
          </tr>
        </table>`
@@ -106,24 +106,27 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
   return `<style>
     @media screen and (max-width:600px){
       table.xsig{width:100%!important;}
-      td.xsig-c1{width:110px!important;padding:8px 6px 8px 10px!important;}
-      td.xsig-c1 img.xsig-logo{width:80px!important;max-width:80px!important;}
-      td.xsig-c1 img.xsig-tag{max-width:95px!important;}
+      table.xsig tr{height:auto!important;}
+      td.xsig-c1{width:100px!important;padding:6px 4px 6px 8px!important;height:auto!important;vertical-align:middle!important;}
+      td.xsig-c1 img.xsig-logo{width:72px!important;max-width:72px!important;}
+      td.xsig-c1 img.xsig-tag{width:80px!important;max-width:80px!important;}
       td.xsig-c2{display:none!important;width:0!important;padding:0!important;overflow:hidden!important;}
-      td.xsig-c3{padding:8px 6px 8px 6px!important;}
-      td.xsig-c3 .xsig-name{font-size:15px!important;}
-      td.xsig-c3 .xsig-role{font-size:11px!important;margin-bottom:6px!important;}
-      td.xsig-c3 table td{font-size:10px!important;white-space:normal!important;}
-      td.xsig-c4{width:90px!important;}
-      table.xsig-photo-wrap{width:90px!important;}
-      td.xsig-photo-td{width:90px!important;height:90px!important;}
-      img.xsig-photo{width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;}
+      td.xsig-c3{padding:6px 4px 6px 4px!important;height:auto!important;vertical-align:middle!important;}
+      td.xsig-c3 .xsig-name{font-size:13px!important;margin-bottom:2px!important;}
+      td.xsig-c3 .xsig-role{font-size:10px!important;margin-bottom:4px!important;}
+      td.xsig-c3 table td{font-size:9px!important;white-space:normal!important;padding:1px 4px 1px 0!important;line-height:1.2!important;}
+      td.xsig-c3 table img{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;max-width:14px!important;max-height:14px!important;}
+      td.xsig-c4{width:80px!important;height:auto!important;vertical-align:top!important;}
+      table.xsig-photo-wrap{width:80px!important;}
+      td.xsig-photo-td{width:80px!important;height:80px!important;}
+      img.xsig-photo{width:80px!important;height:80px!important;min-width:80px!important;min-height:80px!important;max-width:80px!important;max-height:80px!important;}
     }
   </style>
   <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
       style="margin:0;padding:0;width:750px;border-collapse:collapse;
              mso-table-lspace:0pt;mso-table-rspace:0pt;
-             background-color:#ffffff;font-family:${FONT};font-size:0;line-height:0;">
+             background-color:#ffffff;font-family:${FONT};font-size:0;line-height:0;
+             border-radius:12px;overflow:hidden;">
       <tr height="244" style="height:244px;mso-line-height-rule:exactly;">
 
         <!-- Col 1: Logo + tagline + socials — 180px -->
