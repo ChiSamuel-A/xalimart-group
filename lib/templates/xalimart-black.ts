@@ -26,7 +26,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = '13px'
+  const fontSize = '12px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</a>`
@@ -130,7 +130,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
                   <img src="${images.xalimartWhite}" alt="Xalimart Group" width="135"
                     style="display:block;margin:0 auto;max-width:135px;outline:none;text-decoration:none;border:none;">
                 </a>
-                <p style="margin:8px 0 0 0;font-size:13px;color:#ffffff;font-family:${FONT};
+                <p style="margin:8px 0 0 0;font-size:12px;color:#ffffff;font-family:${FONT};
                            line-height:1.4;text-align:center;white-space:nowrap;">
                   ${TAGLINE}
                 </p>
@@ -139,9 +139,9 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
 
               <!-- Col 2: Divider -->
               <td valign="middle" style="padding:0 15px;width:1px;background-color:${BG};height:244px;">
-                <table cellpadding="0" cellspacing="0" border="0" style="width:1px;height:210px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:1px;height:244px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
                   <tr>
-                    <td width="1" height="210" style="width:1px;height:210px;background-color:${DIVIDER};font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&nbsp;</td>
+                    <td width="1" height="244" style="width:1px;height:244px;background-color:${DIVIDER};font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&nbsp;</td>
                   </tr>
                 </table>
               </td>
@@ -149,11 +149,11 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
               <!-- Col 3: Name + Role + contacts -->
               <td valign="middle"
                 style="padding:10px 10px 10px 0;width:415px;line-height:1.4;background-color:${BG};height:244px;">
-                <div style="font-size:24px;font-weight:bold;margin-bottom:4px;
+                <div style="font-size:23px;font-weight:bold;margin-bottom:4px;
                             font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
                   ${clampText(fullName || 'Full Name', 35)}
                 </div>
-                <div style="font-size:15px;color:${TEXT_ROLE};margin-bottom:14px;
+                <div style="font-size:14px;color:${TEXT_ROLE};margin-bottom:14px;
                             font-weight:bold;font-family:${FONT};">
                   ${clampText(role || 'Job Title', 50)}
                 </div>
