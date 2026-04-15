@@ -114,7 +114,8 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
       td.xsig-c3{padding:6px 4px 6px 4px!important;height:auto!important;vertical-align:middle!important;}
       td.xsig-c3 .xsig-name{font-size:13px!important;margin-bottom:2px!important;}
       td.xsig-c3 .xsig-role{font-size:10px!important;margin-bottom:4px!important;}
-      td.xsig-c3 table td{font-size:9px!important;white-space:normal!important;padding:1px 4px 1px 0!important;line-height:1.2!important;}
+      td.xsig-c3 table td{font-size:7px!important;white-space:normal!important;padding:1px 4px 1px 0!important;line-height:1.2!important;}
+      td.xsig-c3 table td span,td.xsig-c3 table td a{font-size:7px!important;line-height:1.2!important;}
       td.xsig-c3 table img{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;max-width:14px!important;max-height:14px!important;}
       td.xsig-c4{width:80px!important;height:auto!important;vertical-align:top!important;}
       table.xsig-photo-wrap{width:80px!important;}
@@ -125,8 +126,8 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
   <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
       style="margin:0;padding:0;width:750px;border-collapse:collapse;
              mso-table-lspace:0pt;mso-table-rspace:0pt;
-             background-color:#ffffff;font-family:${FONT};font-size:0;line-height:0;
-             border-radius:12px;overflow:hidden;">
+             font-family:${FONT};font-size:0;line-height:0;
+             overflow:hidden;">
       <tr height="244" style="height:244px;mso-line-height-rule:exactly;">
 
         <!-- Col 1: Logo + tagline + socials — 180px -->
