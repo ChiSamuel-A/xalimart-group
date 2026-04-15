@@ -109,7 +109,7 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
       table.xsig{width:100%!important;}
       table.xsig tr{height:auto!important;}
       td.xsig-c1{width:100px!important;padding:6px 4px 6px 8px!important;height:auto!important;vertical-align:middle!important;}
-      td.xsig-c1 img.xsig-logo{width:72px!important;max-width:72px!important;}
+      td.xsig-c1 img.xsig-logo{width:72px!important;height:59px!important;max-width:72px!important;max-height:59px!important;}
       td.xsig-c1 img.xsig-tag{width:80px!important;max-width:80px!important;}
       td.xsig-c2{display:none!important;width:0!important;padding:0!important;overflow:hidden!important;}
       td.xsig-c3{padding:6px 4px 6px 4px!important;height:auto!important;vertical-align:middle!important;}
@@ -136,8 +136,8 @@ export function buildXalimartBlack(data: SignatureData, images: SignatureImages)
           style="padding:10px 10px 10px 16px;width:180px;text-align:center;background-color:${BG};height:244px;mso-line-height-rule:exactly;">
           <a href="https://xalimartgroup.sn" target="_blank"
             style="text-decoration:none;display:block;">
-            <img class="xsig-logo" src="${images.xalimartWhite}" alt="Xalimart Group" width="120"
-              style="display:block;margin:0 auto;max-width:120px;outline:none;text-decoration:none;border:none;">
+            <img class="xsig-logo" src="${images.xalimartWhite}" alt="Xalimart Group" width="110" height="90"
+              style="display:block;margin:0 auto;width:110px;height:90px;max-width:110px;max-height:90px;outline:none;text-decoration:none;border:none;object-fit:contain;">
           </a>
           <img class="xsig-tag" src="${images.taglineBl}" alt="We don't follow the standArts, We create them."
             style="display:block;margin:8px auto 0;max-width:140px;border:none;outline:none;">
