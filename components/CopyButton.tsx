@@ -26,23 +26,17 @@ export default function CopyButton({ data, isValid = true }: Props) {
       const images = await processAllImages(rawImages)
       const html = buildSignatureHTML(data, images)
 
-      // Render into the live DOM first so the browser copies a real
-      // laid-out table — Outlook pastes that directly with no extra padding.
-      const container = document.createElement('div')
-      container.style.cssText = 'position:fixed;left:-9999px;top:0;width:800px;pointer-events:none;'
-      container.innerHTML = html
-      document.body.appendChild(container)
+      // Create a blob containing the HTML. This is the modern, 
+      // most reliable way to copy "Rich Text" for Outlook.
+      const htmlBlob = new Blob([html], { type: 'text/html' })
+      const textBlob = new Blob([data.fullName + '\n' + data.role], { type: 'text/plain' })
 
-      const range = document.createRange()
-      range.selectNodeContents(container)
-      const selection = window.getSelection()
-      selection?.removeAllRanges()
-      selection?.addRange(range)
+      const item = new ClipboardItem({
+        'text/html': htmlBlob,
+        'text/plain': textBlob,
+      })
 
-      document.execCommand('copy')
-
-      selection?.removeAllRanges()
-      document.body.removeChild(container)
+      await navigator.clipboard.write([item])
 
       setState('success')
       setTimeout(() => setState('idle'), 3500)
@@ -71,7 +65,7 @@ export default function CopyButton({ data, isValid = true }: Props) {
         {state === 'idle' && (
           <>
             <Copy className="w-4 h-4" />
-            Copy Signature to Outlook
+            Copy Your Email Signature
           </>
         )}
         {state === 'loading' && (
@@ -83,7 +77,7 @@ export default function CopyButton({ data, isValid = true }: Props) {
         {state === 'success' && (
           <>
             <Check className="w-4 h-4" />
-            Copied! Paste into Outlook now
+            Copied! Paste into your mail settings
           </>
         )}
         {state === 'error' && (
@@ -108,11 +102,11 @@ export default function CopyButton({ data, isValid = true }: Props) {
 
       {canCopy && state === 'success' && (
         <p className="text-xs text-center text-gray-500 leading-relaxed">
-          Open Outlook &rarr; <strong>File &rarr; Options &rarr; Mail &rarr; Signatures</strong>
-          {' '}and paste with{' '}
+          Paste with{' '}
           <kbd className="bg-gray-100 border border-gray-200 rounded px-1 py-0.5 font-mono text-[10px]">
             Ctrl+V
           </kbd>
+          {' '}into <strong>Outlook</strong> or <strong>Gmail</strong> settings.
         </p>
       )}
 
