@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { User, Briefcase, Mail, Globe, Upload, X, Link } from 'lucide-react'
 import { parsePhoneNumberWithError, isValidPhoneNumber } from 'libphonenumber-js'
 import { cn } from '@/lib/utils'
@@ -71,6 +71,27 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
   const [errors, setErrors]                 = useState<Record<string, string>>({})
   const [cropSrc, setCropSrc]               = useState<string | null>(null)
 
+  // Sync internal state when data changes (e.g. from localStorage load)
+  // We use a ref to track the last value we synced to avoid infinite loops
+  const lastSyncedPhone = useRef(data.phone)
+  const lastSyncedMobile = useRef(data.mobile)
+
+  useEffect(() => {
+    if (data.phone !== lastSyncedPhone.current) {
+      setDialCode(extractDialCode(data.phone))
+      setLocalNumber(extractLocalNumber(data.phone))
+      lastSyncedPhone.current = data.phone
+    }
+  }, [data.phone])
+
+  useEffect(() => {
+    if (data.mobile !== lastSyncedMobile.current) {
+      setMobileDialCode(extractDialCode(data.mobile || ''))
+      setMobileLocal(extractLocalNumber(data.mobile || ''))
+      lastSyncedMobile.current = data.mobile
+    }
+  }, [data.mobile])
+
   const applyError = (key: string, message: string | null) => {
     const next = { ...errors }
     if (message) next[key] = message
@@ -111,6 +132,7 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
         formatted = parsePhoneNumberWithError(raw).formatInternational()
       }
     } catch { /* keep raw */ }
+    lastSyncedPhone.current = formatted
     onChange({ ...data, phone: formatted })
   }
 
@@ -122,6 +144,7 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
         formatted = parsePhoneNumberWithError(raw).formatInternational()
       }
     } catch { /* keep raw */ }
+    lastSyncedMobile.current = formatted
     onChange({ ...data, mobile: formatted })
   }
 
