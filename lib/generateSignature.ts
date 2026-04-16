@@ -1,17 +1,19 @@
 import type { SignatureData, SignatureImages } from '@/types/signature'
 import { buildXalimartWhite } from './templates/xalimart-white'
 import { buildXalimartBlack } from './templates/xalimart-black'
+import { buildXalimartBlackV2 } from './templates/xalimart-black-v2'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
-  const isBlack = data.templateId === 'xalimart-black'
+  const isBlack = data.templateId === 'xalimart-black' || data.templateId === 'xalimart-black-v2'
   const lineIcon = isBlack ? (images.lineIconBl || '/line-bl.png') : (images.lineIconWh || '/line-wh.png')
   
   const templateImages = { ...images, lineIcon }
 
   switch (data.templateId) {
-    case 'xalimart-black': return buildXalimartBlack(data, templateImages)
-    default:               return buildXalimartWhite(data, templateImages)
+    case 'xalimart-black':    return buildXalimartBlack(data, templateImages)
+    case 'xalimart-black-v2': return buildXalimartBlackV2(data, templateImages)
+    default:                  return buildXalimartWhite(data, templateImages)
   }
 }
 
@@ -37,6 +39,7 @@ export async function getInlineImages(): Promise<SignatureImages> {
   return {
     xalimartBlack:    `${HOSTED_BASE}/xalimart-black.png`,
     xalimartWhite:    `${HOSTED_BASE}/xalimart-white.png`,
+    xalimartWhiteNew: `${HOSTED_BASE}/xalimart-white-new.png`,
     emailIcon:        `${HOSTED_BASE}/email.png`,
     emailIconWh:      `${HOSTED_BASE}/email-wh.png`,
     globeIcon:        `${HOSTED_BASE}/globe.png`,
@@ -65,6 +68,7 @@ export function getPreviewImages(): SignatureImages {
   return {
     xalimartBlack:    '/xalimart-black.png',
     xalimartWhite:    '/xalimart-white.png',
+    xalimartWhiteNew: '/xalimart-white-new.png',
     emailIcon:        '/email.png',
     emailIconWh:      '/email-wh.png',
     globeIcon:        '/globe.png',

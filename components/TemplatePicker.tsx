@@ -16,6 +16,7 @@ const TEMPLATES: {
 }[] = [
   { id: 'xalimart-white', name: 'Xalimart White', tagline: 'White body · logo left · photo right' },
   { id: 'xalimart-black', name: 'Xalimart Black', tagline: 'Black body · logo left · photo right', dark: true },
+  { id: 'xalimart-black-v2', name: 'Xalimart Black V2', tagline: 'Compact 550px · BG Image · logo left', dark: true },
 ]
 
 export default function TemplatePicker({ data, onChange }: Props) {
