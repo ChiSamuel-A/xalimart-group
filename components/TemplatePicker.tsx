@@ -15,6 +15,7 @@ const TEMPLATES: {
   dark?: boolean
 }[] = [
   { id: 'xalimart-white', name: 'Xalimart White', tagline: 'White body · logo left · photo right' },
+  { id: 'xalimart-white-v2', name: 'Xalimart White V2', tagline: 'Compact 550px · White body' },
   { id: 'xalimart-black', name: 'Xalimart Black', tagline: 'Black body · logo left · photo right', dark: true },
   { id: 'xalimart-black-v2', name: 'Xalimart Black V2', tagline: 'Compact 550px · BG Image · logo left', dark: true },
 ]
