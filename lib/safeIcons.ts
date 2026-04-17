@@ -67,7 +67,8 @@ export async function processAllImages(images: SignatureImages): Promise<Signatu
     k.toLowerCase().includes('wh') || 
     k.toLowerCase().includes('bl') ||
     ['instagramWh', 'facebookWh', 'linkedinWh', 'instagramBl', 'facebookBl', 'linkedinBl', 'locationBlack', 'locationWhite'].includes(k)) &&
-    !k.toLowerCase().includes('line')
+    !k.toLowerCase().includes('line') &&
+    k !== 'xalimartWhite'
   )
 
   for (const key of iconKeys) {

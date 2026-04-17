@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { User, Briefcase, Mail, Globe, Upload, X, Link } from 'lucide-react'
+import { User, Briefcase, Mail, Upload, X, Link } from 'lucide-react'
 import { parsePhoneNumberWithError, isValidPhoneNumber } from 'libphonenumber-js'
 import { cn } from '@/lib/utils'
 import type { SignatureData } from '@/types/signature'
@@ -28,9 +28,8 @@ const DIAL_CODES = [
 
 const TEXT_FIELDS = [
   { field: 'fullName' as const, label: 'Full Name',        icon: User,      placeholder: 'Sidiki Camara',              type: 'text',  required: true,  maxLength: 60  },
-  { field: 'role'     as const, label: 'Role / Job Title', icon: Briefcase, placeholder: 'CEO & Architecte',           type: 'text',  required: true,  maxLength: 80  },
+  { field: 'role'     as const, label: 'Role / Job Title', icon: Briefcase, placeholder: 'CEO & Architecte',           type: 'text',  required: false, maxLength: 80  },
   { field: 'email'    as const, label: 'Email Address',    icon: Mail,      placeholder: 'sidiki.camara@xalimartgroup.sn', type: 'email', required: true,  maxLength: undefined },
-  { field: 'website'  as const, label: 'Website',          icon: Globe,     placeholder: 'www.xalimartgroup.sn',       type: 'url',   required: false, maxLength: undefined },
 ]
 
 function isValidEmail(val: string) {
@@ -66,15 +65,11 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dialCode, setDialCode]             = useState(() => extractDialCode(data.phone))
   const [localNumber, setLocalNumber]       = useState(() => extractLocalNumber(data.phone))
-  const [mobileDialCode, setMobileDialCode] = useState(() => extractDialCode(data.mobile || ''))
-  const [mobileLocal, setMobileLocal]       = useState(() => extractLocalNumber(data.mobile || ''))
   const [errors, setErrors]                 = useState<Record<string, string>>({})
   const [cropSrc, setCropSrc]               = useState<string | null>(null)
 
   // Sync internal state when data changes (e.g. from localStorage load)
-  // We use a ref to track the last value we synced to avoid infinite loops
   const lastSyncedPhone = useRef(data.phone)
-  const lastSyncedMobile = useRef(data.mobile)
 
   useEffect(() => {
     if (data.phone !== lastSyncedPhone.current) {
@@ -83,14 +78,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
       lastSyncedPhone.current = data.phone
     }
   }, [data.phone])
-
-  useEffect(() => {
-    if (data.mobile !== lastSyncedMobile.current) {
-      setMobileDialCode(extractDialCode(data.mobile || ''))
-      setMobileLocal(extractLocalNumber(data.mobile || ''))
-      lastSyncedMobile.current = data.mobile
-    }
-  }, [data.mobile])
 
   const applyError = (key: string, message: string | null) => {
     const next = { ...errors }
@@ -102,11 +89,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
 
   const validateEmail = (key: string, val: string) => {
     if (val && !isValidEmail(val)) applyError(key, 'Enter a valid email address')
-    else applyError(key, null)
-  }
-
-  const validateUrl = (key: string, val: string) => {
-    if (val && !isValidUrl(val)) applyError(key, 'Enter a valid URL starting with https://')
     else applyError(key, null)
   }
 
@@ -136,18 +118,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
     onChange({ ...data, phone: formatted })
   }
 
-  const updateMobile = (code: string, local: string) => {
-    const raw = `${code}${local.trim()}`
-    let formatted = raw
-    try {
-      if (raw.length > 5 && isValidPhoneNumber(raw)) {
-        formatted = parsePhoneNumberWithError(raw).formatInternational()
-      }
-    } catch { /* keep raw */ }
-    lastSyncedMobile.current = formatted
-    onChange({ ...data, mobile: formatted })
-  }
-
   const handleDialChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDialCode(e.target.value)
     updatePhone(e.target.value, localNumber)
@@ -156,16 +126,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
   const handleLocalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalNumber(e.target.value)
     updatePhone(dialCode, e.target.value)
-  }
-
-  const handleMobileDialChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setMobileDialCode(e.target.value)
-    updateMobile(e.target.value, mobileLocal)
-  }
-
-  const handleMobileLocalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMobileLocal(e.target.value)
-    updateMobile(mobileDialCode, e.target.value)
   }
 
   const inputClass = (key: string, base: string) =>
@@ -242,8 +202,8 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
               <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               <input
                 type={type}
-                value={data[field]}
-                onChange={(e) => setField(field, e.target.value)}
+                value={data[field as keyof Omit<SignatureData, 'photoBase64' | 'templateId' | 'phone' | 'socials' | 'mobile' | 'website'>] ?? ''}
+                onChange={(e) => setField(field as keyof Omit<SignatureData, 'photoBase64' | 'templateId' | 'phone' | 'socials' | 'mobile' | 'website'>, e.target.value)}
                 onBlur={(e) => {
                   const val = e.target.value
                   if (required && !val.trim()) {
@@ -251,7 +211,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
                     return
                   }
                   if (type === 'email') validateEmail(field, val)
-                  if (type === 'url')   validateUrl(field, val)
                 }}
                 placeholder={placeholder}
                 maxLength={maxLength}
@@ -293,39 +252,6 @@ export default function SignatureForm({ data, onChange, onValidationChange }: Pr
           </div>
           {data.phone && (
             <p className="text-[11px] text-zinc-500 mt-1 ml-1">{data.phone}</p>
-          )}
-        </div>
-
-        {/* ── Mobile ───────────────────────────────────────────────────────── */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Mobile Number
-            <span className="text-gray-400 font-normal text-xs ml-1">(optional)</span>
-          </label>
-          <div className="flex gap-2">
-            <select
-              value={mobileDialCode}
-              onChange={handleMobileDialChange}
-              className="flex-shrink-0 w-28 py-2.5 pl-2 pr-1 text-sm border border-gray-200 rounded-lg
-                         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
-                         bg-white text-gray-800 cursor-pointer"
-            >
-              {DIAL_CODES.map(({ code, flag }) => (
-                <option key={code} value={code}>{flag} {code}</option>
-              ))}
-            </select>
-            <input
-              type="tel"
-              value={mobileLocal}
-              onChange={handleMobileLocalChange}
-              placeholder="77 624 07 07"
-              className="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg
-                         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
-                         transition-shadow placeholder:text-gray-300 text-gray-800"
-            />
-          </div>
-          {data.mobile && (
-            <p className="text-[11px] text-zinc-500 mt-1 ml-1">{data.mobile}</p>
           )}
         </div>
 

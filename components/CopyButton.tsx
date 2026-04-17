@@ -16,7 +16,7 @@ type CopyState = 'idle' | 'loading' | 'success' | 'error'
 
 export default function CopyButton({ data, isValid = true }: Props) {
   const [state, setState] = useState<CopyState>('idle')
-  const hasRequired = !!(data.fullName.trim() && data.role.trim() && data.email.trim())
+  const hasRequired = !!(data.fullName.trim() && data.email.trim())
   const canCopy = isValid && hasRequired
 
   const handleCopy = async () => {
@@ -90,7 +90,7 @@ export default function CopyButton({ data, isValid = true }: Props) {
 
       {!hasRequired && (
         <p className="text-xs text-center text-gray-400 leading-relaxed">
-          Fill in your <strong>name</strong>, <strong>role</strong> and <strong>email</strong> to unlock your signature.
+          Fill in your <strong>name</strong> and <strong>email</strong> to unlock your signature.
         </p>
       )}
 

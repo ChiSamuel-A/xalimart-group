@@ -2,6 +2,7 @@ import type { SignatureImages } from '@/types/signature'
 
 // ── Static content ─────────────────────────────────────────────────────────────
 export const STATIC_ADDRESS = 'Flanc des Mamelles,<br/> Residence Sadiya Tower, Dakar - Senegal'
+export const STATIC_PHONE   = '+221 77 624 07 07'
 
 // ── Text clamp ─────────────────────────────────────────────────────────────────
 export function clampText(value: string, maxChars: number): string {

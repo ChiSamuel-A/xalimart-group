@@ -2,7 +2,7 @@
 // Outer: 600x200 card | Inner: 560x180 shared reference — all cols align to same box
 // DEBUG: borders enabled
 import type { SignatureData, SignatureImages } from '@/types/signature'
-import { clampText, whatsappHref, normalizeUrl, STATIC_ADDRESS } from './shared'
+import { clampText, whatsappHref, normalizeUrl, STATIC_ADDRESS, STATIC_PHONE } from './shared'
 
 const FONT      = "'Century Gothic', Arial, sans-serif"
 const TEXT_NAME = '#ffffff'
@@ -25,7 +25,7 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = '14px'
+  const fontSize = '12px'
   const content = isStatic
     ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.2;">${label}</span>`
     : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.2;">${label}</a>`
@@ -72,7 +72,7 @@ function socialsRow(
 }
 
 export function buildXalimartBlackV2(data: SignatureData, images: SignatureImages): string {
-  const { fullName, role, phone, mobile, email, website, photoBase64, socials } = data
+  const { fullName, role, phone, email, website, photoBase64, socials } = data
 
   const photo = photoBase64
     ? `<img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
@@ -83,10 +83,10 @@ export function buildXalimartBlackV2(data: SignatureData, images: SignatureImage
     : `<div style="width:160px;height:180px;background-color:#1a1a1a;border-radius:10px;"></div>`
 
   const contactRows = `
-    ${email   ? contactRow(images.emailIconWh,  `mailto:${email}`,     clampText(email, 34))   : ''}
-    ${website ? contactRow(images.globeIconWh,  normalizeUrl(website), clampText(website, 34)) : ''}
-    ${phone   ? contactRow(images.appelIcon,    whatsappHref(phone),   phone)                  : ''}
-    ${mobile  ? contactRow(images.phoneIcon,    `tel:${mobile}`,       mobile)                 : ''}
+    ${contactRow(images.emailIconWh,  `mailto:${email || ''}`,     clampText(email || '&nbsp;', 34))}
+    ${contactRow(images.globeIconWh,  normalizeUrl(website || 'www.xalimartgroup.sn'), clampText(website || 'www.xalimartgroup.sn', 34))}
+    ${contactRow(images.appelIcon,    whatsappHref(phone || ''),   phone || '&nbsp;')}
+    ${contactRow(images.phoneIcon,    `tel:${STATIC_PHONE}`, STATIC_PHONE)}
     ${contactRow(images.locationWhite, '#', STATIC_ADDRESS, { color: TEXT_ADDR, isStatic: true, isAddress: true })}
   `
 
@@ -141,13 +141,13 @@ export function buildXalimartBlackV2(data: SignatureData, images: SignatureImage
                     ">
               <a href="https://xalimartgroup.sn" target="_blank"
                 style="text-decoration:none;display:block;">
-                <img class="xsig-logo" src="${images.xalimartWhiteNew}" alt="Xalimart Group"
-                  width="130" height="130"
-                  style="display:block;margin:0 auto;width:130px;height:130px;
-                        max-width:130px;max-height:130px;outline:none;border:none;object-fit:contain;">
+                <img class="xsig-logo" src="${images.xalimartWhite}" alt="Xalimart Group"
+                  width="100" height="90"
+                  style="display:block;margin:0 auto;width:100px;height:90px;
+                        max-width:100px;max-height:90px;outline:none;border:none;">
               </a>
               <img class="xsig-tag" src="${images.taglineBl}" alt="tagline"
-                style="display:block;margin:0 auto;width:110px;max-width:110px;height:auto;border:none;outline:none;">
+                style="display:block;margin:0 auto;width:130px;max-width:130px;height:auto;border:none;outline:none;">
               ${socialsRow(socials, images)}
             </td>
 
