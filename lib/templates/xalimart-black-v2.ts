@@ -83,10 +83,10 @@ export function buildXalimartBlackV2(data: SignatureData, images: SignatureImage
     : `<div style="width:160px;height:180px;background-color:#1a1a1a;"></div>`
 
   const contactRows = `
-    ${contactRow(images.emailIconWh,  `mailto:${email || ''}`,     clampText(email || '&nbsp;', 34))}
-    ${contactRow(images.globeIconWh,  normalizeUrl(website || 'www.xalimartgroup.sn'), clampText(website || 'www.xalimartgroup.sn', 34))}
     ${contactRow(images.appelIcon,    whatsappHref(phone || ''),   phone || '&nbsp;')}
     ${contactRow(images.phoneIcon,    `tel:${STATIC_PHONE}`, STATIC_PHONE)}
+    ${contactRow(images.emailIconWh,  `mailto:${email || ''}`,     clampText(email || '&nbsp;', 34))}
+    ${contactRow(images.globeIconWh,  normalizeUrl('www.xalimartgroup.sn'), 'www.xalimartgroup.sn')}
     ${contactRow(images.locationWhite, '#', STATIC_ADDRESS, { color: TEXT_ADDR, isStatic: true, isAddress: true })}
   `
 
