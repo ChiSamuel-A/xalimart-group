@@ -25,10 +25,10 @@ function contactRow(
   opts: { color?: string; isStatic?: boolean; isAddress?: boolean } = {}
 ): string {
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
-  const fontSize = '12px'
+  const fontSize = '9px'
   const content = isStatic
-    ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.3;">${label}</span>`
-    : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.3;">${label}</a>`
+    ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.8;">${label}</span>`
+    : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.8;">${label}</a>`
 
   return `
     <tr>
@@ -37,7 +37,7 @@ function contactRow(
         ${simpleIcon(iconSrc, 16)}
       </td>
       <td valign="${isAddress ? 'top' : 'middle'}"
-        style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.3;padding:1px 0;">
+        style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.6;padding:1px 0;">
         ${content}
       </td>
     </tr>`
@@ -150,14 +150,14 @@ export function buildXalimartBlackV2(data: SignatureData, images: SignatureImage
                      mso-line-height-rule:exactly;
                      ">
               <div class="xsig-name"
-                style="font-size:19px;font-weight:bold;margin:0 0 2px 0;padding:0;
-                       font-family:${FONT};color:${TEXT_NAME};line-height:1.3;
+                style="font-size:20px;font-weight:bold;margin:0 0 2px 0;padding:0;
+                       font-family:${FONT};color:${TEXT_NAME};line-height:1.6;
                        white-space:nowrap;overflow:hidden;">
                 ${clampText(fullName || 'Full Name', 26)}
               </div>
               <div class="xsig-role"
-                style="font-size:15px;color:${TEXT_ROLE};margin:0 0 5px 0;padding:0;
-                       font-weight:bold;font-family:${FONT};line-height:1.3;
+                style="font-size:16px;color:${TEXT_ROLE};margin:0 0 5px 0;padding:0;
+                       font-weight:bold;font-family:${FONT};line-height:1.6;
                        white-space:nowrap;overflow:hidden;">
                 ${clampText(role || 'Job Title', 38)}
               </div>
@@ -186,12 +186,12 @@ export function buildXalimartBlackV2(data: SignatureData, images: SignatureImage
               <a href="https://xalimartgroup.sn" target="_blank"
                 style="text-decoration:none;display:block;">
                 <img class="xsig-logo" src="${images.xalimartWhite}" alt="Xalimart Group"
-                  width="100" height="90"
-                  style="display:block;margin:0 auto;width:100px;height:90px;
-                        max-width:100px;max-height:90px;outline:none;border:none;">
+                  width="120" height="110"
+                  style="display:block;margin:0 auto;width:120px;height:110px;
+                        max-width:120px;max-height:110px;outline:none;border:none;">
               </a>
               <img class="xsig-tag" src="${images.taglineBl}" alt="tagline"
-                style="display:block;margin:0 auto;width:120px;max-width:120px;height:auto;border:none;outline:none;">
+                style="display:block;margin:0 auto;width:110px;max-width:110px;height:auto;border:none;outline:none;">
               ${socialsRow(socials, images)}
             </td>
 
