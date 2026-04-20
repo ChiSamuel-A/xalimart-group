@@ -121,8 +121,8 @@ export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImage
 
     <!-- Content row -->
     <tr>
-      <td align="center" valign="top"
-        style="padding:0 20px;background-color:${BG};mso-line-height-rule:exactly;">
+      <td align="left" valign="top"
+        style="padding:0;background-color:${BG};mso-line-height-rule:exactly;">
 
         <!-- Inner table: 560x180 — shared reference -->
         <table class="xsig-inner" cellpadding="0" cellspacing="0" border="0" width="560" height="180"
@@ -131,37 +131,22 @@ export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImage
                  font-family:${FONT};font-size:0;line-height:0;overflow:hidden;">
           <tr height="180" style="height:180px;mso-line-height-rule:exactly;">
 
-            <!-- Col 1: Logo + tagline + socials — 130px -->
-            <td class="xsig-c1" valign="middle" width="130" height="180"
-              style="margin:0;padding:0;width:130px;height:180px;
-                    vertical-align:middle;text-align:center;
-                    background-color:${BG};overflow:hidden;
-                    mso-line-height-rule:exactly;">
-              <a href="https://xalimartgroup.sn" target="_blank"
-                style="text-decoration:none;display:block;">
-                <img class="xsig-logo" src="${images.xalimartBlack}" alt="Xalimart Group"
-                  width="98" height="77"
-                  style="display:block;margin:0 auto;width:98px;height:77px;
-                        max-width:98px;max-height:77px;outline:none;border:none;object-fit:contain;">
-              </a>
-              <img class="xsig-tag" src="${images.taglineWh}" alt="tagline"
-                style="display:block;margin:0 auto;width:130px;max-width:130px;height:auto;border:none;outline:none;">
-              ${socialsRow(socials, images)}
+            <!-- Col 1: Photo — 160px -->
+            <td class="xsig-c4" valign="top" width="160" height="180"
+              style="margin:0;padding:0;width:160px;height:180px;
+                     line-height:0;font-size:0;vertical-align:top;
+                     text-align:right;background-color:${BG};overflow:hidden;
+                     mso-line-height-rule:exactly;
+                     ">
+              ${photo}
             </td>
 
-            <!-- Col 2: Divider — 20px -->
-            <td class="xsig-c2" width="20" height="180"
-              style="margin:0;padding:0 9px;width:20px;height:180px;
-                    background-color:${BG};overflow:hidden;
-                    mso-line-height-rule:exactly;">
-              <div style="width:1px;height:180px;background-color:${DIVIDER};margin:0;padding:0;font-size:0;line-height:0;"></div>
-            </td>
-
-            <!-- Col 3: Name + Role + contacts — 250px -->
-            <td class="xsig-c3" valign="middle" width="250" height="180"
-              style="margin:0;padding:0;width:250px;height:180px;
+            <!-- Col 2: Name + Role + contacts — 230px + 30px padding -->
+            <td class="xsig-c3" valign="middle" width="240" height="180"
+              style="margin:0;padding:0 0 0 20px;width:240px;height:180px;
                      vertical-align:middle;background-color:${BG};overflow:hidden;
-                     mso-line-height-rule:exactly;">
+                     mso-line-height-rule:exactly;
+                     ">
               <div class="xsig-name"
                 style="font-size:20px;font-weight:bold;margin:0 0 2px 0;padding:0;
                        font-family:${FONT};color:${TEXT_NAME};line-height:1.15;
@@ -180,13 +165,32 @@ export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImage
               </table>
             </td>
 
-            <!-- Col 4: Photo — 160px -->
-            <td class="xsig-c4" valign="top" width="160" height="180"
-              style="margin:0;padding:0;width:160px;height:180px;
-                     line-height:0;font-size:0;vertical-align:top;
-                     text-align:right;background-color:${BG};overflow:hidden;
-                     mso-line-height-rule:exactly;">
-              ${photo}
+            <!-- Col 3: Vertical Divider — 10px -->
+            <td class="xsig-c2" width="10" height="180"
+              style="margin:0;padding:0 4.5px;width:10px;height:180px;
+                    background-color:${BG};overflow:hidden;
+                    mso-line-height-rule:exactly;
+                    ">
+              <div style="width:1px;height:180px;background-color:${DIVIDER};margin:0;padding:0;font-size:0;line-height:0;"></div>
+            </td>
+
+            <!-- Col 4: Logo + tagline + socials — 130px -->
+            <td class="xsig-c1" valign="middle" width="130" height="180"
+              style="margin:0;padding:0;width:130px;height:180px;
+                    vertical-align:middle;text-align:center;
+                    background-color:${BG};overflow:hidden;
+                    mso-line-height-rule:exactly;
+                    ">
+              <a href="https://xalimartgroup.sn" target="_blank"
+                style="text-decoration:none;display:block;">
+                <img class="xsig-logo" src="${images.xalimartBlack}" alt="Xalimart Group"
+                  width="100" height="90"
+                  style="display:block;margin:0 auto;width:100px;height:90px;
+                        max-width:100px;max-height:90px;outline:none;border:none;">
+              </a>
+              <img class="xsig-tag" src="${images.taglineWh}" alt="tagline"
+                style="display:block;margin:0 auto;width:120px;max-width:120px;height:auto;border:none;outline:none;">
+              ${socialsRow(socials, images)}
             </td>
 
           </tr>
