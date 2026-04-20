@@ -78,8 +78,8 @@ export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImage
          width="160" height="180"
          style="display:block;width:160px;height:180px;max-width:160px;max-height:180px;
                 border:none;vertical-align:top;object-fit:cover;object-position:top center;
-                border-radius:10px;">`
-    : `<div style="width:160px;height:180px;background-color:#f0f0f0;border-radius:10px;"></div>`
+                ">`
+    : `<div style="width:160px;height:180px;background-color:#f0f0f0;"></div>`
 
   const contactRows = `
     ${contactRow(images.emailIcon,   `mailto:${email || ''}`,     clampText(email || '&nbsp;', 34))}
