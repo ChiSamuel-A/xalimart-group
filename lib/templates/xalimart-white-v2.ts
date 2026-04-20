@@ -71,7 +71,7 @@ function socialsRow(
 }
 
 export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImages): string {
-  const { fullName, role, phone, email, website, photoBase64, socials } = data
+  const { fullName, role, phone, email, photoBase64, socials } = data
 
   const photo = photoBase64
     ? `<img class="xsig-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}"
