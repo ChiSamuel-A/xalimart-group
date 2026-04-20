@@ -184,9 +184,9 @@ export function buildXalimartWhiteV2(data: SignatureData, images: SignatureImage
               <a href="https://xalimartgroup.sn" target="_blank"
                 style="text-decoration:none;display:block;">
                 <img class="xsig-logo" src="${images.xalimartBlack}" alt="Xalimart Group"
-                  width="118" height="97"
-                  style="display:block;margin:0 auto;width:118px;height:97px;
-                        max-width:118px;max-height:97px;outline:none;border:none;">
+                  width="120" height="110"
+                  style="display:block;margin:0 auto;width:120px;height:110px;
+                        max-width:120px;max-height:110px;outline:none;border:none;">
               </a>
               <img class="xsig-tag" src="${images.taglineWh}" alt="tagline"
                 style="display:block;margin:0 auto;width:110px;max-width:110px;height:auto;border:none;outline:none;">
