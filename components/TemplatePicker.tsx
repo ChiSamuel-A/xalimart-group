@@ -12,10 +12,35 @@ const TEMPLATES: {
   id: SignatureData['templateId']
   name: string
   tagline: string
+  description?: string
   dark?: boolean
 }[] = [
-  { id: 'xalimart-white-v2', name: 'Xalimart White V2', tagline: 'Compact 550px · White body' },
-  { id: 'xalimart-black-v2', name: 'Xalimart Black V2', tagline: 'Compact 550px · Black body', dark: true },
+  { 
+    id: 'xalimart-white-v2', 
+    name: 'Xalimart White V2', 
+    tagline: 'Standard Modern',
+    description: 'Best for Gmail & Apple Mail. Clean and optimized for modern email apps.',
+  },
+  { 
+    id: 'xalimart-white-v3', 
+    name: 'Xalimart White V3', 
+    tagline: 'Outlook Specialized',
+    description: 'Use this if you use Microsoft Outlook. Fixed spacing and layout safety.',
+  },
+  { 
+    id: 'xalimart-black-v2', 
+    name: 'Xalimart Black V2', 
+    tagline: 'Standard Modern',
+    description: 'Premium dark style. Best for Gmail & Apple Mail apps.',
+    dark: true 
+  },
+  { 
+    id: 'xalimart-black-v3', 
+    name: 'Xalimart Black V3', 
+    tagline: 'Outlook Specialized',
+    description: 'Premium dark style. Fixed spacing specifically for Microsoft Outlook.',
+    dark: true 
+  },
 ]
 
 export default function TemplatePicker({ data, onChange }: Props) {
@@ -26,7 +51,7 @@ export default function TemplatePicker({ data, onChange }: Props) {
       </p>
       {/* Mobile: horizontal scroll strip — sm+: grid */}
       <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 overflow-x-auto pb-1 sm:overflow-x-visible sm:pb-0 snap-x snap-mandatory">
-        {TEMPLATES.map(({ id, name, tagline, dark }) => {
+        {TEMPLATES.map(({ id, name, tagline, description, dark }) => {
           const active = data.templateId === id
           return (
             <button
@@ -34,9 +59,9 @@ export default function TemplatePicker({ data, onChange }: Props) {
               type="button"
               onClick={() => onChange({ ...data, templateId: id })}
               className={cn(
-                'flex flex-col items-start p-4 rounded-xl border-2 text-left',
+                'flex flex-col items-start p-4 rounded-xl border-2 text-left h-full',
                 'transition-all hover:shadow-sm cursor-pointer snap-start',
-                'flex-shrink-0 w-36 sm:w-auto',
+                'flex-shrink-0 w-48 sm:w-auto',
                 dark ? 'bg-zinc-900' : 'bg-white',
                 active
                   ? 'border-black shadow-sm shadow-zinc-200'
@@ -46,9 +71,14 @@ export default function TemplatePicker({ data, onChange }: Props) {
               <span className={cn('text-sm font-semibold leading-tight', dark ? 'text-white' : active ? 'text-black' : 'text-gray-800')}>
                 {name}
               </span>
-              <span className={cn('text-[11px] mt-0.5 leading-tight', dark ? 'text-zinc-400' : 'text-gray-400')}>
+              <span className={cn('text-[11px] font-medium mt-0.5 leading-tight', dark ? 'text-zinc-300' : 'text-zinc-600')}>
                 {tagline}
               </span>
+              {description && (
+                <span className={cn('text-[10px] mt-2 leading-relaxed opacity-80', dark ? 'text-zinc-400' : 'text-gray-500')}>
+                  {description}
+                </span>
+              )}
             </button>
           )
         })}

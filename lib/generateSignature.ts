@@ -2,11 +2,15 @@ import type { SignatureData, SignatureImages } from '@/types/signature'
 import { buildXalimartWhite } from './templates/xalimart-white'
 import { buildXalimartBlack } from './templates/xalimart-black'
 import { buildXalimartBlackV2 } from './templates/xalimart-black-v2'
+import { buildXalimartBlackV3 } from './templates/xalimart-black-v3'
 import { buildXalimartWhiteV2 } from './templates/xalimart-white-v2'
+import { buildXalimartWhiteV3 } from './templates/xalimart-white-v3'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
-  const isBlack = data.templateId === 'xalimart-black' || data.templateId === 'xalimart-black-v2'
+  const isBlack = data.templateId === 'xalimart-black' || 
+                  data.templateId === 'xalimart-black-v2' || 
+                  data.templateId === 'xalimart-black-v3'
   const lineIcon = isBlack ? (images.lineIconBl || '/line-bl.png') : (images.lineIconWh || '/line-wh.png')
   
   const templateImages = { ...images, lineIcon }
@@ -14,7 +18,9 @@ export function buildSignatureHTML(data: SignatureData, images: SignatureImages)
   switch (data.templateId) {
     case 'xalimart-black':    return buildXalimartBlack(data, templateImages)
     case 'xalimart-black-v2': return buildXalimartBlackV2(data, templateImages)
+    case 'xalimart-black-v3': return buildXalimartBlackV3(data, templateImages)
     case 'xalimart-white-v2': return buildXalimartWhiteV2(data, templateImages)
+    case 'xalimart-white-v3': return buildXalimartWhiteV3(data, templateImages)
     default:                  return buildXalimartWhite(data, templateImages)
   }
 }
