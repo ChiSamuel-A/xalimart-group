@@ -14,12 +14,14 @@ const TEMPLATES: {
   tagline: string
   description?: string
   dark?: boolean
+  hidden?: boolean
 }[] = [
   { 
     id: 'xalimart-white-v2', 
     name: 'Xalimart White V2', 
     tagline: 'Standard Modern',
     description: 'Best for Gmail & Apple Mail. Clean and optimized for modern email apps.',
+    hidden: true
   },
   { 
     id: 'xalimart-white-v3', 
@@ -32,7 +34,8 @@ const TEMPLATES: {
     name: 'Xalimart Black V2', 
     tagline: 'Standard Modern',
     description: 'Premium dark style. Best for Gmail & Apple Mail apps.',
-    dark: true 
+    dark: true,
+    hidden: true
   },
   { 
     id: 'xalimart-black-v3', 
@@ -51,7 +54,7 @@ export default function TemplatePicker({ data, onChange }: Props) {
       </p>
       {/* Mobile: horizontal scroll strip — sm+: grid */}
       <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 overflow-x-auto pb-1 sm:overflow-x-visible sm:pb-0 snap-x snap-mandatory">
-        {TEMPLATES.map(({ id, name, tagline, description, dark }) => {
+        {TEMPLATES.filter(t => !t.hidden).map(({ id, name, tagline, description, dark }) => {
           const active = data.templateId === id
           return (
             <button

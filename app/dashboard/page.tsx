@@ -20,7 +20,7 @@ const defaultData: SignatureData = {
   email: '',
   website: '',
   photoBase64: null,
-  templateId: 'xalimart-white',
+  templateId: 'xalimart-white-v3',
   socials: {
     facebook: '',
     instagram: '',
