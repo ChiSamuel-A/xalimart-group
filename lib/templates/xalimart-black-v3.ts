@@ -145,13 +145,13 @@ export function buildXalimartBlackV3(data: SignatureData, images: SignatureImage
                 style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
                 <!-- Name Row -->
                 <tr>
-                  <td style="padding:0 0 2px 0;margin:0;font-family:${FONT};font-size:20px;font-weight:bold;color:${TEXT_NAME};line-height:26px;mso-line-height-rule:exactly;">
+                  <td style="padding:0 0 2px 0;margin:0;font-family:${FONT};font-size:20px;font-weight:bold;color:${TEXT_NAME};line-height:26px;mso-line-height-rule:exactly;white-space:nowrap;overflow:hidden;">
                     <span style="margin:0;padding:0;">${clampText(fullName || 'Full Name', 26)}</span>
                   </td>
                 </tr>
                 <!-- Role Row -->
                 <tr>
-                  <td style="padding:0 0 8px 0;margin:0;font-family:${FONT};font-size:16px;font-weight:bold;color:${TEXT_ROLE};line-height:20px;mso-line-height-rule:exactly;">
+                  <td style="padding:0 0 8px 0;margin:0;font-family:${FONT};font-size:16px;font-weight:bold;color:${TEXT_ROLE};line-height:20px;mso-line-height-rule:exactly;white-space:nowrap;overflow:hidden;">
                     <span style="margin:0;padding:0;">${clampText(role || 'Job Title', 38)}</span>
                   </td>
                 </tr>

@@ -22,17 +22,16 @@ export default function CopyButton({ data, isValid = true }: Props) {
   const handleCopy = async () => {
     setState('loading')
     try {
-      const rawImages = await getInlineImages()
-      const images = await processAllImages(rawImages)
-      const html = buildSignatureHTML(data, images)
+      // Build the HTML blob via a Promise so ClipboardItem is constructed
+      // synchronously within the click gesture — required by Safari.
+      const htmlPromise = getInlineImages()
+        .then(raw => processAllImages(raw))
+        .then(images => new Blob([buildSignatureHTML(data, images)], { type: 'text/html' }))
 
-      // Create a blob containing the HTML. This is the modern, 
-      // most reliable way to copy "Rich Text" for Outlook.
-      const htmlBlob = new Blob([html], { type: 'text/html' })
       const textBlob = new Blob([data.fullName + '\n' + data.role], { type: 'text/plain' })
 
       const item = new ClipboardItem({
-        'text/html': htmlBlob,
+        'text/html': htmlPromise,
         'text/plain': textBlob,
       })
 
