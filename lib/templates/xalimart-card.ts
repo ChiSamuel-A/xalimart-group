@@ -87,11 +87,11 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
     <tr><td style="padding:0;">
 
       <table role="presentation" class="xsig-card-border" cellpadding="0" cellspacing="0" border="0" width="600"
-        style="width:600px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+        background="${images.filegram}"
+        style="width:600px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;background-image:url('${images.filegram}');background-repeat:repeat;background-size:100px 100px;">
         <tr>
-          <td bgcolor="#ffffff" background="${images.filegram}" style="padding:0;background-color:#ffffff;background-image:url('${images.filegram}');background-repeat:repeat;background-size:100px 100px;border-radius:12px;">
+          <td style="padding:0;background-color:transparent;border-radius:12px;">
 
-            <!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:597px;height:210px;"><v:fill type="tile" src="${images.filegram}" color="#ffffff"/><v:textbox inset="0,0,0,0" style="mso-fit-shape-to-text:true"><div><![endif]-->
             <table role="presentation" class="xsig-card-inner" cellpadding="0" cellspacing="0" border="0" width="600"
               style="margin:0;padding:0;width:600px;border-collapse:separate;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:${FONT};font-size:0;line-height:0;">
 
@@ -220,7 +220,6 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
               <tr><td colspan="8" height="14" style="height:14px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>
 
             </table>
-            <!--[if gte mso 9]></div></v:textbox></v:rect><![endif]-->
           </td>
         </tr>
       </table>
