@@ -1,12 +1,11 @@
 'use client'
 
-import { useMemo, useState, useEffect, useRef, useCallback } from 'react' // useState kept for safeImages/previewMode/iframeHeight
+import { useMemo, useState, useRef, useCallback } from 'react'
 import { Monitor, Smartphone } from 'lucide-react'
 import { buildSignatureHTML, getPreviewImages } from '@/lib/generateSignature'
 import CopyButton from '@/components/CopyButton'
 import CopyButtonErrorBoundary from '@/components/CopyButtonErrorBoundary'
-import type { SignatureData, SignatureImages } from '@/types/signature'
-import { processAllImages } from '@/lib/safeIcons'
+import type { SignatureData } from '@/types/signature'
 
 interface Props {
   data: SignatureData
@@ -16,28 +15,15 @@ interface Props {
 type PreviewMode = 'desktop' | 'mobile'
 
 export default function SignaturePreview({ data, isValid = true }: Props) {
-  const [safeImages, setSafeImages]         = useState<SignatureImages | null>(null)
-  const [previewMode, setPreviewMode]       = useState<PreviewMode>('desktop')
-  const [iframeHeight, setIframeHeight]     = useState(260)
-  const iframeRef                           = useRef<HTMLIFrameElement>(null)
-
-  // ── Icon processing ────────────────────────────────────────────────────────
-  useEffect(() => {
-    let active = true
-    async function prepare() {
-      const rawImages = getPreviewImages()
-      const processed = await processAllImages(rawImages)
-      if (active) setSafeImages(processed)
-    }
-    prepare()
-    return () => { active = false }
-  }, [])
+  const [previewMode, setPreviewMode]   = useState<PreviewMode>('desktop')
+  const [iframeHeight, setIframeHeight] = useState(260)
+  const iframeRef                       = useRef<HTMLIFrameElement>(null)
 
   const displayData = useMemo(() => ({ ...data }), [data])
 
   const html = useMemo(
-    () => buildSignatureHTML(displayData, safeImages || getPreviewImages()),
-    [displayData, safeImages]
+    () => buildSignatureHTML(displayData, getPreviewImages()),
+    [displayData]
   )
 
   // ── Auto-size the mobile iframe to its content ─────────────────────────────

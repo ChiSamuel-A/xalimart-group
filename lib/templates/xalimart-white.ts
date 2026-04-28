@@ -12,8 +12,7 @@ const DIVIDER     = '#e0e0e0'
 
 // ── Simple icon ────────────────────────────────────────────────────────────
 function simpleIcon(iconSrc: string, iconSize: number): string {
-  return `<img src="${iconSrc}" width="${iconSize}" height="${iconSize}" border="0"
-    style="display:block;width:${iconSize}px;height:${iconSize}px;min-width:${iconSize}px;min-height:${iconSize}px;max-width:${iconSize}px;max-height:${iconSize}px;border:none;">`
+  return `<img src="${iconSrc}" width="${iconSize}" height="${iconSize}" border="0" alt="" style="display:block;width:${iconSize}px;height:${iconSize}px;min-width:${iconSize}px;min-height:${iconSize}px;max-width:${iconSize}px;max-height:${iconSize}px;border:none;">`
 }
 
 // ── Contact row: icon + text ───────────────────────────────────────────────
@@ -26,19 +25,11 @@ function contactRow(
   const { color = TEXT_INFO, isStatic = false, isAddress = false } = opts
   const fontSize = '12px'
   const content = isStatic
-    ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</span>`
-    : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:1.4;">${label}</a>`
+    ? `<span style="color:${color};font-size:${fontSize};font-family:${FONT};line-height:18px;margin:0;padding:0;">${label}</span>`
+    : `<a href="${href}" style="color:${color};text-decoration:none;font-size:${fontSize};font-family:${FONT};line-height:18px;margin:0;padding:0;">${label}</a>`
 
-  return `
-    <tr>
-      <td valign="${isAddress ? 'top' : 'middle'}" style="padding:2px 8px 2px 0;">
-        ${simpleIcon(iconSrc, 24)}
-      </td>
-      <td valign="${isAddress ? 'top' : 'middle'}"
-        style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:1.4;padding:2px 0;">
-        ${content}
-      </td>
-    </tr>`
+  const vAlign = isAddress ? 'top' : 'middle'
+  return `<tr><td width="24" valign="${vAlign}" style="padding:2px 8px 2px 0;width:24px;font-size:0;line-height:0;mso-line-height-rule:exactly;">${simpleIcon(iconSrc, 24)}</td><td valign="${vAlign}" style="font-size:${fontSize};color:${color};font-family:${FONT};line-height:18px;mso-line-height-rule:exactly;padding:2px 0;">${content}</td></tr>`
 }
 
 // ── Social icons row ───────────────────────────────────────────────────────
@@ -57,15 +48,9 @@ function socialsRow(
 
   return `
     <table cellpadding="0" cellspacing="0" border="0" align="center"
-      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;margin-top:10px;">
+      style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
-        ${items.map((s, i) => `
-          <td align="center" valign="middle"
-            style="${i < items.length - 1 ? 'padding-right:14px;' : ''}mso-table-lspace:0pt;mso-table-rspace:0pt;">
-            <a href="${s.url}" target="_blank" style="text-decoration:none;display:block;">
-              ${simpleIcon(s.src, iconSize)}
-            </a>
-          </td>`).join('')}
+        ${items.map((s, i) => `<td align="center" valign="middle" style="${i < items.length - 1 ? 'padding-right:14px;' : ''}mso-table-lspace:0pt;mso-table-rspace:0pt;font-size:0;line-height:0;"><a href="${s.url}" target="_blank" style="text-decoration:none;display:block;font-size:0;line-height:0;">${simpleIcon(s.src, iconSize)}</a></td>`).join('')}
       </tr>
     </table>`
 }
@@ -123,11 +108,10 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
       img.xsig-photo{width:80px!important;height:91px!important;min-width:80px!important;min-height:91px!important;max-width:80px!important;max-height:91px!important;object-fit:cover!important;}
     }
   </style>
-  <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="750"
-      style="margin:0;padding:0;width:750px;border-collapse:collapse;
+  <table class="xsig" cellpadding="0" cellspacing="0" border="0" width="600"
+      style="margin:0;padding:0;width:600px;border-collapse:collapse;
              mso-table-lspace:0pt;mso-table-rspace:0pt;
-             font-family:${FONT};font-size:0;line-height:0;
-             overflow:hidden;">
+             font-family:${FONT};font-size:0;line-height:0;">
       <tr height="293" style="height:293px;mso-line-height-rule:exactly;">
 
         <!-- Col 1: Logo + tagline + socials — 180px -->
@@ -158,14 +142,23 @@ export function buildXalimartWhite(data: SignatureData, images: SignatureImages)
         <!-- Col 3: Name + Role + contacts — 301px -->
         <td class="xsig-c3" valign="middle" width="301"
           style="padding:10px 8px 10px 0;width:301px;background-color:#ffffff;height:244px;mso-line-height-rule:exactly;">
-          <div class="xsig-name" style="font-size:21px;font-weight:bold;margin:0 0 4px 0;padding:0;
-                      font-family:${FONT};color:${TEXT_NAME};line-height:1.2;">
-            ${clampText(fullName || 'Full Name', 30)}
-          </div>
-          <div class="xsig-role" style="font-size:13px;color:${TEXT_ROLE};margin:0 0 12px 0;padding:0;
-                      font-weight:bold;font-family:${FONT};line-height:1.4;">
-            ${clampText(role || 'Job Title', 45)}
-          </div>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+            style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+            <tr>
+              <td class="xsig-name"
+                style="padding:0 0 4px 0;font-family:${FONT};font-size:21px;font-weight:bold;
+                       color:${TEXT_NAME};line-height:26px;mso-line-height-rule:exactly;">
+                <span style="margin:0;padding:0;">${clampText(fullName || 'Full Name', 30)}</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="xsig-role"
+                style="padding:0 0 12px 0;font-family:${FONT};font-size:13px;font-weight:bold;
+                       color:${TEXT_ROLE};line-height:18px;mso-line-height-rule:exactly;">
+                <span style="margin:0;padding:0;">${clampText(role || 'Job Title', 45)}</span>
+              </td>
+            </tr>
+          </table>
           <table cellpadding="0" cellspacing="0" border="0"
             style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
             ${contactRows}

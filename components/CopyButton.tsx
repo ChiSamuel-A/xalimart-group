@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check, AlertCircle, Loader2 } from 'lucide-react'
+import { Copy, Check, AlertCircle, Loader2, Download } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buildSignatureHTML, getInlineImages } from '@/lib/generateSignature'
-import { processAllImages } from '@/lib/safeIcons'
 import type { SignatureData } from '@/types/signature'
 
 interface Props {
@@ -12,22 +11,41 @@ interface Props {
   isValid?: boolean
 }
 
-type CopyState = 'idle' | 'loading' | 'success' | 'error'
+type CopyState = 'idle' | 'loading' | 'success' | 'error' | 'downloaded'
 
 export default function CopyButton({ data, isValid = true }: Props) {
   const [state, setState] = useState<CopyState>('idle')
   const hasRequired = !!(data.fullName.trim() && data.email.trim())
   const canCopy = isValid && hasRequired
 
+  const buildHtmlBlob = async (): Promise<Blob> => {
+    const images = await getInlineImages()
+    return new Blob([buildSignatureHTML(data, images)], { type: 'text/html' })
+  }
+
+  const handleDownloadFallback = async () => {
+    try {
+      const blob = await buildHtmlBlob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'signature-xalimart.html'
+      a.click()
+      URL.revokeObjectURL(url)
+      setState('downloaded')
+      setTimeout(() => setState('idle'), 4000)
+    } catch {
+      setState('error')
+      setTimeout(() => setState('idle'), 4000)
+    }
+  }
+
   const handleCopy = async () => {
     setState('loading')
     try {
-      // Build the HTML blob via a Promise so ClipboardItem is constructed
-      // synchronously within the click gesture — required by Safari.
-      const htmlPromise = getInlineImages()
-        .then(raw => processAllImages(raw))
-        .then(images => new Blob([buildSignatureHTML(data, images)], { type: 'text/html' }))
-
+      // Pass Promise directly to ClipboardItem — required by Safari to keep
+      // the call synchronous within the user gesture (click event).
+      const htmlPromise = buildHtmlBlob()
       const textBlob = new Blob([data.fullName + '\n' + data.role], { type: 'text/plain' })
 
       const item = new ClipboardItem({
@@ -36,13 +54,12 @@ export default function CopyButton({ data, isValid = true }: Props) {
       })
 
       await navigator.clipboard.write([item])
-
       setState('success')
       setTimeout(() => setState('idle'), 3500)
-    } catch (err) {
-      console.error('Copy failed:', err)
-      setState('error')
-      setTimeout(() => setState('idle'), 4000)
+    } catch {
+      // ClipboardItem failed (old Firefox, HTTP, permissions denied)
+      // Fallback: download as .html file
+      await handleDownloadFallback()
     }
   }
 
@@ -58,6 +75,7 @@ export default function CopyButton({ data, isValid = true }: Props) {
             'bg-black hover:bg-zinc-800 text-white shadow-md hover:shadow-lg active:scale-[0.98]',
           canCopy && state === 'loading' && 'bg-zinc-500 text-white cursor-wait',
           canCopy && state === 'success' && 'bg-emerald-600 text-white',
+          canCopy && state === 'downloaded' && 'bg-blue-600 text-white',
           canCopy && state === 'error'   && 'bg-red-500 text-white'
         )}
       >
@@ -79,10 +97,16 @@ export default function CopyButton({ data, isValid = true }: Props) {
             Copied! Paste into your mail settings
           </>
         )}
+        {state === 'downloaded' && (
+          <>
+            <Download className="w-4 h-4" />
+            Downloaded! Open the file and copy the content
+          </>
+        )}
         {state === 'error' && (
           <>
             <AlertCircle className="w-4 h-4" />
-            Copy failed — see note below
+            Failed — try again
           </>
         )}
       </button>
@@ -109,11 +133,9 @@ export default function CopyButton({ data, isValid = true }: Props) {
         </p>
       )}
 
-      {canCopy && state === 'error' && (
-        <p className="text-xs text-center text-red-400 leading-relaxed">
-          Browser blocked clipboard access. The page must be served over{' '}
-          <strong>HTTPS</strong> or <strong>localhost</strong> for the
-          ClipboardItem API to work.
+      {canCopy && state === 'downloaded' && (
+        <p className="text-xs text-center text-blue-500 leading-relaxed">
+          Open <strong>signature-xalimart.html</strong> in a browser, select all (Ctrl+A), then copy and paste into your mail client.
         </p>
       )}
     </div>

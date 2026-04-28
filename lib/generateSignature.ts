@@ -5,6 +5,7 @@ import { buildXalimartBlackV2 } from './templates/xalimart-black-v2'
 import { buildXalimartBlackV3 } from './templates/xalimart-black-v3'
 import { buildXalimartWhiteV2 } from './templates/xalimart-white-v2'
 import { buildXalimartWhiteV3 } from './templates/xalimart-white-v3'
+import { buildXalimartCard } from './templates/xalimart-card'
 
 // ── Template router ────────────────────────────────────────────────────────────
 export function buildSignatureHTML(data: SignatureData, images: SignatureImages): string {
@@ -21,6 +22,7 @@ export function buildSignatureHTML(data: SignatureData, images: SignatureImages)
     case 'xalimart-black-v3': return buildXalimartBlackV3(data, templateImages)
     case 'xalimart-white-v2': return buildXalimartWhiteV2(data, templateImages)
     case 'xalimart-white-v3': return buildXalimartWhiteV3(data, templateImages)
+    case 'xalimart-card':     return buildXalimartCard(data, templateImages)
     default:                  return buildXalimartWhite(data, templateImages)
   }
 }
@@ -69,6 +71,8 @@ export async function getInlineImages(): Promise<SignatureImages> {
     lineIconWh:       `${HOSTED_BASE}/gray-vertical-line.png`,
     taglineBl:        `${HOSTED_BASE}/tagline-bl.png`,
     taglineWh:        `${HOSTED_BASE}/tagline-wh.png`,
+    watermarkCard:    `${HOSTED_BASE}/icones/icones/Xalimart_black%20embossed.png`,
+    filegram:         `${HOSTED_BASE}/filegram.png`,
   }
 }
 
@@ -98,5 +102,7 @@ export function getPreviewImages(): SignatureImages {
     lineIconWh:       '/gray-vertical-line.png',
     taglineBl:        '/tagline-bl.png',
     taglineWh:        '/tagline-wh.png',
+    watermarkCard:    '/icones/icones/Xalimart_black%20embossed.png',
+    filegram:         '/filegram.png',
   }
 }

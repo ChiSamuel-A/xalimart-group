@@ -19,17 +19,36 @@ async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<string
     img.src = imageSrc
   })
   const canvas = document.createElement('canvas')
-  canvas.width  = 395
-  canvas.height = 475
+  // 320×360 = 2× the 160×180 display size (Retina-ready) with exact portrait ratio.
+  canvas.width  = 320
+  canvas.height = 360
   const ctx = canvas.getContext('2d')!
+
+  // Rounded-corner clip — baked into the PNG so corners work in Outlook too.
+  // r=23px on 320px canvas = 8px border-radius at 110px display width.
+  const r = 23
+  ctx.beginPath()
+  ctx.moveTo(r, 0)
+  ctx.lineTo(320 - r, 0)
+  ctx.quadraticCurveTo(320, 0, 320, r)
+  ctx.lineTo(320, 360 - r)
+  ctx.quadraticCurveTo(320, 360, 320 - r, 360)
+  ctx.lineTo(r, 360)
+  ctx.quadraticCurveTo(0, 360, 0, 360 - r)
+  ctx.lineTo(0, r)
+  ctx.quadraticCurveTo(0, 0, r, 0)
+  ctx.closePath()
+  ctx.clip()
+
   ctx.drawImage(
     image,
     cropPixels.x, cropPixels.y,
     cropPixels.width, cropPixels.height,
     0, 0,
-    395, 475
+    320, 360
   )
-  return canvas.toDataURL('image/jpeg', 0.92)
+  // PNG preserves the transparent rounded corners across all email clients.
+  return canvas.toDataURL('image/png')
 }
 
 export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props) {
@@ -71,7 +90,7 @@ export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props)
             image={imageSrc}
             crop={crop}
             zoom={zoom}
-            aspect={395 / 475}
+            aspect={320 / 360}
             cropShape="rect"
             showGrid={false}
             onCropChange={setCrop}

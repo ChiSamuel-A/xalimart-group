@@ -37,12 +37,18 @@ const TEMPLATES: {
     dark: true,
     hidden: true
   },
-  { 
-    id: 'xalimart-black-v3', 
-    name: 'Xalimart Black V3', 
+  {
+    id: 'xalimart-black-v3',
+    name: 'Xalimart Black V3',
     tagline: 'Outlook Specialized',
     description: 'Premium dark style. Fixed spacing specifically for Microsoft Outlook.',
-    dark: true 
+    dark: true
+  },
+  {
+    id: 'xalimart-card',
+    name: 'Xalimart Card',
+    tagline: 'Badge Icons + QR',
+    description: 'Modern card layout with circular badge icons, vertical divider, and QR code.',
   },
 ]
 
