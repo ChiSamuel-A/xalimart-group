@@ -73,6 +73,7 @@ export async function getInlineImages(): Promise<SignatureImages> {
     taglineWh:        `${HOSTED_BASE}/tagline-wh.png`,
     watermarkCard:    `${HOSTED_BASE}/icones/icones/Xalimart_black%20embossed.png`,
     filegram:         `${HOSTED_BASE}/filegram.png`,
+    filegramCard:     `${HOSTED_BASE}/filegram-card.png`,
   }
 }
 
@@ -104,5 +105,6 @@ export function getPreviewImages(): SignatureImages {
     taglineWh:        '/tagline-wh.png',
     watermarkCard:    '/icones/icones/Xalimart_black%20embossed.png',
     filegram:         '/filegram.png',
+    filegramCard:     '/filegram-card.png',
   }
 }

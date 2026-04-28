@@ -87,11 +87,17 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
     <tr><td style="padding:0;">
 
       <table role="presentation" class="xsig-card-border" cellpadding="0" cellspacing="0" border="0" width="600"
-        background="${images.filegram}"
-        style="width:600px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;background-image:url('${images.filegram}');background-repeat:repeat;background-size:100px 100px;">
+        style="width:600px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
         <tr>
-          <td style="padding:0;background-color:transparent;border-radius:12px;">
+          <td bgcolor="#ffffff" style="padding:0;background-color:#ffffff;background-image:url('${images.filegramCard}');background-size:cover;background-repeat:no-repeat;background-position:center top;border-radius:12px;position:relative;">
 
+            <!--[if gte mso 9]>
+            <v:shape xmlns:v="urn:schemas-microsoft-com:vml"
+                     type="#_x0000_t75"
+                     style="position:absolute;left:0;top:0;width:600px;height:240px;z-index:-1;mso-position-horizontal:absolute;mso-position-vertical:absolute;">
+              <v:imagedata src="${images.filegramCard}" o:title=""/>
+            </v:shape>
+            <![endif]-->
             <table role="presentation" class="xsig-card-inner" cellpadding="0" cellspacing="0" border="0" width="600"
               style="margin:0;padding:0;width:600px;border-collapse:separate;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:${FONT};font-size:0;line-height:0;">
 
