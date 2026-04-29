@@ -41,6 +41,4 @@ export interface SignatureImages {
   taglineBl: string
   taglineWh: string
   watermarkCard: string
-  filegram: string
-  filegramCard: string
 }
