@@ -61,8 +61,8 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
   const hasSocials = !!(socials.instagram || socials.facebook || socials.linkedin)
 
   const photo = photoBase64
-    ? `<img class="xsig-card-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}" width="110" height="130" style="display:block;width:110px;height:130px;max-width:110px;max-height:130px;border:none;vertical-align:top;">`
-    : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="110" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td width="110" height="130" bgcolor="#e0e0e0" style="width:110px;height:130px;background-color:#e0e0e0;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td></tr></table>`
+    ? `<img class="xsig-card-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}" width="120" height="135" style="display:block;width:120px;height:135px;max-width:120px;max-height:135px;border:none;vertical-align:top;">`
+    : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="120" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td width="120" height="135" bgcolor="#e0e0e0" style="width:120px;height:135px;background-color:#e0e0e0;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td></tr></table>`
 
   const phoneRow = phone
     ? `<tr>${iconCell(images.appelIconBl)}<td width="5" style="width:5px;font-size:0;line-height:0;padding:0;">&nbsp;</td><td nowrap width="${TEXT_W}" valign="middle" style="padding:0;width:${TEXT_W}px;white-space:nowrap;font-size:11px;color:${TEXT_INFO};font-family:${FONT};line-height:16px;mso-line-height-rule:exactly;"><a href="${whatsappHref(phone)}" style="color:${TEXT_INFO};text-decoration:none;font-size:11px;font-family:${FONT};line-height:16px;">${phone}</a></td></tr><tr><td colspan="3" height="5" style="height:5px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>`
@@ -75,7 +75,7 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
       td.xsig-c1{width:80px!important;}
       td.xsig-c2{width:auto!important;}
       td.xsig-c4{width:70px!important;}
-      img.xsig-card-photo{width:70px!important;height:82px!important;max-width:70px!important;max-height:82px!important;}
+      img.xsig-card-photo{width:80px!important;height:90px!important;max-width:80px!important;max-height:90px!important;}
     }
   </style>
 
@@ -89,7 +89,7 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
       <table role="presentation" class="xsig-card-border" cellpadding="0" cellspacing="0" border="0" width="600"
         style="width:600px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
         <tr>
-          <td bgcolor="#ffffff" style="padding:0;background-color:#ffffff;background-image:url('${images.filegramCard}');background-size:cover;background-repeat:no-repeat;background-position:center top;border-radius:12px;position:relative;">
+          <td bgcolor="#ffffff" style="padding:0;background-color:#ffffff;background-image:url('${images.filegramCard}');background-size:cover;background-repeat:no-repeat;background-position:center top;border-radius:12px;overflow:hidden;">
 
             <!--[if gte mso 9]>
             <v:shape xmlns:v="urn:schemas-microsoft-com:vml"
@@ -104,8 +104,8 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
               <!-- Width-setter row — forces Outlook to allocate exact column widths -->
               <tr style="font-size:0;line-height:0;mso-line-height-rule:exactly;">
                 <td width="10"  style="width:10px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="110" style="width:110px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="20"  style="width:20px;font-size:0;line-height:0;padding:0;"></td>
+                <td width="120" style="width:120px;font-size:0;line-height:0;padding:0;"></td>
+                <td width="10"  style="width:10px;font-size:0;line-height:0;padding:0;"></td>
                 <td width="210" style="width:210px;font-size:0;line-height:0;padding:0;"></td>
                 <td width="14"  style="width:14px;font-size:0;line-height:0;padding:0;"></td>
                 <td width="1"   style="width:1px;font-size:0;line-height:0;padding:0;"></td>
@@ -122,14 +122,14 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
                 <!-- SP0: 10px left margin -->
                 <td class="xsig-sp0" width="10" style="width:10px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
 
-                <!-- C1: 110px photo -->
-                <td class="xsig-c1" valign="middle" width="110"
-                  style="padding:0;width:110px;vertical-align:middle;font-size:0;line-height:0;">
+                <!-- C1: 120px photo -->
+                <td class="xsig-c1" valign="middle" width="120"
+                  style="padding:0;width:120px;vertical-align:middle;font-size:0;line-height:0;">
                   ${photo}
                 </td>
 
-                <!-- SP1: 20px gap between photo and text -->
-                <td class="xsig-sp1" width="20" style="width:20px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
+                <!-- SP1: 10px gap between photo and text -->
+                <td class="xsig-sp1" width="10" style="width:10px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
 
                 <!-- C2: 210px text content -->
                 <td class="xsig-c2" valign="middle" width="210"
@@ -165,10 +165,10 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
                   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="95"
                     style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
                     <tr>
-                      <td align="right" style="padding:0;">
-                        <a href="https://xalimartgroup.sn" target="_blank" style="text-decoration:none;display:inline-block;font-size:0;line-height:0;">
-                          <img src="${images.xalimartBlack}" alt="Xalimart Group" width="83" height="76"
-                            style="display:block;margin:0 0 0 auto;width:83px;height:76px;max-width:83px;border:none;outline:none;">
+                      <td align="right" style="padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">
+                        <a href="https://xalimartgroup.sn" target="_blank" style="text-decoration:none;display:block;font-size:0;line-height:0;">
+                          <img src="${images.xalimartBlack}" alt="Xalimart Group" width="83" height="75"
+                            style="display:block;margin:0 0 0 auto;width:83px;height:75px;max-width:83px;max-height:75px;border:none;outline:none;">
                         </a>
                       </td>
                     </tr>
@@ -194,7 +194,7 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
                             <td width="90" height="90" align="center" valign="middle"
                               style="width:90px;height:90px;padding:8px;border-radius:14px;line-height:0;font-size:0;">
                               <img src="${QR_URL}" width="74" height="74" border="0" alt="QR xalimartgroup.sn"
-                                style="display:block;width:74px;height:74px;border:none;">
+                                style="display:block;width:74px;height:74px;max-width:74px;max-height:74px;border:none;">
                             </td>
                           </tr>
                         </table>
@@ -209,10 +209,10 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
               <!-- Bottom decoration -->
               <tr>
                 <!-- SP0 + C1: no border (photo area — line starts at text column) -->
-                <td colspan="2" width="120" style="width:120px;padding:0;font-size:0;line-height:0;"></td>
+                <td colspan="2" width="130" style="width:130px;padding:0;font-size:0;line-height:0;"></td>
                 <!-- SP1 + C2: border-left + border-bottom with rounded corner -->
-                <td colspan="2" height="16" width="230"
-                  style="width:230px;height:16px;border-left:3px solid ${DECO};border-bottom:3px solid ${DECO};border-bottom-left-radius:10px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td>
+                <td colspan="2" height="16" width="220"
+                  style="width:220px;height:16px;border-left:3px solid ${DECO};border-bottom:3px solid ${DECO};border-bottom-left-radius:10px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td>
                 <!-- SP_div + C3: no border -->
                 <td colspan="2" width="15" style="width:15px;padding:0;font-size:0;line-height:0;"></td>
                 <!-- C4: underline under logo -->
