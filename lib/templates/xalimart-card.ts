@@ -1,252 +1,285 @@
-// Template: Xalimart Card — Outlook-safe flat layout
-// 10 columns: SP0(10)+C1(120)+SP1(14)+C2(305)+SP_div(2)+C3(1)+C4(113)+SP_4_5(10)+C5(100)+SP_right(5) = 680px
-// No nested spacer tables — spacers are direct <td> columns in the main row
-// Divider = 1px bgcolor <td> (most Outlook-safe technique)
-// Icons: same style as xalimart-white-v3 — 16px black icons, no badge circles
-import type { SignatureData, SignatureImages } from '@/types/signature'
+import type { SignatureData } from '@/types/signature'
 import { clampText, whatsappHref, normalizeUrl, STATIC_ADDRESS, STATIC_PHONE } from './shared'
 
-const FONT      = "'Century Gothic', Arial, sans-serif"
-const TEXT_NAME = '#111111'
-const TEXT_ROLE = '#333333'
-const TEXT_INFO = '#444444'
-const DECO      = '#111111'
-const ICON_SIZE = 16
-// Text area per contact row: C2(305) - icon(16) - gap(5) = 284px
-const TEXT_W    = 284
-
-// Simple icon cell — identical to xalimart-white-v3's simpleIcon approach
-function iconCell(iconSrc: string, vAlign: 'top' | 'middle' = 'middle'): string {
-  return `<td width="${ICON_SIZE}" valign="${vAlign}" style="padding:0;width:${ICON_SIZE}px;font-size:0;line-height:0;mso-line-height-rule:exactly;"><img src="${iconSrc}" width="${ICON_SIZE}" height="${ICON_SIZE}" border="0" alt="" style="display:block;width:${ICON_SIZE}px;height:${ICON_SIZE}px;min-width:${ICON_SIZE}px;min-height:${ICON_SIZE}px;max-width:${ICON_SIZE}px;max-height:${ICON_SIZE}px;border:none;"></td>`
-}
-
-// 3-col row: icon(16) | 5px spacer | text(302) — nowrap HTML attr for Outlook
-function contactRow(
-  iconSrc: string,
-  href: string,
-  label: string,
-  opts: { isStatic?: boolean; isAddress?: boolean } = {}
-): string {
-  const { isStatic = false, isAddress = false } = opts
-  const vAlign = isAddress ? 'top' : 'middle'
-  const content = isStatic
-    ? `<span style="color:${TEXT_INFO};font-size:11px;font-family:${FONT};line-height:16px;">${label}</span>`
-    : `<a href="${href}" style="color:${TEXT_INFO};text-decoration:none;font-size:11px;font-family:${FONT};line-height:16px;">${label}</a>`
-  const textTd = isAddress
-    ? `<td width="${TEXT_W}" valign="top" style="padding:0;width:${TEXT_W}px;font-size:11px;color:${TEXT_INFO};font-family:${FONT};line-height:16px;mso-line-height-rule:exactly;">${content}</td>`
-    : `<td nowrap width="${TEXT_W}" valign="middle" style="padding:0;width:${TEXT_W}px;white-space:nowrap;font-size:11px;color:${TEXT_INFO};font-family:${FONT};line-height:16px;mso-line-height-rule:exactly;">${content}</td>`
-  return `<tr>${iconCell(iconSrc, vAlign)}<td width="5" style="width:5px;font-size:0;line-height:0;padding:0;">&nbsp;</td>${textTd}</tr><tr><td colspan="3" height="5" style="height:5px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>`
-}
-
-// Social icons — black variants, no badge circles (same as white-v3)
-function socialsRow(socials: SignatureData['socials'], images: SignatureImages): string {
-  const items = [
-    socials.instagram ? { url: socials.instagram, src: images.instagramBl, alt: 'Instagram' } : null,
-    socials.facebook  ? { url: socials.facebook,  src: images.facebookBl,  alt: 'Facebook'  } : null,
-    socials.linkedin  ? { url: socials.linkedin,  src: images.linkedinBl,  alt: 'LinkedIn'  } : null,
-  ].filter((s): s is NonNullable<typeof s> => s !== null)
-  if (!items.length) return ''
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr>${
-    items.map((s, i) =>
-      `<td align="center" valign="middle" style="${i < items.length - 1 ? 'padding-right:8px;' : ''}font-size:0;line-height:0;mso-table-lspace:0pt;mso-table-rspace:0pt;"><a href="${s.url}" target="_blank" style="text-decoration:none;display:block;font-size:0;line-height:0;"><img src="${s.src}" width="${ICON_SIZE}" height="${ICON_SIZE}" border="0" alt="${s.alt}" style="display:block;width:${ICON_SIZE}px;height:${ICON_SIZE}px;border:none;"></a></td>`
-    ).join('')
-  }</tr></table>`
-}
-
-const QR_URL = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fxalimartgroup.sn&color=111111&bgcolor=ffffff&format=png'
+// IMPORTANT: Change this to your live domain where the public folder is hosted.
+// For example: 'https://dashboard.xalimartgroup.sn'
+// Email signatures MUST use full absolute URLs (https://...) otherwise images break in Gmail/Outlook.
+const BASE_URL = 'https://xalimart-group.vercel.app/uploads'
 
 function formatPhone(raw: string): string {
-  const digits = raw.replace(/\D/g, '')
-  const local = digits.startsWith('221') ? digits.slice(3) : digits
+  if (!raw) return '';
+
+  // 1. Clean the input: Keep only digits and the '+' sign
+  const cleaned = raw.replace(/[^\d+]/g, '');
+
+  // 2. Extract just the numbers to check for Senegal format
+  const digits = cleaned.replace(/\D/g, '');
+  const local = digits.startsWith('221') ? digits.slice(3) : digits;
+
+  // 3. Perfect Senegal Formatting (e.g., +221 77 123 45 67)
   if (local.length === 9) {
-    return `+221 ${local.slice(0,2)} ${local.slice(2,5)} ${local.slice(5,7)} ${local.slice(7,9)}`
+    return `+221 ${local.slice(0, 2)} ${local.slice(2, 5)} ${local.slice(5, 7)} ${local.slice(7, 9)}`;
   }
-  return raw
+
+  // 4. For ANY other country code, add a space right after the country code
+  // Example: If user types +33123456789 -> It becomes +33 123456789
+  const genericMatch = cleaned.match(/^(\+\d{1,3})(\d+)$/);
+  if (genericMatch) {
+    return `${genericMatch[1]} ${genericMatch[2]}`; // This adds the space!
+  }
+
+  // Fallback if no specific formatting matches
+  return raw;
 }
 
-export function buildXalimartCard(data: SignatureData, images: SignatureImages): string {
+// Notice we no longer strictly need the `images` object since we load from the public folder
+export function buildXalimartCard(data: SignatureData): string {
   const { fullName, role, phone, email, photoBase64, socials } = data
-  const hasSocials = !!(socials.instagram || socials.facebook || socials.linkedin)
 
-  const photo = photoBase64
-    ? `<img class="xsig-card-photo" src="${photoBase64}" alt="${clampText(fullName, 40)}" width="120" height="135" style="display:block;width:120px;height:135px;max-width:120px;max-height:135px;border:none;vertical-align:top;">`
-    : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="120" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td width="120" height="135" bgcolor="#e0e0e0" style="width:120px;height:135px;background-color:#e0e0e0;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td></tr></table>`
+  // 1. DYNAMIC PHOTO
+  const photoHtml = photoBase64
+    ? `<img src="${photoBase64}" alt="${clampText(fullName || 'Profile', 40)}" width="160" style="display:block; width: 160px; max-width: 160px; border-radius: 12px; border:none;">`
+    : `<img src="${BASE_URL}/profile_img.png" alt="Profile" width="160" style="display:block; width: 160px; max-width: 160px; border-radius: 12px; border:none;">`
 
+  // 2. DYNAMIC PHONE ROW
   const phoneRow = phone
-    ? `<tr>${iconCell(images.appelIconBl)}<td width="5" style="width:5px;font-size:0;line-height:0;padding:0;">&nbsp;</td><td width="${TEXT_W}" valign="middle" style="padding:0;width:${TEXT_W}px;font-size:11px;color:${TEXT_INFO};font-family:${FONT};line-height:16px;mso-line-height-rule:exactly;"><a href="${whatsappHref(phone)}" style="color:${TEXT_INFO};text-decoration:none;font-size:11px;font-family:${FONT};line-height:16px;">${formatPhone(phone)}</a><span style="color:${TEXT_INFO};font-size:11px;font-family:${FONT};"> &nbsp;|&nbsp; </span><a href="tel:${STATIC_PHONE.replace(/\s/g,'')}" style="color:${TEXT_INFO};text-decoration:none;font-size:11px;font-family:${FONT};line-height:16px;">${STATIC_PHONE}</a></td></tr><tr><td colspan="3" height="5" style="height:5px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>`
-    : ''
+    ? `<tr>
+        <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/appel-bl.png" width="16" style="display:block; border:none;"></td>
+        <td width="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="10" height="1" style="display:block;"></td>
+        <td class="dark-text-grey" width="247" valign="middle" style="font-size: 13px; color: #1a1a1b; line-height: 15px; white-space: nowrap;"><a href="${whatsappHref(phone)}" class="dark-text-grey" style="color: #1a1a1b; text-decoration: none;">${formatPhone(phone)}</a> &nbsp;|&nbsp; <a href="tel:${STATIC_PHONE.replace(/\s/g,'')}" class="dark-text-grey" style="color: #1a1a1b; text-decoration: none;">${STATIC_PHONE}</a></td>
+       </tr>
+       <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>`
+    : `<tr>
+        <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/appel-bl.png" width="16" style="display:block; border:none;"></td>
+        <td width="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="10" height="1" style="display:block;"></td>
+        <td class="dark-text-grey" width="247" valign="middle" style="font-size: 13px; color: #1a1a1b; line-height: 15px; white-space: nowrap;"><a href="tel:${STATIC_PHONE.replace(/\s/g,'')}" class="dark-text-grey" style="color: #1a1a1b; text-decoration: none;">${STATIC_PHONE}</a></td>
+       </tr>
+       <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>`
 
-  return `<style>
-    @media screen and (max-width:600px){
-      table.xsig-card,table.xsig-card-border,table.xsig-card-inner{width:100%!important;}
-      td.xsig-sp0,td.xsig-sp1,td.xsig-sp-div,td.xsig-c3,td.xsig-c5,td.xsig-sp4-5,td.xsig-sp-right{display:none!important;width:0!important;overflow:hidden!important;}
-      td.xsig-c1{width:80px!important;}
-      td.xsig-c2{width:auto!important;}
-      td.xsig-c4{width:70px!important;}
-      img.xsig-card-photo{width:80px!important;height:90px!important;max-width:80px!important;max-height:90px!important;}
+  // 3. DYNAMIC SOCIAL MEDIA LOGIC
+  let socialItems: string[] =[]
+  if (socials?.instagram) {
+      socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.instagram}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/instagram-bl.png" alt="Insta" width="24" style="display:block; width:24px; border:none;"></a></td>`)
+  }
+  if (socials?.facebook) {
+      socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.facebook}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/facebook-bl.png" alt="FB" width="24" style="display:block; width:24px; border:none;"></a></td>`)
+  }
+  if (socials?.linkedin) {
+      socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.linkedin}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/linkedin-bl.png" alt="LinkedIn" width="24" style="display:block; width:24px; border:none;"></a></td>`)
+  }
+
+  let socialHtml = ''
+  if (socialItems.length > 0) {
+      socialHtml = `<table cellpadding="0" cellspacing="0" border="0" align="center"><tr>`
+      for (let i = 0; i < socialItems.length; i++) {
+          socialHtml += socialItems[i]
+          if (i < socialItems.length - 1) {
+              socialHtml += `<td width="6" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="6" height="1" style="display:block;"></td>`
+          }
+      }
+      socialHtml += `</tr></table>`
+  }
+
+  // 4. FALLBACK TEXTS
+  const displayFullName = fullName ? clampText(fullName, 35) : 'Full Name'
+  const displayRole = role ? clampText(role, 45) : 'Role / Job Title'
+  const displayEmail = email || 'your.email@xalimartgroup.sn'
+
+  // 5. RAW HTML PAYLOAD
+  const rawHtml = `
+<style type="text/css">
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+    a { text-decoration: none; color: inherit; }
+    
+    @media (prefers-color-scheme: dark) {
+        .dark-text-black, .dark-text-black * { color: #000001 !important; -webkit-text-fill-color: #000001 !important; }
+        .dark-text-grey, .dark-text-grey * { color: #1a1a1b !important; -webkit-text-fill-color: #1a1a1b !important; }
     }
-  </style>
+    [data-ogsc] .dark-text-black, [data-ogsc] .dark-text-black * { color: #000001 !important; }
+    [data-ogsc] .dark-text-grey, [data-ogsc] .dark-text-grey * { color: #1a1a1b !important; }
+</style>
 
-  <table role="presentation" class="xsig-card" cellpadding="0" cellspacing="0" border="0" width="680"
-    style="margin:0;padding:0;width:680px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:${FONT};font-size:0;line-height:0;">
+<!-- OUTLOOK VML ROUNDED BORDER -->
+<!--[if gte mso 9]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" arcsize="2%" strokeweight="1px" strokecolor="#e5e5e5" fillcolor="#ffffff" style="width:750px;">
+<v:textbox inset="0,0,0,0">
+<![endif]-->
 
-    <tr><td height="12" style="height:12px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td></tr>
-
-    <tr><td style="padding:0;">
-
-      <table role="presentation" class="xsig-card-border" cellpadding="0" cellspacing="0" border="0" width="680"
-        style="width:680px;border-collapse:separate;border-spacing:0;border:1.5px solid #d8d8d8;border-radius:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-        <tr>
-          <td bgcolor="#ffffff" style="padding:0;background-color:#ffffff;border-radius:12px;overflow:hidden;">
-            <table role="presentation" class="xsig-card-inner" cellpadding="0" cellspacing="0" border="0" width="680"
-              style="margin:0;padding:0;width:680px;border-collapse:separate;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:${FONT};font-size:0;line-height:0;">
-
-              <!-- Width-setter row — forces Outlook to allocate exact column widths -->
-              <tr style="font-size:0;line-height:0;mso-line-height-rule:exactly;">
-                <td width="10"  style="width:10px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="120" style="width:120px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="14"  style="width:14px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="305" style="width:305px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="2"   style="width:2px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="1"   style="width:1px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="113" style="width:113px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="10"  style="width:10px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="100" style="width:100px;font-size:0;line-height:0;padding:0;"></td>
-                <td width="5"   style="width:5px;font-size:0;line-height:0;padding:0;"></td>
-              </tr>
-
-              <!-- Top spacer -->
-              <tr><td colspan="10" height="16" style="height:16px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>
-
-              <!-- ── Main content row ── -->
-              <tr>
-
-                <!-- SP0: 10px left margin -->
-                <td class="xsig-sp0" width="10" style="width:10px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
-
-                <!-- C1: 120px photo -->
-                <td class="xsig-c1" valign="middle" width="120"
-                  style="padding:0;width:120px;vertical-align:middle;font-size:0;line-height:0;">
-                  ${photo}
-                </td>
-
-                <!-- SP1: 14px gap between photo and text -->
-                <td class="xsig-sp1" width="14" style="width:14px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
-
-                <!-- C2: 305px text content -->
-                <td class="xsig-c2" valign="middle" width="305"
-                  style="padding:0;width:305px;vertical-align:middle;mso-line-height-rule:exactly;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="305"
-                    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-                    <!-- Name (colspan=3: icon col + spacer col + text col) -->
-                    <tr><td colspan="3" style="padding:0 0 2px 0;font-family:${FONT};font-size:18px;font-weight:bold;color:${TEXT_NAME};line-height:23px;mso-line-height-rule:exactly;">
-                      <span style="margin:0;padding:0;">${clampText(fullName || 'Full Name', 26)}</span>
-                    </td></tr>
-                    <!-- Role -->
-                    <tr><td colspan="3" style="padding:0 0 10px 0;font-family:${FONT};font-size:12px;font-weight:normal;color:${TEXT_ROLE};line-height:17px;mso-line-height-rule:exactly;">
-                      <span style="margin:0;padding:0;">${clampText(role || 'Job Title', 38)}</span><span style="font-weight:bold;"> &nbsp;|&nbsp; Xalimart Group</span>
-                    </td></tr>
-                    <!-- Contacts — black icons, no badge circles (same as white-v3) -->
-                    ${phoneRow}
-                    ${contactRow(images.emailIcon,     `mailto:${email || ''}`,             clampText(email || '&nbsp;', 32))}
-                    ${contactRow(images.locationBlack, '#',                                  STATIC_ADDRESS, { isStatic: true, isAddress: true })}
-                    ${contactRow(images.globeIcon,     normalizeUrl('www.xalimartgroup.sn'), 'www.xalimartgroup.sn')}
-                  </table>
-                </td>
-
-                <!-- SP_div: 2px spacer before divider line -->
-                <td class="xsig-sp-div" width="2" style="width:2px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
-
-                <!-- C3: 1px divider — fixed height via inner table so it doesn't span full row -->
-                <td class="xsig-c3" width="1" valign="top"
-                  style="width:1px;font-size:0;line-height:0;padding:22px 0 0 0;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="1" height="95"
-                    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-                    <tr><td width="1" height="95" bgcolor="#aaaaaa"
-                      style="width:1px;height:95px;background-color:#aaaaaa;font-size:0;line-height:0;">&nbsp;</td></tr>
-                  </table>
-                </td>
-
-                <!-- C4: 113px logo + tagline -->
-                <td class="xsig-c4" valign="middle" width="113"
-                  style="padding:0;width:113px;vertical-align:middle;text-align:right;mso-line-height-rule:exactly;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="113"
-                    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-                    <tr>
-                      <td align="right" style="padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">
-                        <a href="https://xalimartgroup.sn" target="_blank" style="text-decoration:none;display:block;font-size:0;line-height:0;">
-                          <img src="${images.xalimartBlack}" alt="Xalimart Group" width="83" height="75"
-                            style="display:block;margin:0 0 0 auto;width:83px;height:75px;max-width:83px;max-height:75px;border:none;outline:none;">
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="right" style="padding:5px 0 0;">
-                        <img src="${images.taglineWh}" alt="tagline"
-                          style="display:block;margin:0 0 0 auto;width:83px;max-width:83px;height:auto;border:none;outline:none;">
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-
-                <!-- SP_4_5: 10px gap between logo and QR -->
-                <td class="xsig-sp4-5" width="10" style="width:10px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
-
-                <!-- C5: 100px QR + socials (centered — 90px QR leaves 5px each side) -->
-                <td class="xsig-c5" valign="middle" width="100"
-                  style="padding:0;width:100px;vertical-align:middle;text-align:center;mso-line-height-rule:exactly;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="90"
-                    style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;margin:0 auto;">
-                    <tr>
-                      <td align="center" style="padding:0;">
-                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="90" height="90"
-                          style="border-collapse:separate;border-spacing:0;border:2px solid #111111;border-radius:16px;mso-table-lspace:0pt;mso-table-rspace:0pt;width:90px;height:90px;min-width:90px;min-height:90px;">
-                          <tr>
-                            <td width="90" height="90" align="center" valign="middle"
-                              style="width:90px;height:90px;padding:0;border-radius:14px;line-height:0;font-size:0;mso-line-height-rule:exactly;">
-                              <img src="${QR_URL}" width="74" height="74" border="0" alt="QR xalimartgroup.sn"
-                                style="display:block;width:74px;height:74px;min-width:74px;min-height:74px;max-width:74px;max-height:74px;border:none;outline:none;">
-                            </td>
-                          </tr>
+<table class="main-wrapper-table" cellpadding="0" cellspacing="0" border="0" width="750" style="width: 750px; min-width: 750px; max-width: 750px; background-color:rgb(255,255,255); border: 1px solid #e5e5e5; border-radius: 15px; border-collapse: separate !important; border-spacing: 0; overflow: hidden; font-family: Arial, Helvetica, sans-serif;">
+    
+    <tr>
+        <td colspan="3" height="25" style="line-height:0; font-size:0;">
+            <img src="${BASE_URL}/transprent.png" width="1" height="25" style="display:block;">
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="25" style="line-height:0; font-size:0;">
+            <img src="${BASE_URL}/transprent.png" width="25" height="1" style="display:block;">
+        </td>
+        
+        <td width="700" valign="top">
+            
+            <table cellpadding="0" cellspacing="0" border="0" width="700">
+                <tr>
+                    
+                    <td width="160" valign="bottom" style="line-height:0; font-size:0;">
+                        ${photoHtml}
+                    </td>
+                    
+                    <td width="20" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/transprent.png" width="20" height="1" style="display:block;">
+                    </td>
+                    
+                    <td width="273" valign="top">
+                        <table cellpadding="0" cellspacing="0" border="0" width="273">
+                            <tr>
+                                <td class="dark-text-black" style="font-size: 24px; font-weight: bold; color: #000001; line-height: 26px; white-space: nowrap;">${displayFullName}</td>
+                            </tr>
+                            
+                            <tr><td height="5" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="5" style="display:block;"></td></tr>
+                            
+                            <tr>
+                                <td class="dark-text-grey" style="font-size: 15px; color: #1a1a1b; line-height: 18px; white-space: nowrap;">${displayRole} | <strong class="dark-text-grey" style="color: #1a1a1b;">Xalimart Group</strong></td>
+                            </tr>
+                            
+                            <tr><td height="18" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="18" style="display:block;"></td></tr>
+                            
+                            <tr>
+                                <td>
+                                    <table cellpadding="0" cellspacing="0" border="0" width="273">
+                                        
+                                        ${phoneRow}
+                                        
+                                        <tr>
+                                            <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/email.png" width="16" style="display:block; border:none;"></td>
+                                            <td width="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="10" height="1" style="display:block;"></td>
+                                            <td class="dark-text-grey" width="247" valign="middle" style="font-size: 13px; color: #1a1a1b; line-height: 15px; white-space: nowrap;"><a href="mailto:${displayEmail}" class="dark-text-grey" style="color: #1a1a1b; text-decoration: none;">${displayEmail}</a></td>
+                                        </tr>
+                                        
+                                        <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>
+                                        
+                                        <tr>
+                                            <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/location-black.png" width="16" style="display:block; border:none;"></td>
+                                            <td width="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="10" height="1" style="display:block;"></td>
+                                            <td class="dark-text-grey" width="247" valign="middle" style="font-size: 13px; color: #1a1a1b; line-height: 15px; white-space: nowrap;">${STATIC_ADDRESS}</td>
+                                        </tr>
+                                        
+                                        <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>
+                                        
+                                        <tr>
+                                            <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/globe.png" width="16" style="display:block; border:none;"></td>
+                                            <td width="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="10" height="1" style="display:block;"></td>
+                                            <td class="dark-text-grey" width="247" valign="middle" style="font-size: 13px; color: #1a1a1b; line-height: 15px; white-space: nowrap;"><a href="https://www.xalimartgroup.sn" target="_blank" class="dark-text-grey" style="color: #1a1a1b; text-decoration: none;">www.xalimartgroup.sn</a></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
                         </table>
-                      </td>
-                    </tr>
-                    ${hasSocials ? `<tr><td height="8" style="height:8px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr><tr><td align="center" style="padding:0;">${socialsRow(socials, images)}</td></tr>` : ''}
-                  </table>
-                </td>
-
-                <!-- SP_right: 5px right margin (5px C5 space + 5px here = 10px total = SP0) -->
-                <td class="xsig-sp-right" width="5" style="width:5px;font-size:0;line-height:0;padding:0;">&nbsp;</td>
-
-              </tr>
-
-              <!-- Bottom decoration -->
-              <tr>
-                <td colspan="10" style="padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="680"
-                    style="border-collapse:separate;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;width:680px;">
-                    <tr>
-                      <td width="70" style="width:70px;padding:0;font-size:0;line-height:0;"></td>
-                      <td width="210" height="16" style="width:210px;height:16px;border-left:3px solid ${DECO};border-bottom:3px solid ${DECO};border-bottom-left-radius:10px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td>
-                      <td width="11" style="width:11px;padding:0;font-size:0;line-height:0;"></td>
-                      <td width="95" height="16" style="width:95px;height:16px;border-bottom:3px solid ${DECO};font-size:0;line-height:0;mso-line-height-rule:exactly;"></td>
-                      <td width="294" style="width:294px;padding:0;font-size:0;line-height:0;"></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-
-              <!-- Bottom spacer -->
-              <tr><td colspan="10" height="14" style="height:14px;font-size:0;line-height:0;mso-line-height-rule:exactly;"></td></tr>
-
+                    </td>
+                    
+                    <td width="15" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/transprent.png" width="15" height="1" style="display:block;">
+                    </td>
+                    
+                    <td width="2" valign="middle" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/border.png" height="140" style="display:block; height: 140px; border:none;">
+                    </td>
+                    
+                    <td width="15" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/transprent.png" width="15" height="1" style="display:block;">
+                    </td>
+                    
+                    <td width="215" valign="middle">
+                        <table cellpadding="0" cellspacing="0" border="0" width="215">
+                            <tr>
+                                
+                                <td width="115" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0" width="115">
+                                        <tr>
+                                            <td style="line-height:0; font-size:0;">
+                                                <a href="https://www.xalimartgroup.sn" target="_blank" style="line-height:0; font-size:0;"><img src="${BASE_URL}/logo.png" alt="Xalimart Group" width="115" style="display:block; width:115px; border:none;"></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="8" style="line-height:0; font-size:0;">
+                                                <img src="${BASE_URL}/transprent.png" width="1" height="8" style="display:block;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="line-height:0; font-size:0;">
+                                                <img src="${BASE_URL}/slogan.png" alt="Slogan" width="115" style="display:block; width:115px; border:none;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                
+                                <td width="15" style="line-height:0; font-size:0;">
+                                    <img src="${BASE_URL}/transprent.png" width="15" height="1" style="display:block;">
+                                </td>
+                                
+                                <td width="85" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0" width="85">
+                                        <tr>
+                                            <td style="line-height:0; font-size:0;">
+                                                <img src="${BASE_URL}/barcode.png" alt="QR Code" width="85" style="display:block; width:85px; border:none;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="12" style="line-height:0; font-size:0;">
+                                                <img src="${BASE_URL}/transprent.png" width="1" height="12" style="display:block;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="line-height:0; font-size:0;">
+                                                ${socialHtml}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
-          </td>
-        </tr>
-      </table>
 
-    </td></tr>
+            <table cellpadding="0" cellspacing="0" border="0" width="700">
+                <tr>
+                    <td width="110" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/transprent.png" width="110" height="1" style="display:block;">
+                    </td>
+                    <td width="280" valign="top" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/bottom-line.png" alt="" width="280" style="display:block; width:280px; border:none;">
+                    </td>
+                    <td width="310" style="line-height:0; font-size:0;">
+                        <img src="${BASE_URL}/transprent.png" width="310" height="1" style="display:block;">
+                    </td>
+                </tr>
+            </table>
+            
+        </td>
+        
+        <td width="25" style="line-height:0; font-size:0;">
+            <img src="${BASE_URL}/transprent.png" width="25" height="1" style="display:block;">
+        </td>
+    </tr>
 
-    <tr><td height="10" style="height:10px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td></tr>
+    <tr>
+        <td colspan="3" height="25" style="line-height:0; font-size:0;">
+            <img src="${BASE_URL}/transprent.png" width="1" height="25" style="display:block;">
+        </td>
+    </tr>
+    
+</table>
 
-  </table>`
+<!-- CLOSING OUTLOOK VML TAGS -->
+<!--[if gte mso 9]>
+</v:textbox>
+</v:roundrect>
+<![endif]-->
+`
+
+  // 6. MINIFIER: Removes empty spaces between tags so Gmail won't complain about size limit
+  return rawHtml.replace(/>\s+</g, '><').trim()
 }
