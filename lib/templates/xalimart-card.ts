@@ -1,5 +1,5 @@
 import type { SignatureData } from '@/types/signature'
-import { clampText, whatsappHref, normalizeUrl, STATIC_ADDRESS, STATIC_PHONE } from './shared'
+import { clampText, whatsappHref, STATIC_ADDRESS, STATIC_PHONE } from './shared'
 
 // IMPORTANT: Change this to your live domain where the public folder is hosted.
 // For example: 'https://dashboard.xalimartgroup.sn'
@@ -57,7 +57,7 @@ export function buildXalimartCard(data: SignatureData): string {
        <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>`
 
   // 3. DYNAMIC SOCIAL MEDIA LOGIC
-  let socialItems: string[] =[]
+  const socialItems: string[] = [] // Fixed ESLint "let" warning
   if (socials?.instagram) {
       socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.instagram}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/instagram-bl.png" alt="Insta" width="24" style="display:block; width:24px; border:none;"></a></td>`)
   }
