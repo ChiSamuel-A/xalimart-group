@@ -1,4 +1,4 @@
-import type { SignatureData } from '@/types/signature'
+import type { SignatureData, SignatureImages } from '@/types/signature'
 import { clampText, whatsappHref, STATIC_ADDRESS, STATIC_PHONE } from './shared'
 
 // IMPORTANT: Change this to your live domain where the public folder is hosted.
@@ -32,8 +32,8 @@ function formatPhone(raw: string): string {
   return raw;
 }
 
-// Notice we no longer strictly need the `images` object since we load from the public folder
-export function buildXalimartCard(data: SignatureData): string {
+// Added "images: SignatureImages" back to fix the Type Error in generateSignature.ts
+export function buildXalimartCard(data: SignatureData, images: SignatureImages): string {
   const { fullName, role, phone, email, photoBase64, socials } = data
 
   // 1. DYNAMIC PHOTO
@@ -57,7 +57,7 @@ export function buildXalimartCard(data: SignatureData): string {
        <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>`
 
   // 3. DYNAMIC SOCIAL MEDIA LOGIC
-  const socialItems: string[] = [] // Fixed ESLint "let" warning
+  const socialItems: string[] = [] 
   if (socials?.instagram) {
       socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.instagram}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/instagram-bl.png" alt="Insta" width="24" style="display:block; width:24px; border:none;"></a></td>`)
   }
