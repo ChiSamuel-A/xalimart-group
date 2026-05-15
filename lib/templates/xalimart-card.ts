@@ -1,47 +1,35 @@
-import type { SignatureData, SignatureImages } from '@/types/signature'
+import type { SignatureData } from '@/types/signature'
 import { clampText, whatsappHref, STATIC_ADDRESS, STATIC_PHONE } from './shared'
 
 // IMPORTANT: Change this to your live domain where the public folder is hosted.
-// For example: 'https://dashboard.xalimartgroup.sn'
-// Email signatures MUST use full absolute URLs (https://...) otherwise images break in Gmail/Outlook.
 const BASE_URL = 'https://xalimart-group.vercel.app/uploads'
 
 function formatPhone(raw: string): string {
   if (!raw) return '';
 
-  // 1. Clean the input: Keep only digits and the '+' sign
   const cleaned = raw.replace(/[^\d+]/g, '');
-
-  // 2. Extract just the numbers to check for Senegal format
   const digits = cleaned.replace(/\D/g, '');
   const local = digits.startsWith('221') ? digits.slice(3) : digits;
 
-  // 3. Perfect Senegal Formatting (e.g., +221 77 123 45 67)
   if (local.length === 9) {
     return `+221 ${local.slice(0, 2)} ${local.slice(2, 5)} ${local.slice(5, 7)} ${local.slice(7, 9)}`;
   }
 
-  // 4. For ANY other country code, add a space right after the country code
-  // Example: If user types +33123456789 -> It becomes +33 123456789
   const genericMatch = cleaned.match(/^(\+\d{1,3})(\d+)$/);
   if (genericMatch) {
-    return `${genericMatch[1]} ${genericMatch[2]}`; // This adds the space!
+    return `${genericMatch[1]} ${genericMatch[2]}`;
   }
 
-  // Fallback if no specific formatting matches
   return raw;
 }
 
-// Added "images: SignatureImages" back to fix the Type Error in generateSignature.ts
-export function buildXalimartCard(data: SignatureData, images: SignatureImages): string {
+export function buildXalimartCard(data: SignatureData): string {
   const { fullName, role, phone, email, photoBase64, socials } = data
 
-  // 1. DYNAMIC PHOTO
   const photoHtml = photoBase64
     ? `<img src="${photoBase64}" alt="${clampText(fullName || 'Profile', 40)}" width="160" style="display:block; width: 160px; max-width: 160px; border-radius: 12px; border:none;">`
     : `<img src="${BASE_URL}/profile_img.png" alt="Profile" width="160" style="display:block; width: 160px; max-width: 160px; border-radius: 12px; border:none;">`
 
-  // 2. DYNAMIC PHONE ROW
   const phoneRow = phone
     ? `<tr>
         <td width="16" valign="middle" style="line-height:0; font-size:0;"><img src="${BASE_URL}/appel-bl.png" width="16" style="display:block; border:none;"></td>
@@ -56,7 +44,6 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
        </tr>
        <tr><td colspan="3" height="10" style="line-height:0; font-size:0;"><img src="${BASE_URL}/transprent.png" width="1" height="10" style="display:block;"></td></tr>`
 
-  // 3. DYNAMIC SOCIAL MEDIA LOGIC
   const socialItems: string[] = [] 
   if (socials?.instagram) {
       socialItems.push(`<td width="24" style="line-height:0; font-size:0;"><a href="${socials.instagram}" target="_blank" style="line-height:0; font-size:0; text-decoration:none;"><img src="${BASE_URL}/instagram-bl.png" alt="Insta" width="24" style="display:block; width:24px; border:none;"></a></td>`)
@@ -80,12 +67,10 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
       socialHtml += `</tr></table>`
   }
 
-  // 4. FALLBACK TEXTS
   const displayFullName = fullName ? clampText(fullName, 35) : 'Full Name'
   const displayRole = role ? clampText(role, 45) : 'Role / Job Title'
   const displayEmail = email || 'your.email@xalimartgroup.sn'
 
-  // 5. RAW HTML PAYLOAD
   const rawHtml = `
 <style type="text/css">
     table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
@@ -280,6 +265,5 @@ export function buildXalimartCard(data: SignatureData, images: SignatureImages):
 <![endif]-->
 `
 
-  // 6. MINIFIER: Removes empty spaces between tags so Gmail won't complain about size limit
   return rawHtml.replace(/>\s+</g, '><').trim()
 }
