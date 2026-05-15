@@ -22,7 +22,7 @@ export function buildSignatureHTML(data: SignatureData, images: SignatureImages)
     case 'xalimart-black-v3': return buildXalimartBlackV3(data, templateImages)
     case 'xalimart-white-v2': return buildXalimartWhiteV2(data, templateImages)
     case 'xalimart-white-v3': return buildXalimartWhiteV3(data, templateImages)
-    case 'xalimart-card':     return buildXalimartCard(data, templateImages)
+    case 'xalimart-card':     return buildXalimartCard(data) // <--- Fixed: Now only passes 1 argument!
     default:                  return buildXalimartWhite(data, templateImages)
   }
 }
@@ -39,11 +39,7 @@ export async function fetchImageAsBase64(url: string): Promise<string> {
   })
 }
 
-// Logos are served from the deployed URL so Outlook can fetch them as
-// normal hosted images — base64 logos are unreliable in Outlook Desktop.
-// The profile photo (photoBase64) remains base64 since it is user-uploaded.
 const HOSTED_BASE = 'https://xalimart-group.vercel.app'
-
 
 export async function getInlineImages(): Promise<SignatureImages> {
   return {
