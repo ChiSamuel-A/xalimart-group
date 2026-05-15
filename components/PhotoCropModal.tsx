@@ -3,23 +3,21 @@
 import { useState, useCallback } from 'react'
 import Cropper from 'react-easy-crop'
 import type { Area } from 'react-easy-crop'
-import { X, Check, ZoomIn, ZoomOut, Loader2 } from 'lucide-react'
+import { X, Check, ZoomIn, ZoomOut } from 'lucide-react'
 
 interface Props {
   imageSrc: string
-  onConfirm: (imageUrl: string) => void // Now expects the uploaded URL
+  onConfirm: (croppedBase64: string) => void
   onCancel: () => void
 }
 
-// Helper: Converts the cropped area into a Blob (File) instead of Base64
-async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<Blob> {
+async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<string> {
   const image = await new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image()
     img.addEventListener('load', () => resolve(img))
     img.addEventListener('error', reject)
     img.src = imageSrc
   })
-  
   const canvas = document.createElement('canvas')
   // 320×360 = 2× the 160×180 display size (Retina-ready) with exact portrait ratio.
   canvas.width  = 320
@@ -27,6 +25,7 @@ async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<Blob> 
   const ctx = canvas.getContext('2d')!
 
   // Rounded-corner clip — baked into the PNG so corners work in Outlook too.
+  // r=23px on 320px canvas = 8px border-radius at 110px display width.
   const r = 23
   ctx.beginPath()
   ctx.moveTo(r, 0)
@@ -48,65 +47,23 @@ async function getCroppedImg(imageSrc: string, cropPixels: Area): Promise<Blob> 
     0, 0,
     320, 360
   )
-  
-  // Convert canvas to a File/Blob instead of Base64
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => {
-      if (!blob) return reject(new Error('Canvas is empty'))
-      resolve(blob)
-    }, 'image/png', 1) // 1 = maximum quality
-  })
+  // PNG preserves the transparent rounded corners across all email clients.
+  return canvas.toDataURL('image/png')
 }
 
 export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
+  const [crop, setCrop]         = useState({ x: 0, y: 0 })
+  const [zoom, setZoom]         = useState(1)
   const [croppedArea, setCroppedArea] = useState<Area | null>(null)
-  
-  // State to manage the loading spinner while uploading
-  const [isUploading, setIsUploading] = useState(false)
 
   const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
     setCroppedArea(croppedAreaPixels)
-  },[])
+  }, [])
 
   const handleConfirm = async () => {
     if (!croppedArea) return
-    
-    try {
-      setIsUploading(true)
-      
-      // 1. Get the image as a file Blob
-      const imageBlob = await getCroppedImg(imageSrc, croppedArea)
-      
-      // 2. Prepare it for upload
-      const formData = new FormData()
-      // Generate a unique filename using timestamp
-      formData.append('file', imageBlob, `profile-${Date.now()}.png`)
-
-      // 3. Send it to your backend API endpoint
-      // Replace '/api/upload' with your actual upload endpoint route
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to upload image')
-      }
-
-      // 4. Get the URL from the response
-      const data = await response.json()
-      
-      // 5. Pass the secure, hosted URL back to the parent component
-      onConfirm(data.url) 
-      
-    } catch (error) {
-      console.error('Error uploading image:', error)
-      alert('There was an error uploading your image. Please try again.')
-    } finally {
-      setIsUploading(false)
-    }
+    const base64 = await getCroppedImg(imageSrc, croppedArea)
+    onConfirm(base64)
   }
 
   return (
@@ -121,8 +78,7 @@ export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props)
           </div>
           <button
             onClick={onCancel}
-            disabled={isUploading}
-            className="text-purple-300 hover:text-white transition-colors disabled:opacity-50"
+            className="text-purple-300 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -152,44 +108,30 @@ export default function PhotoCropModal({ imageSrc, onConfirm, onCancel }: Props)
             max={3}
             step={0.05}
             value={zoom}
-            disabled={isUploading}
             onChange={(e) => setZoom(Number(e.target.value))}
-            className="flex-1 accent-purple-600 cursor-pointer h-1.5 rounded-full disabled:opacity-50"
+            className="flex-1 accent-purple-600 cursor-pointer h-1.5 rounded-full"
           />
           <ZoomIn className="w-4 h-4 text-gray-400 flex-shrink-0" />
         </div>
 
         {/* Actions */}
-        <div className="px-6 py-4 flex gap-3 justify-end bg-gray-50">
+        <div className="px-6 py-4 flex gap-3 justify-end">
           <button
             type="button"
             onClick={onCancel}
-            disabled={isUploading}
             className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800
-                       border border-gray-200 rounded-lg hover:border-gray-300 transition-colors disabled:opacity-50"
+                       border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
           >
             Cancel
           </button>
-          
-          {/* Apply Button changes to loading state when uploading */}
           <button
             type="button"
             onClick={handleConfirm}
-            disabled={isUploading}
-            className="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white
-                       bg-purple-700 rounded-lg hover:bg-purple-800 transition-colors disabled:bg-purple-400 min-w-[100px] justify-center"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white
+                       bg-purple-700 rounded-lg hover:bg-purple-800 transition-colors"
           >
-            {isUploading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Uploading
-              </>
-            ) : (
-              <>
-                <Check className="w-4 h-4" />
-                Apply
-              </>
-            )}
+            <Check className="w-4 h-4" />
+            Apply
           </button>
         </div>
 
